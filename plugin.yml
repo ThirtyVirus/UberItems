@@ -1,0 +1,8 @@
+main: thirtyvirus.uber.UberItems
+version: 1.0
+name: UberItems
+api-version: 1.13
+
+commands:
+  uber:
+    description: Main UberItems command

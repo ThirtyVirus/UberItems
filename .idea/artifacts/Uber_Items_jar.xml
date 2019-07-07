@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Uber_Items:jar">
+    <output-path>$PROJECT_DIR$/../../Test Server/plugins</output-path>
+    <root id="archive" name="UberItems.jar">
+      <element id="module-output" name="Uber_Items" />
+      <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+    </root>
+  </artifact>
+</component>
