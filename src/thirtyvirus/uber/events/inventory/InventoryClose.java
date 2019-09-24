@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
-import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class InventoryClose implements Listener {
 
@@ -19,7 +19,7 @@ public class InventoryClose implements Listener {
             Player player = (Player) event.getPlayer();
             ItemStack shootyBox = player.getInventory().getItemInMainHand();
 
-            UberItems.saveItemsInLore(shootyBox, event.getInventory().getContents(), 3);
+            Utilities.saveItemsInLore(shootyBox, event.getInventory().getContents(), 3);
             player.playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
         }
 

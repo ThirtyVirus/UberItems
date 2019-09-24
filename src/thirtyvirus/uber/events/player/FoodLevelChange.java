@@ -10,7 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
-import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class FoodLevelChange implements Listener {
 
@@ -18,7 +18,7 @@ public class FoodLevelChange implements Listener {
     public void onPlayerHungerChange(FoodLevelChangeEvent event) {
         Player player = (Player) event.getEntity();
 
-        ItemStack lunchBox = UberItems.searchFor(player.getInventory(), 2);
+        ItemStack lunchBox = Utilities.searchFor(player.getInventory(), 2);
 
         if (lunchBox != null){
             int now = event.getFoodLevel();
@@ -46,7 +46,7 @@ public class FoodLevelChange implements Listener {
             saturation = (double)Math.round(saturation * 100d) / 100d;
             List<String> lore = lunchBox.getItemMeta().getLore();
             lore.set(0, ChatColor.GOLD + "Saturation: " + saturation);
-            UberItems.loreItem(lunchBox, lore);
+            Utilities.loreItem(lunchBox, lore);
 
         }
 

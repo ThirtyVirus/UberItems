@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.UberItems_old;
 import thirtyvirus.uber.UberItem;
 
 public class infini_gulp extends UberItem{
@@ -67,11 +67,11 @@ public class infini_gulp extends UberItem{
 				meta.removeEnchant(e);
 			}
 			item.setItemMeta(meta);
-			UberItems.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Off"));
+			UberItems_old.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Off"));
 		}
 		else {
 			item.addUnsafeEnchantment(Enchantment.DURABILITY, 10);
-			UberItems.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Item Magnet"));
+			UberItems_old.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Item Magnet"));
 		}
 	}
 

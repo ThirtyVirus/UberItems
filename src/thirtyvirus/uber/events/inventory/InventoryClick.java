@@ -12,6 +12,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.Utilities;
+
+import static org.bukkit.Material.TROPICAL_FISH;
 
 public class InventoryClick implements Listener {
 
@@ -35,7 +38,7 @@ public class InventoryClick implements Listener {
 
                     List<String> lore = player.getInventory().getItemInMainHand().getItemMeta().getLore();
                     lore.set(0, ChatColor.GOLD + "Saturation: " + saturation);
-                    UberItems.loreItem(player.getInventory().getItemInMainHand(), lore);
+                    Utilities.loreItem(player.getInventory().getItemInMainHand(), lore);
                     player.getInventory().remove(event.getCurrentItem());
                 }
                 else{

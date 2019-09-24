@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.potion.PotionEffect;
 
-import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class Bucket implements Listener {
 
@@ -18,7 +18,7 @@ public class Bucket implements Listener {
     public void onBucketFill(PlayerBucketFillEvent event) {
 
         //Big Bucket
-        if (UberItems.isUber(event.getPlayer().getInventory().getItemInMainHand(), 4)){
+        if (Utilities.isUber(event.getPlayer().getInventory().getItemInMainHand(), 4)){
 
             event.getBlockClicked().setType(Material.AIR);
             event.setCancelled(true);
@@ -30,7 +30,7 @@ public class Bucket implements Listener {
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
 
         //Big Bucket
-        if (UberItems.isUber(event.getPlayer().getInventory().getItemInMainHand(), 4)){
+        if (Utilities.isUber(event.getPlayer().getInventory().getItemInMainHand(), 4)){
 
             event.getBlockClicked().setType(Material.AIR);
             event.setCancelled(true);
@@ -40,13 +40,13 @@ public class Bucket implements Listener {
 
     @EventHandler
     public void consumeEvent(PlayerItemConsumeEvent event) {
-        if (UberItems.isUber(event.getItem(), 8)){
+        if (Utilities.isUber(event.getItem(), 8)){
 
             ArrayList<PotionEffect> effects = new ArrayList<PotionEffect>();
             for (PotionEffect e : event.getPlayer().getActivePotionEffects()) { effects.add(e); }
             for (PotionEffect e : effects) event.getPlayer().removePotionEffect(e.getType());
 
-            UberItems.getUber(event.getItem()).activeEffect(event.getPlayer(), event.getItem());
+            Utilities.getUber(event.getItem()).activeEffect(event.getPlayer(), event.getItem());
 
             event.setCancelled(true);
         }

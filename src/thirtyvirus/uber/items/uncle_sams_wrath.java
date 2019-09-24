@@ -17,18 +17,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.UberItems_old;
 import thirtyvirus.uber.UberItem;
 
 public class uncle_sams_wrath extends UberItem{
 
-	public UberItems main = null;
+	public UberItems_old main = null;
 	
 	public static ArrayList<Color> colors = new ArrayList<Color>();
 	public static ArrayList<FireworkEffect.Type> types = new ArrayList<FireworkEffect.Type>();
 	
 	//Constructor
-	public uncle_sams_wrath(int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, UberItems main) {
+	public uncle_sams_wrath(int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, UberItems_old main) {
 		super(id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
 	
 		colors.addAll(Arrays.asList(Color.WHITE, Color.PURPLE, Color.RED, Color.GREEN, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.LIME, Color.MAROON, Color.YELLOW, Color.SILVER, Color.TEAL, Color.ORANGE, Color.OLIVE, Color.NAVY, Color.BLACK));

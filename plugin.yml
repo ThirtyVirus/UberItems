@@ -5,4 +5,11 @@ api-version: 1.13
 
 commands:
   uber:
-    description: Main UberItems command
+    description: Main command for UberItems. Use /uber help for more info
+permissions:
+  uber.user:
+    description: Allows player to use the plugin's user features
+    default: true
+  uber.admin:
+    description: Allows player to use the plugin's admin features
+    default: op

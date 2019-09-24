@@ -30,7 +30,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 
-import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.UberItems_old;
 import thirtyvirus.uber.UberItem;
 
 public class shooty_box extends UberItem{
@@ -57,7 +57,7 @@ public class shooty_box extends UberItem{
 	public void rightClickAirAction(Player player, ItemStack item) {
 		
 		//Get all items inside shooty box
-		ItemStack[] rawItems = UberItems.getItemsFromLore(item, 3);
+		ItemStack[] rawItems = UberItems_old.getItemsFromLore(item, 3);
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		for (ItemStack i : rawItems) if (i != null) items.add(i);
 		
@@ -134,7 +134,7 @@ public class shooty_box extends UberItem{
 			//update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
-		else if (actionItem.getType() == Material.FIRE_CHARGE && !UberItems.isUber(actionItem, 6)){
+		else if (actionItem.getType() == Material.FIRE_CHARGE && !UberItems_old.isUber(actionItem, 6)){
 			Fireball thrown = player.launchProjectile(SmallFireball.class);
 			Vector v = player.getEyeLocation().getDirection().multiply(2.0);
 			thrown.setVelocity(v);
@@ -143,8 +143,8 @@ public class shooty_box extends UberItem{
 			//update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
-		else if (UberItems.isUber(actionItem, 6)) {
-			UberItems.getUber(actionItem).rightClickAirAction(player, actionItem);
+		else if (UberItems_old.isUber(actionItem, 6)) {
+			UberItems_old.getUber(actionItem).rightClickAirAction(player, actionItem);
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 			
 			//update inventory
@@ -167,7 +167,7 @@ public class shooty_box extends UberItem{
 		//Save inventory update to item lore
 		ItemStack[] finalItems = new ItemStack[items.size()];
 		for (int counter = 0; counter < items.size(); counter++) finalItems[counter] = items.get(counter);
-		UberItems.saveItemsInLore(item, finalItems, 3);
+		UberItems_old.saveItemsInLore(item, finalItems, 3);
 	}
 
 	@Override
@@ -189,9 +189,9 @@ public class shooty_box extends UberItem{
 
 	@Override
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
-		Inventory inventory = Bukkit.createInventory(player, InventoryType.DISPENSER, UberItems.itemPrefix + ChatColor.DARK_GRAY + "Shooty Box");
+		Inventory inventory = Bukkit.createInventory(player, InventoryType.DISPENSER, UberItems_old.itemPrefix + ChatColor.DARK_GRAY + "Shooty Box");
 		
-		ItemStack[] items = UberItems.getItemsFromLore(item, 3);
+		ItemStack[] items = UberItems_old.getItemsFromLore(item, 3);
 		if (items != null) { for (ItemStack i : items) { if (i != null) { inventory.addItem(i); } } }
 		player.openInventory(inventory);
 		

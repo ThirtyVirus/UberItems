@@ -27,8 +27,8 @@ public abstract class UberItem {
         this.description = description;
 
         this.defaultLore = lore;
-        item = UberItems.nameItem(material, name);
-        item = UberItems.loreItem(item, lore);
+        item = UberItems_old.nameItem(material, name);
+        item = UberItems_old.loreItem(item, lore);
 
         this.canBreakBlocks = canBreakBlocks;
         this.stackable = stackable;

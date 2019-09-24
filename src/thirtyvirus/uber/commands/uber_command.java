@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class uber_command implements CommandExecutor {
 
@@ -18,7 +19,7 @@ public class uber_command implements CommandExecutor {
         this.main = main;
     }
 
-    //Uber Command
+    // uber command
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) return false;
 
@@ -40,7 +41,7 @@ public class uber_command implements CommandExecutor {
                     break;
                 case "reload":
                     Bukkit.getScheduler().cancelTask(UberItems.activeEffectsCheckID);
-                    UberItems.activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() { public void run() { UberItems.uberActiveEffects(); } }, UberItems.activeEffectsDelay, UberItems.activeEffectsDelay);
+                    UberItems.activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, new Runnable() { public void run() { Utilities.uberActiveEffects(); } }, UberItems.activeEffectsDelay, UberItems.activeEffectsDelay);
                     main.registerUberItems();
                     break;
                 default:
@@ -64,7 +65,7 @@ public class uber_command implements CommandExecutor {
         return true;
     }
 
-    //Give Command
+    // give command
     public void give(Player player, String[] args){
         if (!player.hasPermission("uber.give")){
             player.sendMessage(UberItems.prefix + "Sorry! Not enough permissions!");
@@ -73,7 +74,7 @@ public class uber_command implements CommandExecutor {
         String name = args[1];
 
         UberItem item;
-        if (UberItems.isInteger(name)) {
+        if (Utilities.isInteger(name)) {
             item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
         }
         else {
@@ -93,15 +94,15 @@ public class uber_command implements CommandExecutor {
         player.getInventory().addItem(testItem);
     }
 
-    //Info Command
+    // info Command
     public void info(Player player, String[] args){
         if (args.length > 2){
             player.sendMessage(UberItems.prefix + "Sorry! Format invalid");
             return;
         }
         else if (args.length == 1){
-            UberItem mainHand = UberItems.getUber(player.getInventory().getItemInMainHand());
-            UberItem offHand = UberItems.getUber(player.getInventory().getItemInOffHand());
+            UberItem mainHand = Utilities.getUber(player.getInventory().getItemInMainHand());
+            UberItem offHand = Utilities.getUber(player.getInventory().getItemInOffHand());
 
             if (mainHand != null && offHand != null){
                 player.sendMessage(UberItems.prefix + "Main Hand - " + mainHand.getID() + ": " + mainHand.getName() + ": " + mainHand.getDescription());
@@ -125,7 +126,7 @@ public class uber_command implements CommandExecutor {
         String name = args[1];
 
         UberItem item;
-        if (UberItems.isInteger(name)){
+        if (Utilities.isInteger(name)){
             item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
         }
         else{
@@ -140,7 +141,7 @@ public class uber_command implements CommandExecutor {
         player.sendMessage(UberItems.prefix + item.getID() + ": " + item.getName() + ": " + item.getDescription());
     }
 
-    //List Command
+    // list Command
     public void list(CommandSender sender){
         sender.sendMessage(UberItems.prefix + "Listing Uber Items:");
         for (String id : UberItems.itemIDs.values()) {

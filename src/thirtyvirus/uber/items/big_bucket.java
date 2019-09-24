@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.UberItems_old;
 import thirtyvirus.uber.UberItem;
 
 public class big_bucket extends UberItem {
@@ -23,22 +23,22 @@ public class big_bucket extends UberItem {
 	public void leftClickAirAction(Player player, ItemStack item) {
 		//swap mode of bucket
 		if (item.getItemMeta().getLore().get(1).contains("Collect")){
-			UberItems.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Water", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
+			UberItems_old.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Water", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
 			player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1, 1);
 			return;
 		}
 		if (item.getItemMeta().getLore().get(1).contains("Water")){
-			UberItems.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Lava", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
+			UberItems_old.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Lava", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
 			player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1, 1);
 			return;
 		}
 		if (item.getItemMeta().getLore().get(1).contains("Lava")){
-			UberItems.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Collect-Aura", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
+			UberItems_old.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Collect-Aura", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
 			player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1, 1);
 			return;
 		}
 		if (item.getItemMeta().getLore().get(1).contains("Collect-Aura")){
-			UberItems.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Collect", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
+			UberItems_old.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Collect", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
 			player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1, 1);
 			return;
 		}

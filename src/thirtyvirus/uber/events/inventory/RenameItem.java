@@ -11,6 +11,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.ActionSound;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class RenameItem implements Listener {
 
@@ -23,9 +25,9 @@ public class RenameItem implements Listener {
             if (event.getRawSlot() == 2) {
                 if (event.getView().getItem(0).getType() != Material.AIR && event.getView().getItem(2).getType() != Material.AIR) {
 
-                    if (UberItems.isUber(event.getView().getItem(0)) || UberItems.isUber(event.getView().getItem(1)) || UberItems.isUber(event.getView().getItem(2))) {
+                    if (Utilities.isUber(event.getView().getItem(0)) || Utilities.isUber(event.getView().getItem(1)) || Utilities.isUber(event.getView().getItem(2))) {
                         event.setCancelled(true);
-                        player.playSound(player.getLocation(), Sound.ENTITY_PARROT_IMITATE_SHULKER, 1, 1);
+                        Utilities.playSound(ActionSound.ERROR, player);
                     }
 
                 }
@@ -42,9 +44,9 @@ public class RenameItem implements Listener {
 
         ItemStack[] item = event.getInventory().getMatrix();
 
-        if (UberItems.isUber(item[0]) || UberItems.isUber(item[1]) || UberItems.isUber(item[2]) || UberItems.isUber(item[3]) || UberItems.isUber(item[4]) || UberItems.isUber(item[5]) || UberItems.isUber(item[6]) || UberItems.isUber(item[7]) || UberItems.isUber(item[8])){
+        if (Utilities.isUber(item[0]) || Utilities.isUber(item[1]) || Utilities.isUber(item[2]) || Utilities.isUber(item[3]) || Utilities.isUber(item[4]) || Utilities.isUber(item[5]) || Utilities.isUber(item[6]) || Utilities.isUber(item[7]) || Utilities.isUber(item[8])){
             event.setCancelled(true);
-            player.playSound(player.getLocation(), Sound.ENTITY_PARROT_IMITATE_SHULKER, 1, 1);
+            Utilities.playSound(ActionSound.ERROR, player);
         }
 
     }

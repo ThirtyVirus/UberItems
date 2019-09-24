@@ -8,6 +8,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class BlockBreak implements Listener {
 
@@ -18,11 +19,11 @@ public class BlockBreak implements Listener {
         ItemStack mainHand = player.getInventory().getItemInMainHand();
         ItemStack offHand = player.getInventory().getItemInOffHand();
 
-        if (UberItems.isUber(mainHand)){
-            if (!UberItems.getUber(mainHand).getCanBreakBlocks()) event.setCancelled(true);
+        if (Utilities.isUber(mainHand)){
+            if (!Utilities.getUber(mainHand).getCanBreakBlocks()) event.setCancelled(true);
         }
-        if (UberItems.isUber(offHand)){
-            if (!UberItems.getUber(offHand).getCanBreakBlocks()) event.setCancelled(true);
+        if (Utilities.isUber(offHand)){
+            if (!Utilities.getUber(offHand).getCanBreakBlocks()) event.setCancelled(true);
         }
     }
 }
