@@ -2,14 +2,13 @@ package thirtyvirus.uber;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.bukkit.plugin.java.JavaPlugin;
+
 import thirtyvirus.multiversion.XMaterial;
-import thirtyvirus.uber.commands.uber_command;
+import thirtyvirus.uber.commands.uber;
 import thirtyvirus.uber.events.block.BlockBreak;
 import thirtyvirus.uber.events.chat.TabComplete;
 import thirtyvirus.uber.events.inventory.InventoryClick;
@@ -31,36 +30,30 @@ public class UberItems extends JavaPlugin {
     private FileConfiguration langFileConfig;
 
     // chat messages
-    private Map<String, String> phrases = new HashMap<String, String>();
+    private Map<String, String> phrases = new HashMap<>();
 
     // core settings
-    public static String prefix = "&c&l[&5&lTemplatePlugin&c&l] &8&l"; // generally unchanged unless otherwise stated in config
+    public static String prefix = "&c&l[&5&lUberItems&c&l] &8&l"; // generally unchanged unless otherwise stated in config
     public static String itemPrefix = ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "[UBER] " + ChatColor.GRAY;
-    public static String consolePrefix = "[TemplatePlugin] ";
+    public static String consolePrefix = "[UberItems] ";
 
     // data for all Uber Items
-    public static Map<String, UberItem> items = new HashMap<String, UberItem>();
-    public static Map<Integer, String> itemIDs = new HashMap<Integer, String>();
+    public static Map<String, UberItem> items = new HashMap<>();
+    public static Map<Integer, String> itemIDs = new HashMap<>();
 
     public static int activeEffectsCheckID = 0;
     public static int activeEffectsDelay = 5; //in ticks
 
-    // customizable settings
-    public static boolean customSetting = false;
-
     public void onEnable(){
-        // load config.yml (generate one if not there)
-        loadConfiguration();
 
-        // load language.yml (generate one if not there)
-        loadLangFile();
+        loadConfiguration(); // load config.yml (generate one if not there)
+        loadLangFile(); // load language.yml (generate one if not there)
 
         // register commands and events
         registerCommands();
         registerEvents();
 
-        // register all uber items?
-        registerUberItems();
+        registerUberItems(); // register all uber items
 
         // posts confirmation in chat
         getLogger().info(getDescription().getName() + " V: " + getDescription().getVersion() + " has been enabled");
@@ -77,22 +70,6 @@ public class UberItems extends JavaPlugin {
         getLogger().info(getDescription().getName() + " V: " + getDescription().getVersion() + " has been disabled");
     }
 
-    private void registerCommands() {
-        getCommand("uber").setExecutor(new uber_command(this));
-
-        // set up tab completion
-        getCommand("uber").setTabCompleter(new TabComplete(this));
-    }
-    private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new BlockBreak(), this);
-        getServer().getPluginManager().registerEvents(new FoodLevelChange(), this);
-        getServer().getPluginManager().registerEvents(new InventoryClick(),this);
-        getServer().getPluginManager().registerEvents(new PlayerUse(), this);
-        getServer().getPluginManager().registerEvents(new RenameItem(), this);
-        getServer().getPluginManager().registerEvents(new InventoryClose(), this);
-        getServer().getPluginManager().registerEvents(new Bucket(), this);
-    }
-
     // load the config file and apply settings
     public void loadConfiguration() {
         // prepare config.yml (generate one if not there)
@@ -105,10 +82,7 @@ public class UberItems extends JavaPlugin {
         // general settings
         prefix = ChatColor.translateAlternateColorCodes('&', config.getString("plugin-prefix"));
 
-        customSetting = config.getBoolean("custom-setting");
-        // put more settings here
-
-        Bukkit.getLogger().info(consolePrefix + "Settings Reloaded from config");
+        Bukkit.getLogger().info(consolePrefix + "Settings reloaded from config");
     }
 
     // load the language file and apply settings
@@ -125,6 +99,22 @@ public class UberItems extends JavaPlugin {
         for(String priceString : langFileConfig.getKeys(false)) {
             phrases.put(priceString, langFileConfig.getString(priceString));
         }
+    }
+
+    private void registerCommands() {
+        getCommand("uber").setExecutor(new uber(this));
+
+        // set up tab completion
+        getCommand("uber").setTabCompleter(new TabComplete(this));
+    }
+    private void registerEvents() {
+        getServer().getPluginManager().registerEvents(new BlockBreak(), this);
+        getServer().getPluginManager().registerEvents(new FoodLevelChange(), this);
+        getServer().getPluginManager().registerEvents(new InventoryClick(),this);
+        getServer().getPluginManager().registerEvents(new PlayerUse(), this);
+        getServer().getPluginManager().registerEvents(new RenameItem(), this);
+        getServer().getPluginManager().registerEvents(new InventoryClose(), this);
+        getServer().getPluginManager().registerEvents(new Bucket(), this);
     }
 
     // register Uber Items

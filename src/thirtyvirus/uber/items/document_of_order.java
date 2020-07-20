@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import thirtyvirus.uber.UberItems_old;
+import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberItem;
 
 class ItemComparator implements Comparator<ItemStack> {
@@ -91,8 +91,8 @@ public class document_of_order extends UberItem  {
 		items.sort(new ItemComparator());
 		items = naturalizeItemArrayList(items);
 
-		player.sendMessage(UberItems_old.prefix + "inventories: " + inventories.size());
-		player.sendMessage(UberItems_old.prefix + "items: " + items.size());
+		player.sendMessage(UberItems.prefix + "inventories: " + inventories.size());
+		player.sendMessage(UberItems.prefix + "items: " + items.size());
 		
 		//Distribute items between inventories
 		for (Inventory inventory : inventories){
@@ -115,7 +115,7 @@ public class document_of_order extends UberItem  {
 			while (counter < currentItems.length) { items.remove(0); counter++; }
 			
 		}		
-		player.sendMessage(UberItems_old.prefix + "Inventories: " + inventories.size());
+		player.sendMessage(UberItems.prefix + "Inventories: " + inventories.size());
 	}
 	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		leftClickAirAction(player, item);

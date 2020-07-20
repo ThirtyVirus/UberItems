@@ -1,5 +1,6 @@
 package thirtyvirus.uber.events.chat;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -27,14 +28,20 @@ public class TabComplete implements TabCompleter {
         ArrayList<String> arguments = new ArrayList<>();
 
         // tab completion for /exchange command
-        if (command.getName().equals("template")) {
-
+        if (command.getName().equals("uber")) {
+            Bukkit.getLogger().info("" + args.length);
             // no arguments
-            if (args.length == 1){
-                if (player.hasPermission("template.user")) { arguments.addAll(Arrays.asList("help", "info", "tutorial")); }
-                if (player.hasPermission("template.admin")) { arguments.addAll(Arrays.asList("reload")); }
+            if (args.length == 1) {
+                if (player.hasPermission("uber.user")) { arguments.addAll(Arrays.asList("help", "info", "tutorial", "identify", "list")); }
+                if (player.hasPermission("uber.admin")) { arguments.addAll(Arrays.asList("give", "reload")); }
 
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[0].toLowerCase())) iter.remove(); }
+            }
+
+            // give command
+            else if (args.length == 2 && args[0].equals("give") && player.hasPermission("uber.admin")) {
+                arguments.addAll(Arrays.asList("builders_wand", "lunch_box", "document_of_order", "big_bucket", "escape_rope", "fireball", "infini_gulp", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel", "smart_pack", "boom_stick"));
+                Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }
         }
 

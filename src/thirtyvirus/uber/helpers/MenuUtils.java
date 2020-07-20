@@ -6,15 +6,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import thirtyvirus.multiversion.API;
 import thirtyvirus.multiversion.XMaterial;
-import thirtyvirus.uber.UberItems_old;
+import thirtyvirus.uber.UberItems;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MenuUtils {
 
-    private UberItems_old main = null;
-    public MenuUtils(UberItems_old main) { this.main = main; }
+    private UberItems main = null;
+    public MenuUtils(UberItems main) { this.main = main; }
 
     public static void tutorialMenu(Player player) {
         ItemStack book = new ItemStack(XMaterial.WRITTEN_BOOK.parseMaterial());

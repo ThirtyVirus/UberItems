@@ -2,38 +2,48 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e89be58a-ef4f-430f-8537-cfe9ba3bde74" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/craftbukkit_1_10_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/language.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/multiversion/API.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/multiversion/BookUtil_1_14_4.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/multiversion/BookUtil_1_8.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/multiversion/BookUtil_1_9.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/multiversion/ReflectionUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/multiversion/Sound.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/multiversion/Version.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/multiversion/XMaterial.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/commands/uber.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/chat/TabComplete.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/ActionSound.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/ItemStorageUtilities.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/MenuUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/Utilities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/craftbukkit_1_14_2.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/craftbukkit_1_11_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/craftbukkit_1_12_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/craftbukkit_1_13_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/craftbukkit_1_8_8.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/craftbukkit_1_9_4.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/craftbukkit_suite.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/Uber_Items_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/Uber_Items_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/craftbukkit_1_10_2.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Uber_Items.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Uber_Items.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/language.yml" beforeDir="false" afterPath="$PROJECT_DIR$/language.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/commands/uber_command$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/commands/uber_command.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/block/BlockBreak.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/block/BlockBreak.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/inventory/InventoryClick$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/inventory/InventoryClick$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/inventory/InventoryClick.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/inventory/InventoryClick.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/inventory/InventoryClose.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/inventory/InventoryClose.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/inventory/RenameItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/inventory/RenameItem.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/Bucket.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/Bucket.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/FoodLevelChange.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/FoodLevelChange.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/PlayerUse.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/PlayerUse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/big_bucket.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/big_bucket.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/builders_wand$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/builders_wand$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/builders_wand.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/builders_wand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/electromagnet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/electromagnet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/escape_rope.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/escape_rope.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/infini_gulp.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/infini_gulp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/lunch_box.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/lunch_box.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/shooty_box.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/shooty_box.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/multiversion/Version.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/multiversion/Version.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/commands/uber_command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/commands/uber_command.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/block/BlockBreak.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/block/BlockBreak.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/inventory/InventoryClick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/inventory/InventoryClick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/commands/uber.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/commands/uber.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/commands/uber_command.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/chat/TabComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/chat/TabComplete.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/inventory/InventoryClose.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/inventory/InventoryClose.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/inventory/RenameItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/inventory/RenameItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/Bucket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/Bucket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/FoodLevelChange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/FoodLevelChange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/PlayerUse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/PlayerUse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/MenuUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/MenuUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/Utilities.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/big_bucket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/big_bucket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/builders_wand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/builders_wand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/document_of_order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/document_of_order.java" afterDir="false" />
@@ -44,7 +54,6 @@
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/shooty_box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/shooty_box.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/uncle_sams_wrath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/uncle_sams_wrath.java" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -67,10 +76,16 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/craftbukkit-suite/craftbukkit-suite/craftbukkit-1.9.4.jar!/" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="last_opened_file_path" value="$USER_HOME$/OneDrive/Documents/Programming/Spigot/plugins/ShulkerBox_BackPacks/src/thirtyvirus/sbbp/events/Inventory.java" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.4032258" />
   </component>
@@ -81,18 +96,6 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\ThirtyVirus\Documents\My Programming\Spigot\plugins\Uber_Items\src\thirtyvirus\uber\items" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager">
     <configuration default="true" type="Applet">
@@ -167,6 +170,9 @@
       </method>
     </configuration>
   </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="e89be58a-ef4f-430f-8537-cfe9ba3bde74" name="Default" comment="" />
@@ -182,11 +188,31 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1010" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1595266093157">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1010" y="447" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1595266093157" />
+    <state x="986" y="441" width="670" height="490" key="FileChooserDialogImpl" timestamp="1595263692037">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="986" y="441" width="670" height="490" key="FileChooserDialogImpl/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1595263692037" />
+    <state x="760" y="274" key="SettingsEditor" timestamp="1595263005502">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="760" y="274" key="SettingsEditor/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1595263005502" />
+    <state x="-2174" y="0" width="2190" height="1169" key="dock-window-1" timestamp="1595268031704">
+      <screen x="-2560" y="0" width="2560" height="1400" />
+    </state>
+    <state x="-2174" y="0" width="2190" height="1169" key="dock-window-1/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1595268031704" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />

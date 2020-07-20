@@ -16,12 +16,9 @@ import org.bukkit.plugin.Plugin;
 import thirtyvirus.multiversion.Sound;
 import thirtyvirus.multiversion.XMaterial;
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems_old;
+import thirtyvirus.uber.UberItems;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.*;
 
 public final class Utilities {
@@ -33,7 +30,7 @@ public final class Utilities {
             XMaterial.RED_CARPET.parseMaterial(), XMaterial.WHITE_CARPET.parseMaterial(), XMaterial.YELLOW_CARPET.parseMaterial());
 
     // list of all supported inventory blocks in the plugin
-    public static final List<Material> INVENTORY_BLOCKS = Arrays.asList(XMaterial.CHEST.parseMaterial(),XMaterial.TRAPPED_CHEST.parseMaterial(), XMaterial.ENDER_CHEST.parseMaterial(), XMaterial.SHULKER_BOX.parseMaterial(), XMaterial.BLACK_SHULKER_BOX.parseMaterial(),
+    public static final List<Material> INVENTORY_BLOCKS = Arrays.asList(XMaterial.CHEST.parseMaterial(), XMaterial.TRAPPED_CHEST.parseMaterial(), XMaterial.ENDER_CHEST.parseMaterial(), XMaterial.SHULKER_BOX.parseMaterial(), XMaterial.BLACK_SHULKER_BOX.parseMaterial(),
             XMaterial.BLUE_SHULKER_BOX.parseMaterial(), XMaterial.BROWN_SHULKER_BOX.parseMaterial(), XMaterial.CYAN_SHULKER_BOX.parseMaterial(), XMaterial.GRAY_SHULKER_BOX.parseMaterial(),
             XMaterial.GREEN_SHULKER_BOX.parseMaterial(), XMaterial.LIGHT_BLUE_SHULKER_BOX.parseMaterial(), XMaterial.LIGHT_GRAY_SHULKER_BOX.parseMaterial(), XMaterial.LIME_SHULKER_BOX.parseMaterial(),
             XMaterial.MAGENTA_SHULKER_BOX.parseMaterial(), XMaterial.ORANGE_SHULKER_BOX.parseMaterial(), XMaterial.PINK_SHULKER_BOX.parseMaterial(), XMaterial.PURPLE_SHULKER_BOX.parseMaterial(),
@@ -41,7 +38,7 @@ public final class Utilities {
 
     private static Map<Player, Long> mostRecentSelect = new HashMap<>();
 
-    // load file from JAR with comments
+    // loads file from JAR with comments
     public static File loadResource(Plugin plugin, String resource) {
         File folder = plugin.getDataFolder();
         if (!folder.exists())
@@ -64,7 +61,7 @@ public final class Utilities {
     // convert a location to formatted string (world,x,y,z)
     public static String toLocString(Location location) {
         if (location.equals(null)) return "";
-        return location.getWorld().getName() + "," + (int)location.getX() + "," + (int)location.getY() + "," + (int)location.getZ();
+        return location.getWorld().getName() + "," + (int) location.getX() + "," + (int) location.getY() + "," + (int) location.getZ();
     }
 
     // convert a formatted location string to a Location
@@ -119,14 +116,14 @@ public final class Utilities {
         }
 
         for (String message : messages) {
-            sender.sendMessage(UberItems_old.prefix + ChatColor.RESET + ChatColor.RED + message);
+            sender.sendMessage(UberItems.prefix + ChatColor.RESET + ChatColor.RED + message);
         }
     }
 
     // send player a collection of messages
-    public static void informPlayer(CommandSender player, List<String> messages) {
+    public static void informPlayer(CommandSender sender, List<String> messages) {
         for (String message : messages) {
-            player.sendMessage(UberItems_old.prefix + ChatColor.RESET + ChatColor.GRAY + message);
+            sender.sendMessage(UberItems.prefix + ChatColor.RESET + ChatColor.GRAY + message);
         }
     }
 
@@ -167,10 +164,9 @@ public final class Utilities {
     // test if given number string is integer
     public static boolean isInteger(String input) {
         try {
-            Integer.parseInt( input );
+            Integer.parseInt(input);
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -180,22 +176,26 @@ public final class Utilities {
     //Test if given item is an UberItem
     @SuppressWarnings("deprecation")
     public static boolean isUber(ItemStack item) {
-        if (item == null) { return false; }
+        if (item == null) {
+            return false;
+        }
 
         ItemStack testItem = item.clone();
-        testItem.setDurability((short)0);
+        testItem.setDurability((short) 0);
         testItem.setAmount(1);
 
         ItemMeta meta = testItem.getItemMeta();
-        if (meta == null) { return false; }
+        if (meta == null) {
+            return false;
+        }
         for (Enchantment e : meta.getEnchants().keySet()) {
             meta.removeEnchant(e);
         }
         testItem.setItemMeta(meta);
 
-        for (String key : UberItems_old.items.keySet()) {
-            ItemStack loopItem = UberItems_old.items.get(key).getItem();
-            Utilities.loreItem(testItem, UberItems_old.items.get(key).getDefaultLore());
+        for (String key : UberItems.items.keySet()) {
+            ItemStack loopItem = UberItems.items.get(key).getItem();
+            Utilities.loreItem(testItem, UberItems.items.get(key).getDefaultLore());
             if (testItem.equals(loopItem)) return true;
         }
 
@@ -205,23 +205,27 @@ public final class Utilities {
     //Test if given item is a specific Uber item
     @SuppressWarnings("deprecation")
     public static boolean isUber(ItemStack item, int id) {
-        if (item == null) { return false; }
+        if (item == null) {
+            return false;
+        }
 
         ItemStack testItem = item.clone();
-        testItem.setDurability((short)0);
+        testItem.setDurability((short) 0);
         testItem.setAmount(1);
 
         ItemMeta meta = testItem.getItemMeta();
-        if (meta == null) { return false; }
+        if (meta == null) {
+            return false;
+        }
         for (Enchantment e : meta.getEnchants().keySet()) {
             meta.removeEnchant(e);
         }
         testItem.setItemMeta(meta);
 
-        for (String key : UberItems_old.items.keySet()) {
-            ItemStack loopItem = UberItems_old.items.get(key).getItem();
-            Utilities.loreItem(testItem, UberItems_old.items.get(key).getDefaultLore());
-            if (testItem.equals(loopItem) && UberItems_old.items.get(key).getID() == id) return true;
+        for (String key : UberItems.items.keySet()) {
+            ItemStack loopItem = UberItems.items.get(key).getItem();
+            Utilities.loreItem(testItem, UberItems.items.get(key).getDefaultLore());
+            if (testItem.equals(loopItem) && UberItems.items.get(key).getID() == id) return true;
         }
 
         return false;
@@ -231,7 +235,7 @@ public final class Utilities {
     @SuppressWarnings("deprecation")
     public static UberItem getUber(ItemStack item) {
         ItemStack testItem = item.clone();
-        testItem.setDurability((short)0);
+        testItem.setDurability((short) 0);
         testItem.setAmount(1);
 
         ItemMeta meta = testItem.getItemMeta();
@@ -240,9 +244,9 @@ public final class Utilities {
         }
         testItem.setItemMeta(meta);
 
-        for ( String key : UberItems_old.items.keySet() ) {
-            UberItem uberr = UberItems_old.items.get(key);
-            Utilities.loreItem(testItem, UberItems_old.items.get(key).getDefaultLore());
+        for (String key : UberItems.items.keySet()) {
+            UberItem uberr = UberItems.items.get(key);
+            Utilities.loreItem(testItem, UberItems.items.get(key).getDefaultLore());
             if (testItem.equals(uberr.getItem())) return uberr;
         }
 
@@ -251,26 +255,26 @@ public final class Utilities {
 
     //Return uber item with given name
     public static UberItem getUber(String name) {
-        for ( String key : UberItems_old.items.keySet() ) {
-            UberItem uberr = UberItems_old.items.get(key);
+        for (String key : UberItems.items.keySet()) {
+            UberItem uberr = UberItems.items.get(key);
             if (uberr.getName().equals(name)) return uberr;
         }
         return null;
     }
 
-    //Process active effets for uber items that are in use
+    // process active effets for uber items that are in use
     //TODO: Find more efficient way to do this?
     //TODO: Do active effects for uber items not in hand?
-    public static void uberActiveEffects(){
+    public static void uberActiveEffects() {
 
-        for (Player player : Bukkit.getOnlinePlayers()){
-            if (isUber(player.getInventory().getItemInMainHand())){
-                if (getUber(player.getInventory().getItemInMainHand()).hasActiveEffect()){
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (isUber(player.getInventory().getItemInMainHand())) {
+                if (getUber(player.getInventory().getItemInMainHand()).hasActiveEffect()) {
                     getUber(player.getInventory().getItemInMainHand()).activeEffect(player, player.getInventory().getItemInMainHand());
                 }
             }
-            if (isUber(player.getInventory().getItemInOffHand())){
-                if (getUber(player.getInventory().getItemInOffHand()).hasActiveEffect()){
+            if (isUber(player.getInventory().getItemInOffHand())) {
+                if (getUber(player.getInventory().getItemInOffHand()).hasActiveEffect()) {
                     getUber(player.getInventory().getItemInOffHand()).activeEffect(player, player.getInventory().getItemInOffHand());
                 }
             }
@@ -279,7 +283,7 @@ public final class Utilities {
 
     // find uber item of given ID in inventory (null if nothing)
     public static ItemStack searchFor(Inventory inv, int id) {
-        for (ItemStack item : inv){
+        for (ItemStack item : inv) {
             if (isUber(item, id)) return item;
         }
 

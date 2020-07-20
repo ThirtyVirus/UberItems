@@ -16,8 +16,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import thirtyvirus.uber.UberItems_old;
+import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class electromagnet extends UberItem{
 
@@ -81,11 +82,11 @@ public class electromagnet extends UberItem{
 				meta.removeEnchant(e);
 			}
 			item.setItemMeta(meta);
-			UberItems_old.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Off"));
+			Utilities.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Off"));
 		}
 		else {
 			item.addUnsafeEnchantment(Enchantment.LURE, 10);
-			UberItems_old.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Item Magnet"));
+			Utilities.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Item Magnet"));
 		}
 		
 		player.playSound(player.getLocation(), Sound.ENTITY_ENDER_EYE_DEATH, 1, 1);

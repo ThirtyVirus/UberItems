@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import thirtyvirus.uber.UberItems_old;
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class escape_rope extends UberItem{
 
@@ -63,7 +63,7 @@ public class escape_rope extends UberItem{
 		
 		if(player.getWorld().getHighestBlockYAt(player.getLocation()) != player.getLocation().getY()){
 			player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
-			player.teleport(UberItems_old.fromLocString(item.getItemMeta().getLore().get(1).substring(2)));
+			player.teleport(Utilities.fromLocString(item.getItemMeta().getLore().get(1).substring(2)));
 			player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 			
 			if (player.getGameMode() != GameMode.CREATIVE) destroy(item, 1);
@@ -86,7 +86,7 @@ public class escape_rope extends UberItem{
 	public void activeEffect(Player player, ItemStack item) {
 		//check if player is exposed to sky
 		if(player.getWorld().getHighestBlockYAt(player.getLocation()) == player.getLocation().getY()){
-			UberItems_old.loreItem(item, Arrays.asList("Last saw sky at:", ChatColor.GOLD + UberItems_old.toLocString(player.getLocation()), "Shift-Right-Click to teleport!"));
+			Utilities.loreItem(item, Arrays.asList("Last saw sky at:", ChatColor.GOLD + Utilities.toLocString(player.getLocation()), "Shift-Right-Click to teleport!"));
 		}
 		
 	}

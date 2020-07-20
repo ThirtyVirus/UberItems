@@ -17,7 +17,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems_old;
+import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class builders_wand extends UberItem {
 //TODO
@@ -61,7 +62,7 @@ public class builders_wand extends UberItem {
 			removeBlocks(player.getInventory(), Material.DIAMOND, 1);
 			if (item.getDurability() < 0) item.setDurability((short)0);
 			//Reset Lore
-			item = UberItems_old.loreItem(item, super.getDefaultLore());
+			item = Utilities.loreItem(item, super.getDefaultLore());
 		}
 	}
 	//Shift Right Click Block Action
@@ -408,7 +409,7 @@ public class builders_wand extends UberItem {
 				List<String> lore = super.getItem().getItemMeta().getLore();
 				lore.set(0, "Feed me Diamonds!");
 				lore.set(1, "Shift + Right Click while holding");
-				item = UberItems_old.loreItem(item, lore);
+				item = Utilities.loreItem(item, lore);
 			}
 		}
 

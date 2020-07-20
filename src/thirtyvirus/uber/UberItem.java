@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import thirtyvirus.uber.helpers.Utilities;
 
 public abstract class UberItem {
 
@@ -27,8 +28,8 @@ public abstract class UberItem {
         this.description = description;
 
         this.defaultLore = lore;
-        item = UberItems_old.nameItem(material, name);
-        item = UberItems_old.loreItem(item, lore);
+        item = Utilities.nameItem(material, name);
+        item = Utilities.loreItem(item, lore);
 
         this.canBreakBlocks = canBreakBlocks;
         this.stackable = stackable;

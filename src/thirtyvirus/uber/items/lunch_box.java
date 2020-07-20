@@ -11,8 +11,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import thirtyvirus.uber.UberItems_old;
+import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class lunch_box extends UberItem {
 
@@ -53,8 +54,8 @@ public class lunch_box extends UberItem {
 	//Shift Right Click Air Action
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
 		//Open insert inventory
-		Inventory inv = Bukkit.createInventory(player, 9, UberItems_old.prefix + ChatColor.DARK_GRAY + "Insert Food into Lunch Box!");
-		ItemStack menuBlock = UberItems_old.nameItem(Material.HOPPER, ChatColor.RED + "Click on Food Below!");
+		Inventory inv = Bukkit.createInventory(player, 9, UberItems.prefix + ChatColor.DARK_GRAY + "Insert Food into Lunch Box!");
+		ItemStack menuBlock = Utilities.nameItem(Material.HOPPER, ChatColor.RED + "Click on Food Below!");
 		
 		inv.setItem(0, menuBlock);
 		inv.setItem(1, menuBlock);
