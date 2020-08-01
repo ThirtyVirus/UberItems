@@ -12,6 +12,9 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class BlockBreak implements Listener {
 
+    UberItems main;
+    public BlockBreak(UberItems main) { this.main = main; }
+
     @EventHandler(priority=EventPriority.HIGH)
     public void OnBreakBlock(BlockBreakEvent event){
         Player player = event.getPlayer();
@@ -19,11 +22,11 @@ public class BlockBreak implements Listener {
         ItemStack mainHand = player.getInventory().getItemInMainHand();
         ItemStack offHand = player.getInventory().getItemInOffHand();
 
-        if (Utilities.isUber(mainHand)){
-            if (!Utilities.getUber(mainHand).getCanBreakBlocks()) event.setCancelled(true);
+        if (Utilities.isUber(main, mainHand)){
+            if (!Utilities.getUber(main, mainHand).getCanBreakBlocks()) event.setCancelled(true);
         }
-        if (Utilities.isUber(offHand)){
-            if (!Utilities.getUber(offHand).getCanBreakBlocks()) event.setCancelled(true);
+        if (Utilities.isUber(main, offHand)){
+            if (!Utilities.getUber(main, offHand).getCanBreakBlocks()) event.setCancelled(true);
         }
     }
 }

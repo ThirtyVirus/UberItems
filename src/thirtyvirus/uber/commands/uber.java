@@ -29,8 +29,8 @@ public class uber implements CommandExecutor{
         }
 
         try {
-
             switch (args[0].toLowerCase()) {
+
                 // standard plugin commands
                 case "help":
                     help(sender);
@@ -76,54 +76,46 @@ public class uber implements CommandExecutor{
 
     // give command
     private void give(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Sorry, you must execute this command as a player!");
-            return;
-        }
+
+        // verify that the command is executed by a player
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-console-message"))); return; }
         Player player = (Player) sender;
 
-        if (!player.hasPermission("uber.give")) {
-            player.sendMessage(UberItems.prefix + "Sorry! Not enough permissions!");
-        }
+        // get the item from either ID or name
+        String name = args[1]; UberItem item;
+        if (Utilities.isInteger(name)) item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
+        else item = UberItems.items.get(name);
 
-        String name = args[1];
+        // verify that the item is in fact an UberItem
+        if (item == null) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem"))); return; }
 
-        UberItem item;
-        if (Utilities.isInteger(name)) {
-            item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
-        }
-        else {
-            item = UberItems.items.get(name);
-        }
-        if (item == null) {
-            player.sendMessage(UberItems.prefix + "Sorry! Not an Uber Item!");
-            return;
-        }
-
-        player.sendMessage(UberItems.prefix + "Given " + item.getName());
-
+        // apply UberItem properties to item
         ItemStack testItem = item.getItem().clone();
+        testItem.setItemMeta(item.getItem().getItemMeta());
+        Utilities.storeStringInItem(main, testItem, "true", "is-uber");
+        Utilities.storeStringInItem(main, testItem, name, "uber-name");
+        Utilities.storeIntInItem(main, testItem, item.getID(), "uber-id");
+
         if (args.length > 2 && item.isStackable()){
             testItem.setAmount(Integer.parseInt(args[2]));
         }
+
+        // give the item to the player
         player.getInventory().addItem(testItem);
+        player.sendMessage(UberItems.prefix + "Given " + item.getName());
     }
 
     // identify Command
     public void identify(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Sorry, you must execute this command as a player!");
-            return;
-        }
+
+        // verify that the command is executed by a player
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-console-message"))); return; }
         Player player = (Player) sender;
-        Bukkit.getLogger().info("did ti work? " + args.length);
-        if (args.length > 2){
-            player.sendMessage(UberItems.prefix + "Sorry! Format invalid");
-            return;
-        }
-        else if (args.length == 1) {
-            UberItem mainHand = Utilities.getUber(player.getInventory().getItemInMainHand());
-            UberItem offHand = Utilities.getUber(player.getInventory().getItemInOffHand());
+
+        // identify UberItem(s) held by the player (main or offhand)
+        if (args.length == 1) {
+            UberItem mainHand = Utilities.getUber(main, player.getInventory().getItemInMainHand());
+            UberItem offHand = Utilities.getUber(main, player.getInventory().getItemInOffHand());
 
             if (mainHand != null && offHand != null) {
                 player.sendMessage(UberItems.prefix + "Main Hand - " + mainHand.getID() + ": " + mainHand.getName() + ": " + mainHand.getDescription());
@@ -144,55 +136,58 @@ public class uber implements CommandExecutor{
             }
         }
 
-        String name = args[1];
+        // identify an UberItem by name
 
-        UberItem item;
-        if (Utilities.isInteger(name)){
-            item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
-        }
-        else{
-            item = UberItems.items.get(name);
-        }
-        if (item == null) {
-            player.sendMessage(UberItems.prefix + "Sorry! Not an Uber Item!");
-            return;
-        }
+        // get the item from either ID or name
+        String name = args[1]; UberItem item;
+        if (Utilities.isInteger(name)) item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
+        else item = UberItems.items.get(name);
 
+        // verify that the item is in fact an UberItem
+        if (item == null) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem"))); return; }
+
+        // tell player what
         player.sendMessage(UberItems.prefix + item.getID() + ": " + item.getName() + ": " + item.getDescription());
     }
 
     // list Command
     public void list(CommandSender sender){
-        sender.sendMessage(UberItems.prefix + "Listing Uber Items:");
+        sender.sendMessage(UberItems.prefix + "Listing UberItems:");
         for (String id : UberItems.itemIDs.values()) {
             UberItem item = UberItems.items.get(id);
             sender.sendMessage(ChatColor.GOLD + "" + item.getID() + ": " + item.getName() + ": " + item.getDescription());
         }
-
     }
 
     // info command
     private void info(CommandSender sender) {
-        sender.sendMessage(UberItems.prefix + ChatColor.GRAY + "Plugin Info");
+        sender.sendMessage(UberItems.prefix + ChatColor.GRAY + "UberItems Plugin Info");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GREEN + "Version " + main.getVersion() + " - By ThirtyVirus");
         sender.sendMessage("");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GREEN + "~The best plugin lbp ever!");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GREEN + "~Add powerful and fun items to your Minecraft Server!");
         sender.sendMessage("");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.RESET + ChatColor.RED + "" + ChatColor.BOLD + "You" + ChatColor.WHITE + ChatColor.BOLD + "Tube" + ChatColor.GREEN + " - https://youtube.com/thirtyvirus");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.RESET + ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Twitter" + ChatColor.GREEN + " - https://twitter.com/Thirtyvirus");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.RESET + ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Twitter" + ChatColor.GREEN + " - https://twitter.com/ThirtyVirus");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.RESET + ChatColor.GOLD + "" + ChatColor.BOLD + "SpigotMC" + ChatColor.GREEN + " - https://www.spigotmc.org/members/thirtyvirus.179587/");
         sender.sendMessage(ChatColor.DARK_PURPLE + "------------------------------");
     }
 
+    // help command
     private void help(CommandSender sender) {
         sender.sendMessage(UberItems.prefix + ChatColor.GRAY + "Commands");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber help");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber info");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber tutorial");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber cancel");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber identify");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber list");
+        if (sender.hasPermission("uber.admin")) {
+            sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber give");
+            sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber reload");
+        }
         sender.sendMessage(ChatColor.DARK_PURPLE + "------------------------------");
     }
 
+    // reload the config and language files in real time
     private void reload(CommandSender sender) {
         main.reloadConfig();
         main.loadConfiguration();

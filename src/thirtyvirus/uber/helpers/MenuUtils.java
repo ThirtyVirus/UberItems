@@ -28,7 +28,7 @@ public class MenuUtils {
         // exmaple main menu
         pages.add(ChatColor.translateAlternateColorCodes('&',
                 "      &7&lWelcome to:" + "\n" +
-                        "   &c&lTemplate&5&lPlugin&r" + "\n" +
+                        "   &c&lUberItems&r" + "\n" +
                         "This guide book will show you everything you need to know about template! Happy reading!" + "\n" +
                         "" + "\n" +
                         " - ThirtyVirus" + "\n" +

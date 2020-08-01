@@ -1,69 +1,48 @@
 package thirtyvirus.uber.helpers;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataAdapterContext;
+import org.bukkit.persistence.PersistentDataType;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ItemStorageUtilities {
+public class CompactInventory implements PersistentDataType<byte[], ItemStack[]> {
 
-    // save list of items into the lore of a given item, starting at startLoreIndex
-    public static void saveItemsInLore(ItemStack item, ItemStack[] items, int startLoreIndex) {
-        String dataString = itemsToString(items);
+    private Charset charset = Charset.defaultCharset();
 
-        ArrayList<String> loreChunks = new ArrayList<String>();
-
-        for (int index = 0; index < startLoreIndex; index++) {
-            loreChunks.add(item.getItemMeta().getLore().get(index));
-        }
-
-        while (dataString.length() > 0) {
-            String chunk = "";
-
-            if (dataString.length() >= 510) {
-                chunk = dataString.substring(0, 510);
-                dataString = dataString.substring(510);
-            }
-            else{
-                chunk = dataString;
-                dataString = "";
-            }
-
-            loreChunks.add(convertToInvisibleString(chunk));
-
-        }
-        Utilities.loreItem(item, loreChunks);
+    @Override
+    public Class<byte[]> getPrimitiveType() {
+        return byte[].class;
     }
 
-    // load list of items from the lore of a given item, starting at startLoreIndex
-    public static ItemStack[] getItemsFromLore(ItemStack item, int startLoreIndex) {
+    @Override
+    public Class<ItemStack[]> getComplexType() {
+        return ItemStack[].class;
+    }
 
-        String itemString = "";
-        while (startLoreIndex < item.getItemMeta().getLore().size()) {
-            itemString = itemString + item.getItemMeta().getLore().get(startLoreIndex);
-            startLoreIndex++;
-        }
+    @Override
+    public byte[] toPrimitive(ItemStack[] items, PersistentDataAdapterContext itemTagAdapterContext) {
+        return itemsToString(items).getBytes(charset);
+    }
 
-        if (!itemString.equals("")){
-            return stringToItems(convertToVisibleString(itemString));
-        }
-        else {
-            return null;
-        }
+    @Override
+    public ItemStack[] fromPrimitive(byte[] bytes, PersistentDataAdapterContext itemTagAdapterContext) {
+        ItemStack[] items = stringToItems(new String(bytes, charset));
+        return items;
     }
 
     // convert list of items into string
-    private static String itemsToString(ItemStack[] items) {
+    private String itemsToString(ItemStack[] items) {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -79,7 +58,7 @@ public class ItemStorageUtilities {
 
     // convert string to list of items
     @SuppressWarnings("unchecked")
-    private static ItemStack[] stringToItems(String s) {
+    private ItemStack[] stringToItems(String s) {
         try {
             ByteArrayInputStream bis = new ByteArrayInputStream(
                     DatatypeConverter.parseBase64Binary(s));
@@ -96,7 +75,7 @@ public class ItemStorageUtilities {
 
     // serialize list of items
     @SuppressWarnings("unchecked")
-    private static Map<String, Object>[] serializeItemStack(ItemStack[] items) {
+    private Map<String, Object>[] serializeItemStack(ItemStack[] items) {
 
         Map<String, Object>[] result = new Map[items.length];
 
@@ -118,7 +97,7 @@ public class ItemStorageUtilities {
 
     // deserialize list of items
     @SuppressWarnings("unchecked")
-    private static ItemStack[] deserializeItemStack(Map<String, Object>[] map) {
+    private ItemStack[] deserializeItemStack(Map<String, Object>[] map) {
         ItemStack[] items = new ItemStack[map.length];
 
         for (int i = 0; i < items.length; i++) {
@@ -152,17 +131,4 @@ public class ItemStorageUtilities {
         return items;
     }
 
-    // makes string invisible to player
-    private static String convertToInvisibleString(String s) {
-        String hidden = "";
-        for (char c : s.toCharArray()) hidden += ChatColor.COLOR_CHAR+""+c;
-        return hidden;
-    }
-
-    // makes invisible string visible to player
-    private static String convertToVisibleString(String s){
-        String c = "";
-        c = c + ChatColor.COLOR_CHAR;
-        return s.replaceAll(c, "");
-    }
 }

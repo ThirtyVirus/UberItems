@@ -32,14 +32,13 @@ import org.bukkit.util.Vector;
 
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
-import thirtyvirus.uber.helpers.ItemStorageUtilities;
 import thirtyvirus.uber.helpers.Utilities;
 
 public class shooty_box extends UberItem{
 
 	//Constructor
-	public shooty_box(int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public shooty_box(UberItems main, int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
+		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class shooty_box extends UberItem{
 	public void rightClickAirAction(Player player, ItemStack item) {
 		
 		//Get all items inside shooty box
-		ItemStack[] rawItems = ItemStorageUtilities.getItemsFromLore(item, 3);
+		ItemStack[] rawItems = Utilities.getCompactInventory(super.getMain(), item);
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		for (ItemStack i : rawItems) if (i != null) items.add(i);
 		
@@ -84,12 +83,39 @@ public class shooty_box extends UberItem{
 		}
 		else if (actionItem.getType() == Material.ANVIL){
 
-			FallingBlock block = player.getWorld().spawnFallingBlock(player.getLocation(), Material.ANVIL, (byte) 0);
+			FallingBlock block = player.getWorld().spawnFallingBlock(player.getLocation().add(0,1,0), Material.ANVIL, (byte) 0);
             block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
             player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
             
 			//update inventory
             if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
+		}
+		else if (actionItem.getType() == Material.TORCH){
+
+			FallingBlock block = player.getWorld().spawnFallingBlock(player.getLocation().add(0,1,0), Material.TORCH, (byte) 0);
+			block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
+			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
+
+			//update inventory
+			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
+		}
+		else if (actionItem.getType() == Material.WATER_BUCKET){
+
+			FallingBlock block = player.getWorld().spawnFallingBlock(player.getLocation().add(0,1,0), Material.WATER, (byte) 0);
+			block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
+			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
+
+			//update inventory
+			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
+		}
+		else if (actionItem.getType() == Material.LAVA_BUCKET){
+
+			FallingBlock block = player.getWorld().spawnFallingBlock(player.getLocation().add(0,1,0), Material.LAVA, (byte) 0);
+			block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
+			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
+
+			//update inventory
+			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (actionItem.getType() == Material.TNT){
 			Entity tnt = player.getWorld().spawn(player.getEyeLocation(), TNTPrimed.class);
@@ -136,7 +162,7 @@ public class shooty_box extends UberItem{
 			//update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
-		else if (actionItem.getType() == Material.FIRE_CHARGE && !Utilities.isUber(actionItem, 6)){
+		else if (actionItem.getType() == Material.FIRE_CHARGE && !Utilities.isUber(getMain(), actionItem, 6)){
 			Fireball thrown = player.launchProjectile(SmallFireball.class);
 			Vector v = player.getEyeLocation().getDirection().multiply(2.0);
 			thrown.setVelocity(v);
@@ -145,8 +171,8 @@ public class shooty_box extends UberItem{
 			//update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
-		else if (Utilities.isUber(actionItem, 6)) {
-			Utilities.getUber(actionItem).rightClickAirAction(player, actionItem);
+		else if (Utilities.isUber(getMain(), actionItem, 6)) {
+			Utilities.getUber(getMain(), actionItem).rightClickAirAction(player, actionItem);
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 			
 			//update inventory
@@ -169,7 +195,7 @@ public class shooty_box extends UberItem{
 		//Save inventory update to item lore
 		ItemStack[] finalItems = new ItemStack[items.size()];
 		for (int counter = 0; counter < items.size(); counter++) finalItems[counter] = items.get(counter);
-		ItemStorageUtilities.saveItemsInLore(item, finalItems, 3);
+		Utilities.saveCompactInventory(super.getMain(), item, finalItems);
 	}
 
 	@Override
@@ -193,7 +219,7 @@ public class shooty_box extends UberItem{
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
 		Inventory inventory = Bukkit.createInventory(player, InventoryType.DISPENSER, UberItems.itemPrefix + ChatColor.DARK_GRAY + "Shooty Box");
 		
-		ItemStack[] items = ItemStorageUtilities.getItemsFromLore(item, 3);
+		ItemStack[] items = Utilities.getCompactInventory(super.getMain(), item);
 		if (items != null) { for (ItemStack i : items) { if (i != null) { inventory.addItem(i); } } }
 		player.openInventory(inventory);
 		

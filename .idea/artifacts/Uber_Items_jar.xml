@@ -4,6 +4,8 @@
     <root id="archive" name="UberItems.jar">
       <element id="module-output" name="Uber_Items" />
       <element id="file-copy" path="$PROJECT_DIR$/plugin.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/language.yml" />
+      <element id="file-copy" path="$PROJECT_DIR$/config.yml" />
     </root>
   </artifact>
 </component>

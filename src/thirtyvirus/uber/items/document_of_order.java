@@ -49,8 +49,8 @@ class ItemComparator implements Comparator<ItemStack> {
 
 public class document_of_order extends UberItem  {
 
-	public document_of_order(int id, String name, List<String> lore, String description, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public document_of_order(UberItems main, int id, String name, List<String> lore, String description, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
+		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
 	}
 	public void leftClickAirAction(Player player, ItemStack item) {
 		ArrayList<Material> supportedBlocks = new ArrayList<Material>(); supportedBlocks.add(Material.CHEST); supportedBlocks.add(Material.DROPPER); supportedBlocks.add(Material.DISPENSER); supportedBlocks.add(Material.ENDER_CHEST); supportedBlocks.add(Material.TRAPPED_CHEST);

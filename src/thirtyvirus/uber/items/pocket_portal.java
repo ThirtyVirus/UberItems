@@ -18,13 +18,9 @@ import thirtyvirus.uber.UberItem;
 
 public class pocket_portal extends UberItem{
 
-	public UberItems main = null;
-	
 	//Constructor
-	public pocket_portal(int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, UberItems main) {
-		super(id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
-	
-		this.main = main;
+	public pocket_portal(UberItems main, int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
+		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
 	}
 
 	@Override
@@ -45,7 +41,7 @@ public class pocket_portal extends UberItem{
 		player.playSound(player.getLocation(), Sound.BLOCK_BEACON_AMBIENT, 5, 1);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 120, 1));
 		
-		Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() { public void run() { 
+		Bukkit.getScheduler().scheduleSyncDelayedTask(super.getMain(), new Runnable() { public void run() {
 			
 			player.playSound(player.getLocation(), Sound.BLOCK_PORTAL_TRAVEL, 5, 1);
 			

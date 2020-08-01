@@ -9,12 +9,13 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.UberItems;
 
 public class smart_pack extends UberItem{
 
 	//Constructor
-	public smart_pack(int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public smart_pack(UberItems main, int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
+		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
 	}
 
 	@Override

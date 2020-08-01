@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.UberItems;
 
 public class wrench extends UberItem{
 
@@ -29,8 +30,8 @@ public class wrench extends UberItem{
 	//Material.ACACIA_SLAB, Material.ACACIA_STAIRS, Material.BLACK_SHULKER_BOX
 	
 	//Constructor
-	public wrench(int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public wrench(UberItems main, int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
+		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
 	}
 
 	@Override

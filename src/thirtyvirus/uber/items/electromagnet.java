@@ -25,13 +25,13 @@ public class electromagnet extends UberItem{
 	public static List<EntityType> repelTargets = Arrays.asList(EntityType.ZOMBIE, EntityType.SKELETON, EntityType.SPIDER, EntityType.CAVE_SPIDER, EntityType.CREEPER,
 			EntityType.DRAGON_FIREBALL, EntityType.ARROW, EntityType.FIREBALL, EntityType.FIREWORK, EntityType.DROWNED, EntityType.EGG, EntityType.ELDER_GUARDIAN, EntityType.BLAZE,
 			EntityType.ENDERMAN, EntityType.EVOKER, EntityType.FISHING_HOOK, EntityType.GHAST, EntityType.GIANT, EntityType.GUARDIAN, EntityType.HUSK, EntityType.LIGHTNING,
-			EntityType.MAGMA_CUBE, EntityType.LLAMA_SPIT, EntityType.PHANTOM, EntityType.PRIMED_TNT, EntityType.PIG_ZOMBIE, EntityType.POLAR_BEAR, EntityType.PUFFERFISH,
+			EntityType.MAGMA_CUBE, EntityType.LLAMA_SPIT, EntityType.PHANTOM, EntityType.PRIMED_TNT, EntityType.ZOMBIFIED_PIGLIN, EntityType.POLAR_BEAR, EntityType.PUFFERFISH,
 			EntityType.SHULKER, EntityType.SHULKER_BULLET, EntityType.SNOWBALL, EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR, EntityType.WITCH, EntityType.WITHER,
 			EntityType.WITHER_SKELETON, EntityType.WITHER_SKULL, EntityType.ZOMBIE_VILLAGER);
 	
 	//Constructor
-	public electromagnet(int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public electromagnet(UberItems main, int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
+		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
 	}
 
 	@Override

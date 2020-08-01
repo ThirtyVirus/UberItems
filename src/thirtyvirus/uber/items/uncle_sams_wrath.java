@@ -28,8 +28,8 @@ public class uncle_sams_wrath extends UberItem{
 	public static ArrayList<FireworkEffect.Type> types = new ArrayList<FireworkEffect.Type>();
 	
 	//Constructor
-	public uncle_sams_wrath(int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, UberItems main) {
-		super(id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public uncle_sams_wrath(UberItems main, int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
+		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
 	
 		colors.addAll(Arrays.asList(Color.WHITE, Color.PURPLE, Color.RED, Color.GREEN, Color.AQUA, Color.BLUE, Color.FUCHSIA, Color.GRAY, Color.LIME, Color.MAROON, Color.YELLOW, Color.SILVER, Color.TEAL, Color.ORANGE, Color.OLIVE, Color.NAVY, Color.BLACK));
 		types.addAll(Arrays.asList(FireworkEffect.Type.BURST, FireworkEffect.Type.BALL, FireworkEffect.Type.BALL_LARGE, FireworkEffect.Type.CREEPER, FireworkEffect.Type.STAR));

@@ -43,6 +43,12 @@ public class TabComplete implements TabCompleter {
                 arguments.addAll(Arrays.asList("builders_wand", "lunch_box", "document_of_order", "big_bucket", "escape_rope", "fireball", "infini_gulp", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel", "smart_pack", "boom_stick"));
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }
+
+            // identify command
+            else if (args.length == 2 && args[0].equals("identify") && player.hasPermission("uber.admin")) {
+                arguments.addAll(Arrays.asList("builders_wand", "lunch_box", "document_of_order", "big_bucket", "escape_rope", "fireball", "infini_gulp", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel", "smart_pack", "boom_stick"));
+                Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
+            }
         }
 
         return arguments;

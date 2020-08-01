@@ -25,43 +25,39 @@ import java.util.*;
 
 public class UberItems extends JavaPlugin {
 
-    // console and IO
-    private File langFile;
-    private FileConfiguration langFileConfig;
+    // data for all UberItems
+    public static Map<String, UberItem> items = new HashMap<>();
+    public static Map<Integer, String> itemIDs = new HashMap<>();
 
     // chat messages
     private Map<String, String> phrases = new HashMap<>();
 
-    // core settings
+    // plugin settings
     public static String prefix = "&c&l[&5&lUberItems&c&l] &8&l"; // generally unchanged unless otherwise stated in config
     public static String itemPrefix = ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "[UBER] " + ChatColor.GRAY;
     public static String consolePrefix = "[UberItems] ";
 
-    // data for all Uber Items
-    public static Map<String, UberItem> items = new HashMap<>();
-    public static Map<Integer, String> itemIDs = new HashMap<>();
-
     public static int activeEffectsCheckID = 0;
     public static int activeEffectsDelay = 5; //in ticks
 
+    // actions to be taken on plugin enable
     public void onEnable(){
-
         loadConfiguration(); // load config.yml (generate one if not there)
         loadLangFile(); // load language.yml (generate one if not there)
 
-        // register commands and events
+        // register commands, events, and UberItems
         registerCommands();
         registerEvents();
-
-        registerUberItems(); // register all uber items
-
-        // posts confirmation in chat
-        getLogger().info(getDescription().getName() + " V: " + getDescription().getVersion() + " has been enabled");
+        registerUberItems();
 
         // schedule repeating task for processing Uber Item active effects
-        activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() { public void run() { Utilities.uberActiveEffects(); } }, activeEffectsDelay, activeEffectsDelay);
+        activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() { public void run() { Utilities.uberActiveEffects(UberItems.this); } }, activeEffectsDelay, activeEffectsDelay);
+
+        // post confirmation in chat
+        getLogger().info(getDescription().getName() + " V: " + getDescription().getVersion() + " has been enabled");
     }
 
+    // actions to be taken on plugin disable
     public void onDisable(){
         // cancel scheduled tasks
         Bukkit.getScheduler().cancelTask(activeEffectsCheckID);
@@ -70,9 +66,8 @@ public class UberItems extends JavaPlugin {
         getLogger().info(getDescription().getName() + " V: " + getDescription().getVersion() + " has been disabled");
     }
 
-    // load the config file and apply settings
+    // load config.yml (generate one if not there)
     public void loadConfiguration() {
-        // prepare config.yml (generate one if not there)
         File configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()){
             Utilities.loadResource(this, "config.yml");
@@ -82,15 +77,15 @@ public class UberItems extends JavaPlugin {
         // general settings
         prefix = ChatColor.translateAlternateColorCodes('&', config.getString("plugin-prefix"));
 
+        // post confirmation in chat
         Bukkit.getLogger().info(consolePrefix + "Settings reloaded from config");
     }
 
-    // load the language file and apply settings
+    // load language.yml (generate one if not there)
     public void loadLangFile() {
-
-        // load language.yml (generate one if not there)
-        langFile = new File(getDataFolder(), "language.yml");
-        langFileConfig = new YamlConfiguration();
+        // console and IO
+        File langFile = new File(getDataFolder(), "language.yml");
+        FileConfiguration langFileConfig = new YamlConfiguration();
         if (!langFile.exists()){ Utilities.loadResource(this, "language.yml"); }
 
         try { langFileConfig.load(langFile); }
@@ -101,40 +96,41 @@ public class UberItems extends JavaPlugin {
         }
     }
 
+    // register commands
     private void registerCommands() {
         getCommand("uber").setExecutor(new uber(this));
-
-        // set up tab completion
-        getCommand("uber").setTabCompleter(new TabComplete(this));
+        getCommand("uber").setTabCompleter(new TabComplete(this)); // set up tab completion
     }
+
+    // register event handlers
     private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new BlockBreak(), this);
-        getServer().getPluginManager().registerEvents(new FoodLevelChange(), this);
-        getServer().getPluginManager().registerEvents(new InventoryClick(),this);
-        getServer().getPluginManager().registerEvents(new PlayerUse(), this);
-        getServer().getPluginManager().registerEvents(new RenameItem(), this);
-        getServer().getPluginManager().registerEvents(new InventoryClose(), this);
-        getServer().getPluginManager().registerEvents(new Bucket(), this);
+        getServer().getPluginManager().registerEvents(new BlockBreak(this), this);
+        getServer().getPluginManager().registerEvents(new FoodLevelChange(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryClick(this),this);
+        getServer().getPluginManager().registerEvents(new PlayerUse(this), this);
+        getServer().getPluginManager().registerEvents(new RenameItem(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryClose(this), this);
+        getServer().getPluginManager().registerEvents(new Bucket(this), this);
     }
 
-    // register Uber Items
+    // register UberItems
     public void registerUberItems() {
-        //UberItems.items.put("NAME", new UberItemTemplate(0, itemPrefix + "NAME", Arrays.asList("LORE"), "DESCRIPTION", Material.AIR, false, false, false)); itemIDs.put(0, "NAME");
-        items.put("builders_wand", new builders_wand(1, itemPrefix + "Builder's Wand", Arrays.asList("Right Click to duplicate", "connected block faces"), "Build all the things!", XMaterial.DIAMOND_SHOVEL.parseMaterial(), false, false, true)); itemIDs.put(1, "builders_wand");
-        items.put("lunch_box", new lunch_box(2, itemPrefix + "Lunch Box", Arrays.asList(ChatColor.GOLD + "Saturation: 0", "Feed yourself on the go!", "Shift-Right-Click to add food"), "Automatic Feeding!", Material.SKELETON_SKULL, false, false, false)); itemIDs.put(2, "lunch_box");
-        items.put("document_of_order", new document_of_order(3, itemPrefix + "Document of Order", Arrays.asList(ChatColor.GOLD + "Chests Selected: 0", "Sort Containers with Right-Click", "Shift-Right-Click for multiple, Left-Click to confirm"), "Automatic Chest Sorting", Material.PAPER, false, false, false)); itemIDs.put(3, "document_of_order");
-        items.put("big_bucket", new big_bucket(4, itemPrefix + "Big Bucket", Arrays.asList("Pick up and Place Infinite Liquids!", ChatColor.GOLD + "Mode: Collect", "Left click to cycle modes", "Collect Aura Consumes Eyes of Ender"), "Infinite liquid storage", Material.BUCKET, true, false, true)); itemIDs.put(4, "big_bucket");
-        items.put("escape_rope", new escape_rope(5, itemPrefix +"Escape Rope", Arrays.asList("Last saw sky at:", ChatColor.GOLD + "0, 0, 0", "Shift-Right-Click to teleport!"), "Teleport to the most recent spot exposed to the sky!", XMaterial.LEAD.parseMaterial(), false, true, true)); itemIDs.put(5, "escape_rope");
-        items.put("fireball", new fireball(6, itemPrefix + "FireBall", Arrays.asList(ChatColor.GOLD + "Right Click to Throw!"), "Throw explosives!", XMaterial.FIRE_CHARGE.parseMaterial(), false, true, false)); itemIDs.put(6, "fireball");
-        items.put("wrench", new wrench(7, itemPrefix + "Wrench", Arrays.asList("Rotate Blocks w/ Right Click!"), "Change orientation of blocks", Material.IRON_HOE, true, false, false)); itemIDs.put(7, "wrench");
-        items.put("infini_gulp", new infini_gulp(8, itemPrefix + "Infini-Gulp", Arrays.asList("Endless Milk Bucket"), "Infinite Milk Bucket which can be spiked with potions", Material.MILK_BUCKET, false, false, false)); itemIDs.put(8, "infini_gulp");
-        items.put("uncle_sams_wrath", new uncle_sams_wrath(9, itemPrefix + "Uncle Sam's Wrath", Arrays.asList(ChatColor.RED + "Show " + ChatColor.WHITE + "your " + ChatColor.AQUA + "patriotism!", ChatColor.GOLD + "Right-Click to shoot fireworks!"), "Shoot fireworks at your enemies!", Material.FIREWORK_ROCKET, false, false, false, this)); itemIDs.put(9, "uncle_sams_wrath");
-        items.put("electromagnet", new electromagnet(10, itemPrefix + "ElectroMagnet", Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Off"), "Suck in items and repel mobs!", Material.IRON_INGOT, false, false, true)); itemIDs.put(10, "electromagnet");
-        items.put("pocket_portal", new pocket_portal(11, itemPrefix + "Pocket Portal", Arrays.asList(ChatColor.GOLD + "Portable nether portal!", "Right Click to teleport!"), "Teleport to and from the nether instantly!", Material.COMPASS, false, false, false, this)); itemIDs.put(11, "pocket_portal");
-        items.put("shooty_box", new shooty_box(12, itemPrefix + "Shooty Box", Arrays.asList(ChatColor.GOLD + "A hand held dispenser!", "Right Click to Shoot", "Shift-Right-Click to open!", ""), "A hand held dispenser!", Material.DISPENSER, false, false, false)); itemIDs.put(12, "shooty_box");
-        items.put("chisel", new chisel(13, itemPrefix + "Chisel", Arrays.asList(ChatColor.GOLD + "Transmute Similar Blocks", "Punch to cycle block types", "Leave block type chisel to lock type", ChatColor.AQUA + "Stored: none"), "Transmute Similar Blocks", Material.SHEARS, true, false, false)); itemIDs.put(13, "chisel");
-        items.put("smart_pack", new smart_pack(14, itemPrefix + "Smart Pack", Arrays.asList("Smart Pack!", "Right-Click to open!"), "The smartest (and only) backpack in minecraft!", Material.LIME_SHULKER_BOX, false, false, true)); itemIDs.put(14, "smart_pack");
-        items.put("boom_stick", new boom_stick(15, itemPrefix + "BOOM Stick", Arrays.asList("You can't touch this"), "Make your enemies go BOOM", Material.STICK, false, false, false)); itemIDs.put(15, "boom_stick");
+        //UberItems.items.put("NAME", new UberItemTemplate(this, 0, itemPrefix + "NAME", Arrays.asList("LORE"), "DESCRIPTION", Material.AIR, false, false, false)); itemIDs.put(0, "NAME");
+        items.put("builders_wand", new builders_wand(this, 1, itemPrefix + "Builder's Wand", Arrays.asList("Right Click to duplicate", "connected block faces"), "Build all the things!", XMaterial.STICK.parseMaterial(), false, false, true)); itemIDs.put(1, "builders_wand");
+        items.put("lunch_box", new lunch_box(this,2, itemPrefix + "Lunch Box", Arrays.asList(ChatColor.GOLD + "Saturation: 0", "Feed yourself on the go!", "Shift-Right-Click to add food"), "Automatic Feeding!", Material.SKELETON_SKULL, false, false, false)); itemIDs.put(2, "lunch_box");
+        items.put("document_of_order", new document_of_order(this,3, itemPrefix + "Document of Order", Arrays.asList(ChatColor.GOLD + "Chests Selected: 0", "Sort Containers with Right-Click", "Shift-Right-Click for multiple, Left-Click to confirm"), "Automatic Chest Sorting", Material.PAPER, false, false, false)); itemIDs.put(3, "document_of_order");
+        items.put("big_bucket", new big_bucket(this,4, itemPrefix + "Big Bucket", Arrays.asList("Pick up and Place Infinite Liquids!", ChatColor.GOLD + "Mode: Collect", "Left click to cycle modes", "Collect Aura Consumes Eyes of Ender"), "Infinite liquid storage", Material.BUCKET, true, false, true)); itemIDs.put(4, "big_bucket");
+        items.put("escape_rope", new escape_rope(this,5, itemPrefix +"Escape Rope", Arrays.asList("Last saw sky at:", ChatColor.GOLD + "0, 0, 0", "Shift-Right-Click to teleport!"), "Teleport to the most recent spot exposed to the sky!", XMaterial.LEAD.parseMaterial(), false, true, true)); itemIDs.put(5, "escape_rope");
+        items.put("fireball", new fireball(this,6, itemPrefix + "FireBall", Arrays.asList(ChatColor.GOLD + "Right Click to Throw!"), "Throw explosives!", XMaterial.FIRE_CHARGE.parseMaterial(), false, true, false)); itemIDs.put(6, "fireball");
+        items.put("wrench", new wrench(this,7, itemPrefix + "Wrench", Arrays.asList("Rotate Blocks w/ Right Click!"), "Change orientation of blocks", Material.IRON_HOE, true, false, false)); itemIDs.put(7, "wrench");
+        items.put("infini_gulp", new infini_gulp(this,8, itemPrefix + "Infini-Gulp", Arrays.asList("Endless Milk Bucket"), "Infinite Milk Bucket which can be spiked with potions", Material.MILK_BUCKET, false, false, false)); itemIDs.put(8, "infini_gulp");
+        items.put("uncle_sams_wrath", new uncle_sams_wrath(this,9, itemPrefix + "Uncle Sam's Wrath", Arrays.asList(ChatColor.RED + "Show " + ChatColor.WHITE + "your " + ChatColor.AQUA + "patriotism!", ChatColor.GOLD + "Right-Click to shoot fireworks!"), "Shoot fireworks at your enemies!", Material.FIREWORK_ROCKET, false, false, false)); itemIDs.put(9, "uncle_sams_wrath");
+        items.put("electromagnet", new electromagnet(this,10, itemPrefix + "ElectroMagnet", Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Off"), "Suck in items and repel mobs!", Material.IRON_INGOT, false, false, true)); itemIDs.put(10, "electromagnet");
+        items.put("pocket_portal", new pocket_portal(this,11, itemPrefix + "Pocket Portal", Arrays.asList(ChatColor.GOLD + "Portable nether portal!", "Right Click to teleport!"), "Teleport to and from the nether instantly!", Material.COMPASS, false, false, false)); itemIDs.put(11, "pocket_portal");
+        items.put("shooty_box", new shooty_box(this,12, itemPrefix + "Shooty Box", Arrays.asList(ChatColor.GOLD + "A hand held dispenser!", "Right Click to Shoot", "Shift-Right-Click to open!", ""), "A hand held dispenser!", Material.DISPENSER, false, false, false)); itemIDs.put(12, "shooty_box");
+        items.put("chisel", new chisel(this,13, itemPrefix + "Chisel", Arrays.asList(ChatColor.GOLD + "Transmute Similar Blocks", "Punch to cycle block types", "Leave block type chisel to lock type", ChatColor.AQUA + "Stored: none"), "Transmute Similar Blocks", Material.SHEARS, true, false, false)); itemIDs.put(13, "chisel");
+        items.put("smart_pack", new smart_pack(this,14, itemPrefix + "Smart Pack", Arrays.asList("Smart Pack!", "Right-Click to open!"), "The smartest (and only) backpack in minecraft!", Material.LIME_SHULKER_BOX, false, false, true)); itemIDs.put(14, "smart_pack");
+        items.put("boom_stick", new boom_stick(this,15, itemPrefix + "BOOM Stick", Arrays.asList("You can't touch this"), "Make your enemies go BOOM", Material.STICK, false, false, false)); itemIDs.put(15, "boom_stick");
     }
 
     // getters

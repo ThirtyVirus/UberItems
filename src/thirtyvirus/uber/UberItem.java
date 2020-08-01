@@ -21,8 +21,12 @@ public abstract class UberItem {
     private boolean stackable;
     private boolean hasActive;
 
-    //New Builder's Wand Item
-    public UberItem(int id, String name, List<String> lore, String description, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect){
+    private UberItems main;
+
+    // new UberItem
+    public UberItem(UberItems main, int id, String name, List<String> lore, String description, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect){
+        this.main = main;
+
         this.id = id;
         this.name = name;
         this.description = description;
@@ -61,9 +65,12 @@ public abstract class UberItem {
     public boolean isStackable() { return stackable; }
     public boolean hasActiveEffect() { return hasActive; }
 
-    //Destroy Uber Item (mostly used for Single-Use items)
+    // destroy UberItem (mostly used for single - use items)
     public static void destroy(ItemStack item, int quantity) {
         if (item.getAmount() <= quantity) item.setAmount(0);
         else item.setAmount(item.getAmount() - quantity);
     }
+
+    // get an instance of the main class
+    public UberItems getMain() { return main; }
 }

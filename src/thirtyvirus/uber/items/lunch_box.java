@@ -18,8 +18,8 @@ import thirtyvirus.uber.helpers.Utilities;
 public class lunch_box extends UberItem {
 
 	//Constructor
-	public lunch_box(int id, String name, List<String> lore, String description, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public lunch_box(UberItems main, int id, String name, List<String> lore, String description, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
+		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
 	}
 	//Left Click Air Action
 	public void leftClickAirAction(Player player, ItemStack item) {

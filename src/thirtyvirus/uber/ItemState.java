@@ -1,4 +1,4 @@
-package uber;
+package thirtyvirus.uber;
 
 public enum ItemState{
     MODE_ONE,

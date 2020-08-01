@@ -28,8 +28,8 @@ public class builders_wand extends UberItem {
 	// /wandoops command to undo wand action
 	
 	//Constructor
-	public builders_wand(int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public builders_wand(UberItems main, int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
+		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
 	}
 	
 	public void leftClickAirAction(Player player, ItemStack item) {

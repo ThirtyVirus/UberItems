@@ -18,12 +18,15 @@ import static org.bukkit.Material.TROPICAL_FISH;
 
 public class InventoryClick implements Listener {
 
+    UberItems main;
+    public InventoryClick(UberItems main) { this.main = main; }
+
     @EventHandler
     public void onInventoryClickItem(InventoryClickEvent event) {
         Player player = (Player) event.getWhoClicked();
         ItemStack item = event.getCurrentItem();
 
-        //Lunch Box Code
+        // Lunch Box Code
         if (event.getView().getTitle().contains("Insert Food into Lunch Box!")) {
             event.setCancelled(true);
             if (player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "[UBER] " + ChatColor.GRAY + "Lunch Box")){
@@ -49,7 +52,7 @@ public class InventoryClick implements Listener {
             else if (event.getRawSlot() < 9 && event.getRawSlot() != 4) { event.setCancelled(true); return; }
         }
 
-        //Infini-Gulp Code
+        // Infini-Gulp Code
         if (event.getView().getTitle().contains("Add Potion Effects!")) {
             event.setCancelled(true);
 
@@ -64,7 +67,7 @@ public class InventoryClick implements Listener {
 
     }
 
-    //Values based on "effective quality" from Minecraft wiki
+    // values based on "effective quality" from Minecraft wiki
     public double addSaturation(double saturation2, ItemStack i, int amount){
         double saturation = saturation2;
         switch (i.getType()){
@@ -110,7 +113,7 @@ public class InventoryClick implements Listener {
                 break;
         }
 
-        //balancing (to make it not too OP)
+        // balancing (to make it not too OP)
         saturation /= 2;
 
         return saturation;
