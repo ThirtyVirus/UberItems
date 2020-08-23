@@ -18,6 +18,8 @@ import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.helpers.UberAbility;
+import thirtyvirus.uber.helpers.UberRarity;
 
 class ItemComparator implements Comparator<ItemStack> {
     @SuppressWarnings("deprecation")
@@ -49,9 +51,15 @@ class ItemComparator implements Comparator<ItemStack> {
 
 public class document_of_order extends UberItem  {
 
-	public document_of_order(UberItems main, int id, String name, List<String> lore, String description, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public document_of_order(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
+
+	@Override
+	public void onItemStackCreate(ItemStack item) {
+		// TODO Auto-generated method stub
+	}
+
 	public void leftClickAirAction(Player player, ItemStack item) {
 		ArrayList<Material> supportedBlocks = new ArrayList<Material>(); supportedBlocks.add(Material.CHEST); supportedBlocks.add(Material.DROPPER); supportedBlocks.add(Material.DISPENSER); supportedBlocks.add(Material.ENDER_CHEST); supportedBlocks.add(Material.TRAPPED_CHEST);
 		supportedBlocks.add(Material.BLACK_SHULKER_BOX); supportedBlocks.add(Material.BLUE_SHULKER_BOX); supportedBlocks.add(Material.BROWN_SHULKER_BOX); supportedBlocks.add(Material.CYAN_SHULKER_BOX); supportedBlocks.add(Material.GRAY_SHULKER_BOX);

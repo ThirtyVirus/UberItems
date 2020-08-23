@@ -18,6 +18,8 @@ import org.bukkit.util.Vector;
 
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.helpers.UberAbility;
+import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
 public class electromagnet extends UberItem{
@@ -30,8 +32,13 @@ public class electromagnet extends UberItem{
 			EntityType.WITHER_SKELETON, EntityType.WITHER_SKULL, EntityType.ZOMBIE_VILLAGER);
 	
 	//Constructor
-	public electromagnet(UberItems main, int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public electromagnet(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	}
+
+	@Override
+	public void onItemStackCreate(ItemStack item) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -75,20 +82,21 @@ public class electromagnet extends UberItem{
 
 	@Override
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
-		
-		if (item.getItemMeta().getLore().get(1).contains("Item Magnet")) {
+
+		// status = 0 means off, 1 means on
+		if (Utilities.getIntFromItem(getMain(), item, "status") == 0) {
+			item.addUnsafeEnchantment(Enchantment.LURE, 10);
+			Utilities.storeIntInItem(getMain(), item, 1, "status");
+		}
+		else {
 			ItemMeta meta = item.getItemMeta();
 			for (Enchantment e : meta.getEnchants().keySet()) {
 				meta.removeEnchant(e);
 			}
 			item.setItemMeta(meta);
-			Utilities.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Off"));
+			Utilities.storeIntInItem(getMain(), item, 0, "status");
 		}
-		else {
-			item.addUnsafeEnchantment(Enchantment.LURE, 10);
-			Utilities.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Item Magnet"));
-		}
-		
+
 		player.playSound(player.getLocation(), Sound.ENTITY_ENDER_EYE_DEATH, 1, 1);
 	}
 
@@ -105,16 +113,14 @@ public class electromagnet extends UberItem{
 
 	@Override
 	public void activeEffect(Player player, ItemStack item) {
-		
-		if (item.getItemMeta().getLore().get(1).contains("Item Magnet")) {
+
+		if (Utilities.getIntFromItem(getMain(), item, "status") == 1) {
 			for (Entity e : player.getNearbyEntities(16, 16, 16)) {
 				if (e.getType() == EntityType.DROPPED_ITEM && e.hasGravity()) {
 					e.teleport(player.getEyeLocation());
 				}
 			}
-		}
-		
-		if (item.getItemMeta().getLore().get(1).contains("Electro-Aura")) {
+
 			for (Entity e : player.getNearbyEntities(8, 8, 8)) {
 				if (repelTargets.contains(e.getType())) {
 					repelEntity(player, e);

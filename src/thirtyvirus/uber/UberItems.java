@@ -17,6 +17,9 @@ import thirtyvirus.uber.events.inventory.RenameItem;
 import thirtyvirus.uber.events.player.Bucket;
 import thirtyvirus.uber.events.player.FoodLevelChange;
 import thirtyvirus.uber.events.player.PlayerUse;
+import thirtyvirus.uber.helpers.AbilityType;
+import thirtyvirus.uber.helpers.UberAbility;
+import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 import thirtyvirus.uber.items.*;
 
@@ -33,8 +36,8 @@ public class UberItems extends JavaPlugin {
     private Map<String, String> phrases = new HashMap<>();
 
     // plugin settings
-    public static String prefix = "&c&l[&5&lUberItems&c&l] &8&l"; // generally unchanged unless otherwise stated in config
-    public static String itemPrefix = ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "[UBER] " + ChatColor.GRAY;
+    public static String prefix = "&8&l[&5&lUberItems&8&l] &8&l"; // generally unchanged unless otherwise stated in config
+    public static String itemPrefix = ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "[" + ChatColor.AQUA + "UBER" + ChatColor.DARK_GRAY + "] " + ChatColor.GRAY;
     public static String consolePrefix = "[UberItems] ";
 
     public static int activeEffectsCheckID = 0;
@@ -115,22 +118,22 @@ public class UberItems extends JavaPlugin {
 
     // register UberItems
     public void registerUberItems() {
-        //UberItems.items.put("NAME", new UberItemTemplate(this, 0, itemPrefix + "NAME", Arrays.asList("LORE"), "DESCRIPTION", Material.AIR, false, false, false)); itemIDs.put(0, "NAME");
-        items.put("builders_wand", new builders_wand(this, 1, itemPrefix + "Builder's Wand", Arrays.asList("Right Click to duplicate", "connected block faces"), "Build all the things!", XMaterial.STICK.parseMaterial(), false, false, true)); itemIDs.put(1, "builders_wand");
-        items.put("lunch_box", new lunch_box(this,2, itemPrefix + "Lunch Box", Arrays.asList(ChatColor.GOLD + "Saturation: 0", "Feed yourself on the go!", "Shift-Right-Click to add food"), "Automatic Feeding!", Material.SKELETON_SKULL, false, false, false)); itemIDs.put(2, "lunch_box");
-        items.put("document_of_order", new document_of_order(this,3, itemPrefix + "Document of Order", Arrays.asList(ChatColor.GOLD + "Chests Selected: 0", "Sort Containers with Right-Click", "Shift-Right-Click for multiple, Left-Click to confirm"), "Automatic Chest Sorting", Material.PAPER, false, false, false)); itemIDs.put(3, "document_of_order");
-        items.put("big_bucket", new big_bucket(this,4, itemPrefix + "Big Bucket", Arrays.asList("Pick up and Place Infinite Liquids!", ChatColor.GOLD + "Mode: Collect", "Left click to cycle modes", "Collect Aura Consumes Eyes of Ender"), "Infinite liquid storage", Material.BUCKET, true, false, true)); itemIDs.put(4, "big_bucket");
-        items.put("escape_rope", new escape_rope(this,5, itemPrefix +"Escape Rope", Arrays.asList("Last saw sky at:", ChatColor.GOLD + "0, 0, 0", "Shift-Right-Click to teleport!"), "Teleport to the most recent spot exposed to the sky!", XMaterial.LEAD.parseMaterial(), false, true, true)); itemIDs.put(5, "escape_rope");
-        items.put("fireball", new fireball(this,6, itemPrefix + "FireBall", Arrays.asList(ChatColor.GOLD + "Right Click to Throw!"), "Throw explosives!", XMaterial.FIRE_CHARGE.parseMaterial(), false, true, false)); itemIDs.put(6, "fireball");
-        items.put("wrench", new wrench(this,7, itemPrefix + "Wrench", Arrays.asList("Rotate Blocks w/ Right Click!"), "Change orientation of blocks", Material.IRON_HOE, true, false, false)); itemIDs.put(7, "wrench");
-        items.put("infini_gulp", new infini_gulp(this,8, itemPrefix + "Infini-Gulp", Arrays.asList("Endless Milk Bucket"), "Infinite Milk Bucket which can be spiked with potions", Material.MILK_BUCKET, false, false, false)); itemIDs.put(8, "infini_gulp");
-        items.put("uncle_sams_wrath", new uncle_sams_wrath(this,9, itemPrefix + "Uncle Sam's Wrath", Arrays.asList(ChatColor.RED + "Show " + ChatColor.WHITE + "your " + ChatColor.AQUA + "patriotism!", ChatColor.GOLD + "Right-Click to shoot fireworks!"), "Shoot fireworks at your enemies!", Material.FIREWORK_ROCKET, false, false, false)); itemIDs.put(9, "uncle_sams_wrath");
-        items.put("electromagnet", new electromagnet(this,10, itemPrefix + "ElectroMagnet", Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Off"), "Suck in items and repel mobs!", Material.IRON_INGOT, false, false, true)); itemIDs.put(10, "electromagnet");
-        items.put("pocket_portal", new pocket_portal(this,11, itemPrefix + "Pocket Portal", Arrays.asList(ChatColor.GOLD + "Portable nether portal!", "Right Click to teleport!"), "Teleport to and from the nether instantly!", Material.COMPASS, false, false, false)); itemIDs.put(11, "pocket_portal");
-        items.put("shooty_box", new shooty_box(this,12, itemPrefix + "Shooty Box", Arrays.asList(ChatColor.GOLD + "A hand held dispenser!", "Right Click to Shoot", "Shift-Right-Click to open!", ""), "A hand held dispenser!", Material.DISPENSER, false, false, false)); itemIDs.put(12, "shooty_box");
-        items.put("chisel", new chisel(this,13, itemPrefix + "Chisel", Arrays.asList(ChatColor.GOLD + "Transmute Similar Blocks", "Punch to cycle block types", "Leave block type chisel to lock type", ChatColor.AQUA + "Stored: none"), "Transmute Similar Blocks", Material.SHEARS, true, false, false)); itemIDs.put(13, "chisel");
-        items.put("smart_pack", new smart_pack(this,14, itemPrefix + "Smart Pack", Arrays.asList("Smart Pack!", "Right-Click to open!"), "The smartest (and only) backpack in minecraft!", Material.LIME_SHULKER_BOX, false, false, true)); itemIDs.put(14, "smart_pack");
-        items.put("boom_stick", new boom_stick(this,15, itemPrefix + "BOOM Stick", Arrays.asList("You can't touch this"), "Make your enemies go BOOM", Material.STICK, false, false, false)); itemIDs.put(15, "boom_stick");
+        //UberItems.items.put("NAME", new UberItemTemplate(this, 0, UberRarity.UNFINISHED, "NAME", "DESCRIPTION", Material.STONE, false, false, false, Arrays.asList(new UberAbility("Ability name!", AbilityType.RIGHT_CLICK, "Ability description")))); itemIDs.put(0, "NAME");
+        items.put("builders_wand", new builders_wand(this, 1, UberRarity.UNFINISHED, "Builder's Wand", XMaterial.STICK.parseMaterial(), false, false, true, Arrays.asList(new UberAbility("Contruction!", AbilityType.RIGHT_CLICK, "Right click the face of any block to\nextend all connected block faces.\n" + ChatColor.DARK_GRAY + "(consumes blocks from your inventory)")))); itemIDs.put(1, "builders_wand");
+        //items.put("lunch_box", new lunch_box(this,2, UberRarity.RARE, "Lunch Box", Arrays.asList(ChatColor.GOLD + "Saturation: 0", "Feed yourself on the go!", "Shift-Right-Click to add food"), "Automatic Feeding!", Material.SKELETON_SKULL, false, false, false)); itemIDs.put(2, "lunch_box");
+        items.put("document_of_order", new document_of_order(this,3, UberRarity.UNFINISHED, "Document of Order", Material.PAPER, false, false, false, Arrays.asList(new UberAbility("Bureaucracy", AbilityType.RIGHT_CLICK, "Use on a container block to sort its contents"), new UberAbility("Multisort", AbilityType.LEFT_CLICK, "Select many containers at once, then\nleft click any non-container block to confirm,\ncr crouch left click any block to cancel.\n"+ ChatColor.DARK_GRAY + "(sorts everything as if one large inventory)")))); itemIDs.put(3, "document_of_order");
+        //items.put("big_bucket", new big_bucket(this,4, UberRarity.EPIC,  "Big Bucket", Arrays.asList("Pick up and Place Infinite Liquids!", ChatColor.GOLD + "Mode: Collect", "Left click to cycle modes", "Collect Aura Consumes Eyes of Ender"), "Infinite liquid storage", Material.BUCKET, true, false, true)); itemIDs.put(4, "big_bucket");
+        items.put("escape_rope", new escape_rope(this,5, UberRarity.UNCOMMON,  "Escape Rope", XMaterial.LEAD.parseMaterial(), false, true, true, Arrays.asList(new UberAbility("Round Trip!", AbilityType.RIGHT_CLICK, "Instantly teleport back to the last\nlocation with the sky visible\n" + ChatColor.DARK_GRAY + "(one time use)")))); itemIDs.put(5, "escape_rope");
+        items.put("fireball", new fireball(this,6, UberRarity.EPIC,  "FireBall", XMaterial.FIRE_CHARGE.parseMaterial(), false, true, false, Arrays.asList(new UberAbility("Throw em!", AbilityType.RIGHT_CLICK, "Throw a fireball which\nexplodes on impact\n" + ChatColor.DARK_GRAY + "(one time use)")))); itemIDs.put(6, "fireball");
+        items.put("wrench", new wrench(this,7, UberRarity.COMMON,   "Wrench", Material.IRON_HOE, true, false, false, Arrays.asList(new UberAbility("Tinker", AbilityType.RIGHT_CLICK, "Change the direction of certain blocks"))));; itemIDs.put(7, "wrench");
+        //items.put("infini_gulp", new infini_gulp(this,8, UberRarity.RARE,  "Infini-Gulp", Arrays.asList("Endless Milk Bucket"), "Infinite Milk Bucket which can be spiked with potions", Material.MILK_BUCKET, false, false, false)); itemIDs.put(8, "infini_gulp");
+        items.put("uncle_sams_wrath", new uncle_sams_wrath(this,9, UberRarity.RARE, ChatColor.RED + "Uncle " + ChatColor.WHITE + "Sam's " + ChatColor.AQUA + "Wrath", Material.FIREWORK_ROCKET, false, false, false, Arrays.asList(new UberAbility("July 4th", AbilityType.RIGHT_CLICK, "Shoot lethal fireworks at\nyour enemies. MURCA")))); itemIDs.put(9, "uncle_sams_wrath");
+        items.put("electromagnet", new electromagnet(this,10, UberRarity.UNCOMMON,   "ElectroMagnet", Material.IRON_INGOT, false, false, true, Arrays.asList(new UberAbility("Magnetic Pull", AbilityType.NONE, "Attract dropped items from\na radius of " + ChatColor.GREEN + "32" + ChatColor.GRAY + " blocks away."), new UberAbility("Force Field", AbilityType.NONE, "When held in the hand,\nrepel hostile mobs\nand projectiles\n\n" + ChatColor.DARK_GRAY + "(toggle with crouch + right click)")))); itemIDs.put(10, "electromagnet");
+        items.put("pocket_portal", new pocket_portal(this,11, UberRarity.RARE,  "Pocket Portal", Material.COMPASS, false, false, false, Arrays.asList(new UberAbility("Beam me up Scotty!", AbilityType.RIGHT_CLICK, "Teleport to and from the nether")))); itemIDs.put(11, "pocket_portal");
+        items.put("shooty_box", new shooty_box(this,12, UberRarity.MYTHIC,   "Shooty Box", Material.DISPENSER, false, false, false, Arrays.asList(new UberAbility("Blunderbuss!", AbilityType.RIGHT_CLICK, "Shoot the contents of the box at\nhigh speed, like a handheld dispenser\n" + ChatColor.DARK_GRAY + "(open with crouch + right click")))); itemIDs.put(12, "shooty_box");
+        //items.put("chisel", new chisel(this,13, UberRarity.COMMON,   "Chisel", Arrays.asList(ChatColor.GOLD + "Transmute Similar Blocks", "Punch to cycle block types", "Leave block type chisel to lock type", ChatColor.AQUA + "Stored: none"), "Transmute Similar Blocks", Material.SHEARS, true, false, false)); itemIDs.put(13, "chisel");
+        //items.put("smart_pack", new smart_pack(this,14, UberRarity.EPIC,  "Smart Pack", Arrays.asList("Smart Pack!", "Right-Click to open!"), "The smartest (and only) backpack in minecraft!", Material.LIME_SHULKER_BOX, false, false, true)); itemIDs.put(14, "smart_pack");
+        //items.put("boom_stick", new boom_stick(this,15, UberRarity.SPECIAL,   "BOOM Stick", Arrays.asList("You can't touch this"), "Make your enemies go BOOM", Material.STICK, false, false, false)); itemIDs.put(15, "boom_stick");
     }
 
     // getters

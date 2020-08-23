@@ -6,6 +6,4 @@ public enum ItemState{
     MODE_THREE,
     MODE_FOUR,
     ACTIVE_EFFECT,
-
-
 };

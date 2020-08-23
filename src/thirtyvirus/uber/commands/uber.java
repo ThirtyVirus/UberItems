@@ -90,13 +90,15 @@ public class uber implements CommandExecutor{
         if (item == null) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem"))); return; }
 
         // apply UberItem properties to item
-        ItemStack testItem = item.getItem().clone();
-        testItem.setItemMeta(item.getItem().getItemMeta());
+        ItemStack testItem = new ItemStack(item.getMaterial());
+        Utilities.nameItem(testItem, item.getRarity().getColor() + item.getName());
+        Utilities.loreItem(testItem, item.getLore());
         Utilities.storeStringInItem(main, testItem, "true", "is-uber");
         Utilities.storeStringInItem(main, testItem, name, "uber-name");
         Utilities.storeIntInItem(main, testItem, item.getID(), "uber-id");
+        item.onItemStackCreate(testItem);
 
-        if (args.length > 2 && item.isStackable()){
+        if (args.length > 2 && item.isStackable()) {
             testItem.setAmount(Integer.parseInt(args[2]));
         }
 
@@ -118,20 +120,20 @@ public class uber implements CommandExecutor{
             UberItem offHand = Utilities.getUber(main, player.getInventory().getItemInOffHand());
 
             if (mainHand != null && offHand != null) {
-                player.sendMessage(UberItems.prefix + "Main Hand - " + mainHand.getID() + ": " + mainHand.getName() + ": " + mainHand.getDescription());
-                player.sendMessage(UberItems.prefix + "Off  Hand - " + offHand.getID() + ": " + offHand.getName() + ": " + offHand.getDescription());
+                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + "Main Hand - " + mainHand.getID() + ": " + mainHand.getName());
+                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + "Off  Hand - " + offHand.getID() + ": " + offHand.getName());
                 return;
             }
             else if (mainHand != null) {
-                player.sendMessage(UberItems.prefix + mainHand.getID() + ": " + mainHand.getName() + ": " + mainHand.getDescription());
+                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + mainHand.getID() + ": " + mainHand.getName());
                 return;
             }
             else if (offHand != null) {
-                player.sendMessage(UberItems.prefix + offHand.getID() + ": " + offHand.getName() + ": " + offHand.getDescription());
+                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + offHand.getID() + ": " + offHand.getName());
                 return;
             }
             else {
-                player.sendMessage(UberItems.prefix + "Sorry! Not an Uber Item!");
+                Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem")));
                 return;
             }
         }
@@ -147,7 +149,7 @@ public class uber implements CommandExecutor{
         if (item == null) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem"))); return; }
 
         // tell player what
-        player.sendMessage(UberItems.prefix + item.getID() + ": " + item.getName() + ": " + item.getDescription());
+        player.sendMessage(UberItems.prefix + ChatColor.YELLOW + item.getID() + ": " + item.getName());
     }
 
     // list Command
@@ -155,7 +157,7 @@ public class uber implements CommandExecutor{
         sender.sendMessage(UberItems.prefix + "Listing UberItems:");
         for (String id : UberItems.itemIDs.values()) {
             UberItem item = UberItems.items.get(id);
-            sender.sendMessage(ChatColor.GOLD + "" + item.getID() + ": " + item.getName() + ": " + item.getDescription());
+            sender.sendMessage(ChatColor.GOLD + "" + item.getID() + ": " + item.getName());
         }
     }
 

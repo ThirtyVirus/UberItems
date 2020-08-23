@@ -32,13 +32,20 @@ import org.bukkit.util.Vector;
 
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.UberAbility;
+import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
 public class shooty_box extends UberItem{
 
 	//Constructor
-	public shooty_box(UberItems main, int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public shooty_box(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	}
+
+	@Override
+	public void onItemStackCreate(ItemStack item) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override

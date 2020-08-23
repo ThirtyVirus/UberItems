@@ -29,7 +29,6 @@ public class TabComplete implements TabCompleter {
 
         // tab completion for /exchange command
         if (command.getName().equals("uber")) {
-            Bukkit.getLogger().info("" + args.length);
             // no arguments
             if (args.length == 1) {
                 if (player.hasPermission("uber.user")) { arguments.addAll(Arrays.asList("help", "info", "tutorial", "identify", "list")); }
@@ -40,13 +39,13 @@ public class TabComplete implements TabCompleter {
 
             // give command
             else if (args.length == 2 && args[0].equals("give") && player.hasPermission("uber.admin")) {
-                arguments.addAll(Arrays.asList("builders_wand", "lunch_box", "document_of_order", "big_bucket", "escape_rope", "fireball", "infini_gulp", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel", "smart_pack", "boom_stick"));
+                arguments.addAll(Arrays.asList("builders_wand", "lunch_box", "document_of_order", "big_bucket", "escape_rope", "fireball", "wrench", "infini_gulp", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel", "smart_pack", "boom_stick"));
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }
 
             // identify command
             else if (args.length == 2 && args[0].equals("identify") && player.hasPermission("uber.admin")) {
-                arguments.addAll(Arrays.asList("builders_wand", "lunch_box", "document_of_order", "big_bucket", "escape_rope", "fireball", "infini_gulp", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel", "smart_pack", "boom_stick"));
+                arguments.addAll(Arrays.asList("builders_wand", "lunch_box", "document_of_order", "big_bucket", "escape_rope", "fireball", "wrench", "infini_gulp", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel", "smart_pack", "boom_stick"));
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }
         }

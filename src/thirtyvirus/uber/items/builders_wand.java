@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -18,6 +19,8 @@ import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.UberAbility;
+import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
 public class builders_wand extends UberItem {
@@ -28,10 +31,15 @@ public class builders_wand extends UberItem {
 	// /wandoops command to undo wand action
 	
 	//Constructor
-	public builders_wand(UberItems main, int id, String name, List<String> lore, String description, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	public builders_wand(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
-	
+
+	@Override
+	public void onItemStackCreate(ItemStack item) {
+		item.addUnsafeEnchantment(Enchantment.DIG_SPEED, 10);
+	}
+
 	public void leftClickAirAction(Player player, ItemStack item) {
 		
 	}
@@ -405,12 +413,12 @@ public class builders_wand extends UberItem {
 			player.getWorld().playEffect(player.getEyeLocation(), Effect.SMOKE, 0);
 			if (player.getGameMode() != GameMode.CREATIVE) item.setDurability((short) (item.getDurability() + 5));
 			//Change item lore to imform user that item needs repair
-			if (item.getDurability() > 1532){
-				List<String> lore = super.getItem().getItemMeta().getLore();
-				lore.set(0, "Feed me Diamonds!");
-				lore.set(1, "Shift + Right Click while holding");
-				item = Utilities.loreItem(item, lore);
-			}
+			//if (item.getDurability() > 1532){
+			//	List<String> lore = super.getItem().getItemMeta().getLore();
+			//	lore.set(0, "Feed me Diamonds!");
+			//	lore.set(1, "Shift + Right Click while holding");
+			//	item = Utilities.loreItem(item, lore);
+			//}
 		}
 
 	}

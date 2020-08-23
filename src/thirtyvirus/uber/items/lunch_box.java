@@ -13,15 +13,23 @@ import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.helpers.UberAbility;
+import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
 public class lunch_box extends UberItem {
 
-	//Constructor
-	public lunch_box(UberItems main, int id, String name, List<String> lore, String description, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect) {
-		super(main, id, name, lore, description, material, canBreakBlocks, stackable, hasActiveEffect);
+	// Constructor
+	public lunch_box(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
-	//Left Click Air Action
+
+	@Override
+	public void onItemStackCreate(ItemStack item) {
+		// TODO Auto-generated method stub
+	}
+
+	// Left Click Air Action
 	public void leftClickAirAction(Player player, ItemStack item) {
 		// TODO Auto-generated method stub
 		

@@ -1,44 +1,69 @@
 package thirtyvirus.uber;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import thirtyvirus.uber.helpers.UberAbility;
+import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
 public abstract class UberItem {
 
     private int id;
+    private UberRarity rarity;
     private String name;
-    private String description;
-    private ItemStack item;
+    private Material material;
 
     private List<String> defaultLore;
     private boolean canBreakBlocks;
     private boolean stackable;
     private boolean hasActive;
 
+    private List<UberAbility> abilities = new ArrayList<>();
+
     private UberItems main;
 
     // new UberItem
-    public UberItem(UberItems main, int id, String name, List<String> lore, String description, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect){
+    public UberItem(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities){
         this.main = main;
 
         this.id = id;
+        this.rarity = rarity;
         this.name = name;
-        this.description = description;
-
-        this.defaultLore = lore;
-        item = Utilities.nameItem(material, name);
-        item = Utilities.loreItem(item, lore);
+        this.material = material;
 
         this.canBreakBlocks = canBreakBlocks;
         this.stackable = stackable;
         this.hasActive = hasActiveEffect;
+
+        this.abilities = abilities;
+
+
     }
+
+    public List<String> getLore() {
+        List<String> lore = new ArrayList<>();
+
+        lore.add("");
+
+        // show the item's abilities
+        for (UberAbility ability : abilities) {
+            lore.addAll(ability.toLore());
+            lore.add("");
+        }
+        // show the rarity of the item
+        lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString());
+
+        return lore;
+    }
+
+    public abstract void onItemStackCreate(ItemStack item);
 
     public abstract void leftClickAirAction(Player player, ItemStack item);
     public abstract void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item);
@@ -57,9 +82,9 @@ public abstract class UberItem {
     public abstract void activeEffect(Player player, ItemStack item);
 
     public int getID() { return id; }
+    public UberRarity getRarity() { return rarity; }
     public String getName() { return name; }
-    public String getDescription() { return description; }
-    public ItemStack getItem() { return item; }
+    public Material getMaterial() { return material; }
     public List<String> getDefaultLore() { return defaultLore; }
     public boolean getCanBreakBlocks() { return canBreakBlocks; }
     public boolean isStackable() { return stackable; }
