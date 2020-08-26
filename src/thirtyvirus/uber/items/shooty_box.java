@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.ThrownPotion;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -242,6 +243,11 @@ public class shooty_box extends UberItem{
 	public void middleClickAction(Player player, ItemStack item) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
+
 	}
 
 	@Override

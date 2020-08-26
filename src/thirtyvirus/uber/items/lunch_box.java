@@ -6,7 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -86,6 +88,12 @@ public class lunch_box extends UberItem {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
+
+	}
+
 	//Active Effect
 	public void activeEffect(Player player, ItemStack item) {
 		// TODO Auto-generated method stub

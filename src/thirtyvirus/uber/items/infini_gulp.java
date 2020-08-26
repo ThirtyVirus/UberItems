@@ -7,7 +7,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -92,6 +94,11 @@ public class infini_gulp extends UberItem{
 	public void middleClickAction(Player player, ItemStack item) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
+
 	}
 
 	@Override

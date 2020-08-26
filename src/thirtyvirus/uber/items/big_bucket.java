@@ -7,7 +7,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,30 +30,28 @@ public class big_bucket extends UberItem {
 		// TODO Auto-generated method stub
 	}
 
+	// swap the bucket mode
 	public void leftClickAirAction(Player player, ItemStack item) {
-		//swap mode of bucket
-		if (item.getItemMeta().getLore().get(1).contains("Collect")){
-			Utilities.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Water", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
-			player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1, 1);
-			return;
+		// swap mode of bucket
+		switch (Utilities.getIntFromItem(getMain(), item, "mode")) {
+			// empty bucket (take liquids)
+			case 6:
+				item.setType(Material.WATER_BUCKET);
+				Utilities.storeIntInItem(getMain(), item, 1, "mode");
+				break;
+			// water bucket
+			case 7:
+				item.setType(Material.LAVA_BUCKET);
+				Utilities.storeIntInItem(getMain(), item, 2, "mode");
+				break;
+			// lava bucket
+			case 8:
+				item.setType(Material.BUCKET);
+				Utilities.storeIntInItem(getMain(), item, 0, "mode");
+				break;
 		}
-		if (item.getItemMeta().getLore().get(1).contains("Water")){
-			Utilities.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Lava", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
-			player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1, 1);
-			return;
-		}
-		if (item.getItemMeta().getLore().get(1).contains("Lava")){
-			Utilities.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Collect-Aura", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
-			player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1, 1);
-			return;
-		}
-		if (item.getItemMeta().getLore().get(1).contains("Collect-Aura")){
-			Utilities.loreItem(item, Arrays.asList(item.getItemMeta().getLore().get(0), ChatColor.GOLD + "Mode: Collect", item.getItemMeta().getLore().get(2), item.getItemMeta().getLore().get(3)));
-			player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1, 1);
-			return;
-		}
-	}
 
+	}
 	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		event.setCancelled(true);
 		leftClickAirAction(player, item);
@@ -63,12 +63,7 @@ public class big_bucket extends UberItem {
 	}
 
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		if (block.getType() == Material.WATER){
-			block.setType(Material.AIR);
-		}
-		if (block.getType() == Material.LAVA){
-			block.setType(Material.AIR);
-		}
+		Utilities.informPlayer(event.getPlayer(), Arrays.asList("mode: " + Utilities.getIntFromItem(getMain(), item, "mode"), "water: " + Utilities.getIntFromItem(getMain(), item, "water-count"), "lava: " + Utilities.getIntFromItem(getMain(), item, "lava-count"), ""));
 	}
 
 	public void shiftLeftClickAirAction(Player player, ItemStack item) {
@@ -96,9 +91,28 @@ public class big_bucket extends UberItem {
 		
 	}
 
+	@Override
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
+
+	}
+
 	public void activeEffect(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
+
+		// enforce item material (fights the game being weird with buckets)
+		switch (Utilities.getIntFromItem(getMain(), item, "mode")) {
+			// empty bucket (take liquids)
+			case 0:
+				item.setType(Material.BUCKET);
+				break;
+			// water bucket
+			case 1:
+				item.setType(Material.WATER_BUCKET);
+				break;
+			// water bucket
+			case 2:
+				item.setType(Material.LAVA_BUCKET);
+				break;
+		}
 	}
 
 }

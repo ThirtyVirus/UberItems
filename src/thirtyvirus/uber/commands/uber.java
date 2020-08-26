@@ -90,20 +90,22 @@ public class uber implements CommandExecutor{
         if (item == null) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem"))); return; }
 
         // apply UberItem properties to item
-        ItemStack testItem = new ItemStack(item.getMaterial());
-        Utilities.nameItem(testItem, item.getRarity().getColor() + item.getName());
-        Utilities.loreItem(testItem, item.getLore());
-        Utilities.storeStringInItem(main, testItem, "true", "is-uber");
-        Utilities.storeStringInItem(main, testItem, name, "uber-name");
-        Utilities.storeIntInItem(main, testItem, item.getID(), "uber-id");
-        item.onItemStackCreate(testItem);
+        ItemStack newItemStack = new ItemStack(item.getMaterial());
+        Utilities.nameItem(newItemStack, item.getRarity().getColor() + item.getName());
+        Utilities.loreItem(newItemStack, item.getLore());
+        Utilities.storeStringInItem(main, newItemStack, "true", "is-uber");
+        Utilities.storeStringInItem(main, newItemStack, name, "uber-name");
+        Utilities.storeIntInItem(main, newItemStack, item.getID(), "uber-id");
+
+        item.enforceStackability(newItemStack);
+        item.onItemStackCreate(newItemStack);
 
         if (args.length > 2 && item.isStackable()) {
-            testItem.setAmount(Integer.parseInt(args[2]));
+            newItemStack.setAmount(Integer.parseInt(args[2]));
         }
 
         // give the item to the player
-        player.getInventory().addItem(testItem);
+        player.getInventory().addItem(newItemStack);
         player.sendMessage(UberItems.prefix + "Given " + item.getName());
     }
 

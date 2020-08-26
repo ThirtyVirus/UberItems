@@ -3,7 +3,6 @@ package thirtyvirus.uber.items;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -11,6 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,9 +37,7 @@ public class electromagnet extends UberItem{
 	}
 
 	@Override
-	public void onItemStackCreate(ItemStack item) {
-		// TODO Auto-generated method stub
-	}
+	public void onItemStackCreate(ItemStack item) { }
 
 	@Override
 	public void leftClickAirAction(Player player, ItemStack item) {
@@ -57,28 +55,16 @@ public class electromagnet extends UberItem{
 	}
 
 	@Override
-	public void rightClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void rightClickAirAction(Player player, ItemStack item) { }
 
 	@Override
-	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 
 	@Override
-	public void shiftLeftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
 
 	@Override
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 
 	@Override
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
@@ -106,9 +92,11 @@ public class electromagnet extends UberItem{
 	}
 
 	@Override
-	public void middleClickAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
+	public void middleClickAction(Player player, ItemStack item) { }
+
+	@Override
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
+
 	}
 
 	@Override

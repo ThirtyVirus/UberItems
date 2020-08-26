@@ -11,6 +11,8 @@
 # messages to better support their players.
 
 no-permissions-message: You do not have proper permissions!
+no-build-permissions-message: You do not have permissions to sort inventories here!
+not-container-block-message: This is not a container block!
 
 not-a-command-message: That is not a command!
 formatting-error-message: Formatting error, check your command syntax!

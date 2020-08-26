@@ -2,8 +2,8 @@
 # Author: Brandon (ThirtyVirus) Calabrese
 #
 # YouTube:      https://www.youtube.com/thirtyvirus
-# Twitter:      https://twitter.com/ThirtyVirus
-# SpigotMC:     https://www.spigotmc.org/members/thirtyvirus.179587/
+# Twitter:      https://twitter.com/thirtyvirus
+# SpigotMC:     https://www.spigotmc.org/members/179587/
 
 # FILE: config.yml
 # These are the settings for UberItems. Change whatever you like but do not remove any
@@ -11,5 +11,39 @@
 
 plugin-prefix: "&c&l[&5&lUberItems&c&l] &8&l"
 
-# Custom Setting
-custom-setting: false
+# Sorting Mode
+# 1 - Alphabetical
+# 2 - Smart (Alphabetical + item categories)
+# 3 - Numeric ID (only works 1.8 - 1.12)
+# 4 - Scramble (random)
+sorting-mode: 2
+
+# Reverse the sort
+reverse-sort: false
+
+# Allow external sorting
+external-sort: true
+
+# Allow multi-sort (requires external-sort)
+multi-sort: true
+
+# Multi sort timeout time (in seconds)
+multi-sort-timeout: 60
+
+# Automatic sort on inventory open (all but player inventory)
+automatic-sort: false
+
+# Don't run the check on whether or not a player can build in that spot
+ignore-area-build-permissions: false
+
+# BlackList and WhiteList
+# This functionality limits the plugin's features to only work
+# in inventories whose name contains (or does not contain)
+# certain words or phrases
+use-whitelist: true
+use-blacklist: true
+
+# whitelist = only use inventories with names containing these words / phrases (comma separated, case sensitive)
+whitelist: Chest,Large Chest,Ender Chest,Shulker Box
+# blacklist = only use inventories with names not containing these words / phrases (comma separated, case sensitive)
+blacklist: Settings,In Hand,Other Plugin Menu Name

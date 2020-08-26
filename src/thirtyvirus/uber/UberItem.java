@@ -2,11 +2,14 @@ package thirtyvirus.uber;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.helpers.UberAbility;
@@ -40,11 +43,10 @@ public abstract class UberItem {
 
         this.canBreakBlocks = canBreakBlocks;
         this.stackable = stackable;
+
         this.hasActive = hasActiveEffect;
 
         this.abilities = abilities;
-
-
     }
 
     public List<String> getLore() {
@@ -62,6 +64,11 @@ public abstract class UberItem {
 
         return lore;
     }
+    public void enforceStackability(ItemStack item) {
+        if (!stackable) {
+            Utilities.storeStringInItem(getMain(), item,  UUID.randomUUID().toString(), "UUID");
+        }
+    }
 
     public abstract void onItemStackCreate(ItemStack item);
 
@@ -78,6 +85,7 @@ public abstract class UberItem {
     public abstract void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item);
 
     public abstract void middleClickAction(Player player, ItemStack item);
+    public abstract void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item);
 
     public abstract void activeEffect(Player player, ItemStack item);
 

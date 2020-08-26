@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -77,6 +79,11 @@ public class smart_pack extends UberItem{
 	public void middleClickAction(Player player, ItemStack item) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
+
 	}
 
 	@Override

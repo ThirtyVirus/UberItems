@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -79,6 +81,11 @@ public class escape_rope extends UberItem{
 
 	@Override
 	public void middleClickAction(Player player, ItemStack item) {
+
+	}
+
+	@Override
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
 
 	}
 

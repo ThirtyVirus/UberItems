@@ -12,7 +12,9 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -62,7 +64,7 @@ public class builders_wand extends UberItem {
 	//Shift Right Click Air Action
 	@SuppressWarnings("deprecation")
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
-		//REPAIR USING ITEM FROM INVENTORY
+		// REPAIR USING ITEM FROM INVENTORY
 		if (player.getInventory().contains(Material.DIAMOND) && item.getDurability() > 0) {
 			player.playSound(player.getLocation(), Sound.ENTITY_PARROT_IMITATE_SHULKER, 1, 1);
 			
@@ -87,6 +89,12 @@ public class builders_wand extends UberItem {
 	public void middleClickAction(Player player, ItemStack item) {
 		
 	}
+
+	@Override
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
+
+	}
+
 	public void activeEffect(Player player, ItemStack item) {
 		
 	}
