@@ -1,7 +1,6 @@
 package thirtyvirus.uber.helpers;
 
 import org.bukkit.ChatColor;
-import thirtyvirus.uber.UberItem;
 
 import java.util.ArrayList;
 import java.util.Arrays;

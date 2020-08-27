@@ -15,6 +15,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -23,101 +24,51 @@ import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberRarity;
-import thirtyvirus.uber.helpers.Utilities;
 
 public class builders_wand extends UberItem {
-//TODO
-	//Show outline of what is going to be placed
-	//Add line for durability in gold
-	//Fix weird glitch that limits blocks placed to half that of what is in inventory (doesn't always happen)
-	// /wandoops command to undo wand action
-	
-	//Constructor
+	// TODO /wandoops command to undo wand action
+	// TODO simplify code and fix the wand taking too many blocks in survival
+
 	public builders_wand(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
-
-	@Override
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.DIG_SPEED, 10);
 	}
+	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
+	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	public void leftClickAirAction(Player player, ItemStack item) {
-		
-	}
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		
-	}
-	public void rightClickAirAction(Player player, ItemStack item) {
-		
-	}
+	public void leftClickAirAction(Player player, ItemStack item) { }
+	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void rightClickAirAction(Player player, ItemStack item) { }
+
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		BlockFace face = event.getBlockFace();
 		fillConnectedFaces(player, block, face, item);
 	}
-	public void shiftLeftClickAirAction(Player player, ItemStack item) {
-		
-	}
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		
-	}
-	//Shift Right Click Air Action
-	@SuppressWarnings("deprecation")
-	public void shiftRightClickAirAction(Player player, ItemStack item) {
-		// REPAIR USING ITEM FROM INVENTORY
-		if (player.getInventory().contains(Material.DIAMOND) && item.getDurability() > 0) {
-			player.playSound(player.getLocation(), Sound.ENTITY_PARROT_IMITATE_SHULKER, 1, 1);
-			
-			item.setDurability(((short)(item.getDurability() - 500)));
-			removeBlocks(player.getInventory(), Material.DIAMOND, 1);
-			if (item.getDurability() < 0) item.setDurability((short)0);
-			//Reset Lore
-			item = Utilities.loreItem(item, super.getDefaultLore());
-		}
-	}
-	//Shift Right Click Block Action
-	@SuppressWarnings("deprecation")
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		if (item.getDurability() > 1532){
-			shiftRightClickAirAction(player, item);
-		}
-		else{
-			rightClickBlockAction(player, event, block, item);
-		}
-		
-	}
-	public void middleClickAction(Player player, ItemStack item) {
-		
-	}
 
-	@Override
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
+	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
+	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void shiftRightClickAirAction(Player player, ItemStack item) { }
+	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void middleClickAction(Player player, ItemStack item) { }
 
-	}
-
-	public void activeEffect(Player player, ItemStack item) {
-		
-	}
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+	public void activeEffect(Player player, ItemStack item) { }
 	
-	//Main Logic for builder's wand
-	@SuppressWarnings({ "incomplete-switch", "deprecation" })
+	// main logic for builder's wand
 	public void fillConnectedFaces(Player player, Block origin, BlockFace face, ItemStack item){
 		
-		ArrayList<Block> blocks = new ArrayList<Block>();
-		
+		ArrayList<Block> blocks = new ArrayList<>(); blocks.add(origin);
 		Material fillMaterial = origin.getType();
-		
-		if (item.getDurability() < 1532) blocks.add(origin);
-		int blockLimit = 2048;
+		int blockLimit = 2048; int blocksPlaced = 0; boolean needBlocks = true;
+
 		int blocksInInventory = countBlocks(player.getInventory(), origin.getType());
-		//player.sendMessage(uber.uber.prefix + "Blocks in Inventory: " + blocksInInventory);
-		
-		int blocksPlaced = 0;
-		boolean needBlocks = true;
-		if (player.getGameMode() == GameMode.CREATIVE){ needBlocks = false; }
+		if (player.getGameMode() == GameMode.CREATIVE) { needBlocks = false; }
 		if (blocksInInventory < blockLimit && needBlocks) { blockLimit = blocksInInventory; }
 		
-		switch (face){
+		switch (face) {
 		case NORTH: //Z-
 			
 			while(blocks.size() > 0 && blockLimit > 0){
@@ -415,23 +366,15 @@ public class builders_wand extends UberItem {
 		}
 		
 		if (blocksPlaced != 0){
-			//if (needBlocks) { removeBlocks(player.getInventory(), origin.getType(), blocksPlaced); }
+			if (needBlocks) { removeBlocks(player.getInventory(), origin.getType(), blocksPlaced); }
 			
 			player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_BULLET_HIT, 1, 1);
 			player.getWorld().playEffect(player.getEyeLocation(), Effect.SMOKE, 0);
-			if (player.getGameMode() != GameMode.CREATIVE) item.setDurability((short) (item.getDurability() + 5));
-			//Change item lore to imform user that item needs repair
-			//if (item.getDurability() > 1532){
-			//	List<String> lore = super.getItem().getItemMeta().getLore();
-			//	lore.set(0, "Feed me Diamonds!");
-			//	lore.set(1, "Shift + Right Click while holding");
-			//	item = Utilities.loreItem(item, lore);
-			//}
 		}
 
 	}
 	
-	//Counts amount of blocks of type m in inventory inv
+	// counts amount of blocks of type m in inventory inv
 	public int countBlocks(Inventory inv, Material m){
 		int blockAmount = 0;
 		
@@ -445,7 +388,7 @@ public class builders_wand extends UberItem {
 		return blockAmount;
 	}
 	
-	//Remove blockAmount blocks of type m from inv
+	// remove blockAmount blocks of type m from inv
 	public void removeBlocks(Inventory inv, Material m, int blockAmount){
 		inv.removeItem(new ItemStack (m, blockAmount));
 	}

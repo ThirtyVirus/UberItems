@@ -10,6 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -22,55 +23,24 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class infini_gulp extends UberItem{
 
-	//Constructor
+	// TODO fix the item with Minecraft's weird bucket mechanics
+
 	public infini_gulp(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
+	public void onItemStackCreate(ItemStack item) { }
+	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
+	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	@Override
-	public void onItemStackCreate(ItemStack item) {
-		// TODO Auto-generated method stub
-	}
+	public void leftClickAirAction(Player player, ItemStack item) { }
+	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void rightClickAirAction(Player player, ItemStack item) { }
+	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
+	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 
-	@Override
-	public void leftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void rightClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void shiftLeftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
+	// change bucket mode
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
-
 		if (item.getItemMeta().getLore().get(0).contains("Mode: Potions")){
 			ItemMeta meta = item.getItemMeta();
 			for (Enchantment e : meta.getEnchants().keySet()) {
@@ -84,26 +54,12 @@ public class infini_gulp extends UberItem{
 			Utilities.loreItem(item, Arrays.asList("Shift-Right-Click to change mode", ChatColor.GOLD + "Mode: Item Magnet"));
 		}
 	}
-
-	@Override
 	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		shiftRightClickAirAction(player, item);
 	}
 
-	@Override
-	public void middleClickAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
-
-	}
-
-	@Override
-	//not an actual active effect, used as function for applying stored potion effects
-	public void activeEffect(Player player, ItemStack item) {
-		
-	}
+	public void middleClickAction(Player player, ItemStack item) { }
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+	public void activeEffect(Player player, ItemStack item) { }
 }

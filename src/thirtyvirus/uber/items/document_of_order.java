@@ -8,6 +8,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,15 +24,16 @@ import static thirtyvirus.uber.helpers.ActionSound.CLICK;
 public class document_of_order extends UberItem  {
 
 	// TODO make the sort respect area build permissions.
+	// TODO make smart sort smarter
 
 	public document_of_order(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
-
-	@Override
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.MENDING, 10);
 	}
+	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
+	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
 	public void leftClickAirAction(Player player, ItemStack item) { }
 
@@ -73,13 +75,10 @@ public class document_of_order extends UberItem  {
 			SortingUtilities.sortBlock(event.getClickedBlock(), event.getPlayer(), getMain());
 		}
 	}
+
 	public void middleClickAction(Player player, ItemStack item) { }
-
-	@Override
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
-
-	}
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
 
 	public void activeEffect(Player player, ItemStack item) { }
-	
 }

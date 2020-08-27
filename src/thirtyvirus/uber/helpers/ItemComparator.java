@@ -70,9 +70,7 @@ public class ItemComparator implements Comparator<ItemStack> {
         return a.getType().name().compareTo(b.getType().name());
     }
 
-    // TODO code
     private int smart(ItemStack a, ItemStack b) {
-
 
         // building blocks
         // decoration

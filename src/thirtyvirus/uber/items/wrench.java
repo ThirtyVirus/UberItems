@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -31,37 +32,19 @@ public class wrench extends UberItem{
 			Material.WHITE_GLAZED_TERRACOTTA, Material.YELLOW_GLAZED_TERRACOTTA, Material.REPEATER, Material.COMPARATOR, Material.ACACIA_FENCE_GATE, Material.BIRCH_FENCE_GATE, Material.DARK_OAK_FENCE_GATE,
 			Material.JUNGLE_FENCE_GATE, Material.OAK_FENCE_GATE, Material.SPRUCE_FENCE_GATE, Material.FURNACE, Material.ENDER_CHEST, Material.ANVIL, Material.HAY_BLOCK, Material.CHEST, Material.TRAPPED_CHEST, Material.RAIL,
 			Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL);
-	//Material.ACACIA_SLAB, Material.ACACIA_STAIRS, Material.BLACK_SHULKER_BOX
-	
-	//Constructor
+
 	public wrench(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
+	public void onItemStackCreate(ItemStack item) { }
+	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
+	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	@Override
-	public void onItemStackCreate(ItemStack item) {
-		// TODO Auto-generated method stub
-	}
+	public void leftClickAirAction(Player player, ItemStack item) { }
+	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void rightClickAirAction(Player player, ItemStack item) { }
 
-	@Override
-	public void leftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void rightClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
+	// rotate blocks that are compatible
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		if (supportedBlocks.contains(block.getType()) || block.getType().name().contains("SLAB") || block.getType().name().contains("STAIRS") || block.getType().name().contains("SHULKER_BOX")){
 			BlockBreakEvent e = new BlockBreakEvent(block, player);
@@ -115,8 +98,6 @@ public class wrench extends UberItem{
 				
 				data = data.replace("CraftBlockData{", "");
 				data = data.replace("}", "");
-				//Bukkit.broadcastMessage(data);
-				//Bukkit.broadcastMessage("-");
 				block.setBlockData(Bukkit.createBlockData(data));
 				
 				player.playSound(block.getLocation(), Sound.BLOCK_LEVER_CLICK, 1, 1);
@@ -124,44 +105,12 @@ public class wrench extends UberItem{
 		}
 	}
 
-	@Override
-	public void shiftLeftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void shiftRightClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void middleClickAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
-
-	}
-
-	@Override
-	public void activeEffect(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
+	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void shiftRightClickAirAction(Player player, ItemStack item) { }
+	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void middleClickAction(Player player, ItemStack item) { }
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+	public void activeEffect(Player player, ItemStack item) { }
 }

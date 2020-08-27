@@ -76,37 +76,20 @@ public class uber implements CommandExecutor{
 
     // give command
     private void give(CommandSender sender, String[] args) {
-
         // verify that the command is executed by a player
         if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-console-message"))); return; }
         Player player = (Player) sender;
 
-        // get the item from either ID or name
-        String name = args[1]; UberItem item;
-        if (Utilities.isInteger(name)) item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
-        else item = UberItems.items.get(name);
+        // create the item from either ID or name
+        int stack = 1; if (args.length > 2) stack = Integer.parseInt(args[2]);
+        ItemStack uber = UberItem.fromString(main, args[1], stack);
 
         // verify that the item is in fact an UberItem
-        if (item == null) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem"))); return; }
-
-        // apply UberItem properties to item
-        ItemStack newItemStack = new ItemStack(item.getMaterial());
-        Utilities.nameItem(newItemStack, item.getRarity().getColor() + item.getName());
-        Utilities.loreItem(newItemStack, item.getLore());
-        Utilities.storeStringInItem(main, newItemStack, "true", "is-uber");
-        Utilities.storeStringInItem(main, newItemStack, name, "uber-name");
-        Utilities.storeIntInItem(main, newItemStack, item.getID(), "uber-id");
-
-        item.enforceStackability(newItemStack);
-        item.onItemStackCreate(newItemStack);
-
-        if (args.length > 2 && item.isStackable()) {
-            newItemStack.setAmount(Integer.parseInt(args[2]));
-        }
+        if (uber == null) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem"))); return; }
 
         // give the item to the player
-        player.getInventory().addItem(newItemStack);
-        player.sendMessage(UberItems.prefix + "Given " + item.getName());
+        player.getInventory().addItem(uber);
+        player.sendMessage(UberItems.prefix + "Given " + uber.getItemMeta().getDisplayName());
     }
 
     // identify Command

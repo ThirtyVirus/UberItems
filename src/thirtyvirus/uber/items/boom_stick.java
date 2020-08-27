@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,49 +22,35 @@ import thirtyvirus.uber.helpers.UberRarity;
 
 public class boom_stick extends UberItem{
 
-	//Constructor
 	public boom_stick(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
-
-	@Override
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.KNOCKBACK, 4);
 	}
+	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
+	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	@Override
-	public void leftClickAirAction(Player player, ItemStack item) {
-
-	}
-	@Override
+	public void leftClickAirAction(Player player, ItemStack item) { }
 	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 
-	@Override
+	// use the explosive ability
 	public void rightClickAirAction(Player player, ItemStack item) {
-
 		for(Entity e : player.getNearbyEntities(10,10,10)) {
 			if (e instanceof LivingEntity && e != player) {
 				player.getLocation().getWorld().createExplosion(e.getLocation().add(0,0,0), 1);
 			}
 		}
-
-
 	}
 
-	@Override
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	@Override
 	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
-	@Override
 	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	@Override
 	public void shiftRightClickAirAction(Player player, ItemStack item) { }
-	@Override
 	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	@Override
 	public void middleClickAction(Player player, ItemStack item) { }
 
-	@Override
+	// send mobs to the shadow dimension
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
 
 		// enforce that the entity is a mob
@@ -83,6 +70,6 @@ public class boom_stick extends UberItem{
 		} }, 40);
 	}
 
-	@Override
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
 	public void activeEffect(Player player, ItemStack item) { }
 }

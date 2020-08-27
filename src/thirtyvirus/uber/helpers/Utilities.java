@@ -150,11 +150,12 @@ public final class Utilities {
     // store a string value in the meta of an item, completely invisible to player
     public static void storeStringInItem(UberItems main, ItemStack host, String string, String key) {
         NamespacedKey k = new NamespacedKey(main, key);
+
+        // make sure that the item isn't null, meta isn't null
+        if (host == null) return;
+        if (!host.hasItemMeta()) return;
+
         ItemMeta itemMeta = host.getItemMeta();
-
-        // make sure that the meta isn't null
-        if (itemMeta == null) return;
-
         itemMeta.getPersistentDataContainer().set(k, new StoredString(), string);
         host.setItemMeta(itemMeta);
     }
@@ -162,11 +163,12 @@ public final class Utilities {
     // retrieve a string value from the meta of an item, completely invisible to player
     public static String getStringFromItem(UberItems main, ItemStack host, String key) {
         NamespacedKey k = new NamespacedKey(main, key);
+
+        // make sure that the item isn't null, meta isn't null
+        if (host == null) return null;
+        if (!host.hasItemMeta()) return null;
+
         ItemMeta itemMeta = host.getItemMeta();
-
-        // make sure that the meta isn't null
-        if (itemMeta == null) return null;
-
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
         if(container.has(k, new CompactInventory())) return container.get(k, new StoredString());
@@ -178,11 +180,12 @@ public final class Utilities {
     // store an int value in the meta of an item, completely invisible to player
     public static void storeIntInItem(UberItems main, ItemStack host, Integer i, String key) {
         NamespacedKey k = new NamespacedKey(main, key);
+
+        // make sure that the item isn't null, meta isn't null
+        if (host == null) return;
+        if (!host.hasItemMeta()) return;
+
         ItemMeta itemMeta = host.getItemMeta();
-
-        // make sure that the meta isn't null
-        if (itemMeta == null) return;
-
         itemMeta.getPersistentDataContainer().set(k, new StoredInt(), i);
         host.setItemMeta(itemMeta);
     }
@@ -190,11 +193,12 @@ public final class Utilities {
     // retrieve an int value from the meta of an item, completely invisible to player
     public static Integer getIntFromItem(UberItems main, ItemStack host, String key) {
         NamespacedKey k = new NamespacedKey(main, key);
+
+        // make sure that the item isn't null, meta isn't null
+        if (host == null) return 0;
+        if (!host.hasItemMeta()) return 0;
+
         ItemMeta itemMeta = host.getItemMeta();
-
-        // make sure that the meta isn't null
-        if (itemMeta == null) return 0;
-
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
         if(container.has(k, new CompactInventory())) return container.get(k, new StoredInt());
@@ -226,6 +230,7 @@ public final class Utilities {
         return new ItemStack[0];
     }
 
+    // UBER ITEM CENTRIC FUNCTIONS
     // _____________________________________________________________________________ \\
 
     // test if given item is an UberItem

@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -20,29 +21,17 @@ import thirtyvirus.uber.helpers.UberRarity;
 
 public class fireball extends UberItem{
 
-	//Constructor
 	public fireball(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
+	public void onItemStackCreate(ItemStack item) { }
+	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
+	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	@Override
-	public void onItemStackCreate(ItemStack item) {
-		// TODO Auto-generated method stub
-	}
+	public void leftClickAirAction(Player player, ItemStack item) { }
+	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 
-	@Override
-	public void leftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
+	// throw fireball
 	public void rightClickAirAction(Player player, ItemStack item) {
 		Fireball thrown = player.launchProjectile(Fireball.class);
 		Vector v = player.getEyeLocation().getDirection().multiply(2.0);
@@ -53,48 +42,22 @@ public class fireball extends UberItem{
 		
 		if (player.getGameMode() != GameMode.CREATIVE) destroy(item, 1);
 	}
-
-	@Override
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		rightClickAirAction(player, item);
 	}
 
-	@Override
-	public void shiftLeftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
+	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 
-	@Override
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
 		rightClickAirAction(player, item);
 	}
-
-	@Override
 	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		rightClickAirAction(player, item);
 	}
 
-	@Override
-	public void middleClickAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
-
-	}
-
-	@Override
-	public void activeEffect(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void middleClickAction(Player player, ItemStack item) { }
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+	public void activeEffect(Player player, ItemStack item) { }
 }

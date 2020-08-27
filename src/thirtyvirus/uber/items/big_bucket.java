@@ -3,13 +3,12 @@ package thirtyvirus.uber.items;
 import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,11 +23,9 @@ public class big_bucket extends UberItem {
 	public big_bucket(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
-
-	@Override
-	public void onItemStackCreate(ItemStack item) {
-		// TODO Auto-generated method stub
-	}
+	public void onItemStackCreate(ItemStack item) { }
+	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
+	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
 	// swap the bucket mode
 	public void leftClickAirAction(Player player, ItemStack item) {
@@ -52,15 +49,13 @@ public class big_bucket extends UberItem {
 		}
 
 	}
+
 	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		event.setCancelled(true);
 		leftClickAirAction(player, item);
 	}
 
-	public void rightClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void rightClickAirAction(Player player, ItemStack item) { }
 
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		Utilities.informPlayer(event.getPlayer(), Arrays.asList("mode: " + Utilities.getIntFromItem(getMain(), item, "mode"), "water: " + Utilities.getIntFromItem(getMain(), item, "water-count"), "lava: " + Utilities.getIntFromItem(getMain(), item, "lava-count"), ""));
@@ -70,47 +65,39 @@ public class big_bucket extends UberItem {
 		// TODO Auto-generated method stub
 		
 	}
-
 	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		// TODO Auto-generated method stub
 		
 	}
-
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
 		
 
 	}
-
 	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		// TODO Auto-generated method stub
 		
 	}
-
 	public void middleClickAction(Player player, ItemStack item) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
-
-	}
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
 
 	public void activeEffect(Player player, ItemStack item) {
-
 		// enforce item material (fights the game being weird with buckets)
 		switch (Utilities.getIntFromItem(getMain(), item, "mode")) {
 			// empty bucket (take liquids)
 			case 0:
-				item.setType(Material.BUCKET);
+				changeMaterial(item, Material.BUCKET);
 				break;
 			// water bucket
 			case 1:
-				item.setType(Material.WATER_BUCKET);
+				changeMaterial(item, Material.WATER_BUCKET);
 				break;
-			// water bucket
+			// lava bucket
 			case 2:
-				item.setType(Material.LAVA_BUCKET);
+				changeMaterial(item, Material.LAVA_BUCKET);
 				break;
 		}
 	}

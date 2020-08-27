@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -17,78 +18,23 @@ import thirtyvirus.uber.helpers.UberRarity;
 
 public class UberItemTemplate extends UberItem{
 
-	//Constructor
 	public UberItemTemplate(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
+	public void onItemStackCreate(ItemStack item) { }
+	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
+	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	@Override
-	public void onItemStackCreate(ItemStack item) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void leftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void rightClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void shiftLeftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void shiftRightClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void middleClickAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
-
-	}
-
-	@Override
-	public void activeEffect(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void leftClickAirAction(Player player, ItemStack item) { }
+	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void rightClickAirAction(Player player, ItemStack item) { }
+	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
+	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void shiftRightClickAirAction(Player player, ItemStack item) { }
+	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void middleClickAction(Player player, ItemStack item) { }
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+	public void activeEffect(Player player, ItemStack item) { }
 }

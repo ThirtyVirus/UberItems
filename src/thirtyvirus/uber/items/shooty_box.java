@@ -23,6 +23,7 @@ import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -37,56 +38,44 @@ import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
-public class shooty_box extends UberItem{
+public class shooty_box extends UberItem {
 
-	//Constructor
+	// TODO add more item support, optimize code
+
 	public shooty_box(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
+	public void onItemStackCreate(ItemStack item) { }
+	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
+	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	@Override
-	public void onItemStackCreate(ItemStack item) {
-		// TODO Auto-generated method stub
-	}
+	public void leftClickAirAction(Player player, ItemStack item) { }
+	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 
-	@Override
-	public void leftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
 	public void rightClickAirAction(Player player, ItemStack item) {
 		
-		//Get all items inside shooty box
+		// get all items inside shooty box
 		ItemStack[] rawItems = Utilities.getCompactInventory(super.getMain(), item);
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		for (ItemStack i : rawItems) if (i != null) items.add(i);
 		
-		//Play "empty" sound when no items in dispenser
+		// play "empty" sound when no items in dispenser
 		if (items.isEmpty()){
 			player.getWorld().playEffect(player.getLocation(), Effect.CLICK1, 1);
 			return;
 		}
 		
-		//Pick random Item
+		// pick random Item
 		Random ran = new Random();
 		ItemStack actionItem = items.get(ran.nextInt(items.size()));
 		
-		//Perform dispenser action + update inventory
+		// perform dispenser action + update inventory
 		if (actionItem.getType().name().toLowerCase().contains("arrow")) {
 			
 			player.launchProjectile(Arrow.class);
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 			
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (actionItem.getType() == Material.ANVIL){
@@ -95,7 +84,7 @@ public class shooty_box extends UberItem{
             block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
             player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
             
-			//update inventory
+			// update inventory
             if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (actionItem.getType() == Material.TORCH){
@@ -104,7 +93,7 @@ public class shooty_box extends UberItem{
 			block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (actionItem.getType() == Material.WATER_BUCKET){
@@ -113,7 +102,7 @@ public class shooty_box extends UberItem{
 			block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (actionItem.getType() == Material.LAVA_BUCKET){
@@ -122,7 +111,7 @@ public class shooty_box extends UberItem{
 			block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (actionItem.getType() == Material.TNT){
@@ -131,7 +120,7 @@ public class shooty_box extends UberItem{
 			((TNTPrimed)tnt).setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 	          
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (actionItem.getType() == Material.EGG){
@@ -140,7 +129,7 @@ public class shooty_box extends UberItem{
 			thrown.setVelocity(v);
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 	          
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (actionItem.getType() == Material.ENDER_PEARL) {
@@ -149,7 +138,7 @@ public class shooty_box extends UberItem{
 			thrown.setVelocity(v);
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 	          
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (actionItem.getType() == Material.SPLASH_POTION) {
@@ -167,7 +156,7 @@ public class shooty_box extends UberItem{
 			
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 			
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (actionItem.getType() == Material.FIRE_CHARGE && !Utilities.isUber(getMain(), actionItem, 6)){
@@ -176,54 +165,43 @@ public class shooty_box extends UberItem{
 			thrown.setVelocity(v);
 			player.getWorld().playEffect(player.getLocation(), Effect.BLAZE_SHOOT, 1);
 			
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else if (Utilities.isUber(getMain(), actionItem, 6)) {
 			Utilities.getUber(getMain(), actionItem).rightClickAirAction(player, actionItem);
 			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 			
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		else {
-			//Shoot item forward as default action
+			// shoot item forward as default action
 			ItemStack dropItem = actionItem.clone(); dropItem.setAmount(1);
 			Entity drop = (Entity) player.getWorld().dropItemNaturally(player.getEyeLocation(), dropItem);
 			drop.setVelocity(player.getLocation().getDirection().multiply(0.5));
 			player.getWorld().playEffect(player.getLocation(), Effect.CLICK2, 1);
 			
-			//update inventory
+			// update inventory
 			if (player.getGameMode() != GameMode.CREATIVE) actionItem.setAmount(actionItem.getAmount() - 1);
 		}
 		
-		//delete ActionItem stack if last item used
+		// delete ActionItem stack if last item used
 		if (actionItem.getAmount() == 0) items.remove(actionItem);
 		
-		//Save inventory update to item lore
+		// save inventory update to item lore
 		ItemStack[] finalItems = new ItemStack[items.size()];
 		for (int counter = 0; counter < items.size(); counter++) finalItems[counter] = items.get(counter);
 		Utilities.saveCompactInventory(super.getMain(), item, finalItems);
 	}
-
-	@Override
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		rightClickAirAction(player, item);
 	}
 
-	@Override
-	public void shiftLeftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
+	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 
-	@Override
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
+	// open the box's inventory
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
 		Inventory inventory = Bukkit.createInventory(player, InventoryType.DISPENSER, UberItems.itemPrefix + ChatColor.DARK_GRAY + "Shooty Box");
 		
@@ -233,27 +211,13 @@ public class shooty_box extends UberItem{
 		
 		player.playSound(player.getLocation(), Sound.BLOCK_IRON_TRAPDOOR_OPEN, 1, 1);
 	}
-
-	@Override
 	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		shiftRightClickAirAction(player, item);
 	}
 
-	@Override
-	public void middleClickAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
-
-	}
-
-	@Override
-	public void activeEffect(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void middleClickAction(Player player, ItemStack item) { }
+	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+	public void activeEffect(Player player, ItemStack item) { }
 	
 }
