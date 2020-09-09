@@ -13,26 +13,25 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import thirtyvirus.uber.UberItems;
+import org.bukkit.inventory.meta.PotionMeta;
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
-public class lunch_box extends UberItem {
+public class malk_bucket extends UberItem{
 
-	// TODO fix to give hunger and saturation for faster healing
-	//  fix the values for each food type in addSaturation()
-	//  tweak FoodLevelChange.java to properly adjust saturation
-
-	public lunch_box(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
+	public malk_bucket(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
 	}
-	public void onItemStackCreate(ItemStack item) { }
-	public void getSpecificLorePrefix(List<String> lore, ItemStack item) {
-		lore.add(ChatColor.GREEN + "Food: " + ChatColor.GRAY + Utilities.getIntFromItem(getMain(), item, "food"));
-		lore.add(ChatColor.GREEN + "Saturation: " + ChatColor.GRAY + Utilities.getIntFromItem(getMain(), item, "saturation"));
+	public void onItemStackCreate(ItemStack item) {
+		Utilities.storeStringInItem(getMain(), item, "none", "potion-name");
 	}
+	public void getSpecificLorePrefix(List<String> lore, ItemStack item) {
+		lore.add(ChatColor.GREEN + "Spiked with: " + ChatColor.GRAY + Utilities.getStringFromItem(getMain(), item, "potion-name"));
+	}
+
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
 	public void leftClickAirAction(Player player, ItemStack item) { }
@@ -43,35 +42,29 @@ public class lunch_box extends UberItem {
 	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 	public void shiftRightClickAirAction(Player player, ItemStack item) { }
 	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+
 	public void middleClickAction(Player player, ItemStack item) { }
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
 
-	// click food items onto the lunch box in your inventory to insert food
-	// TODO make actually work lol
+	// apply potion effect to malk bucket
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) {
 
-		// verify that the item is compatible with the lunchbox
+		// verify that the item is compatible with the malk bucket
 		ItemStack item = event.getWhoClicked().getItemOnCursor();
 		ItemStack uber = event.getCurrentItem();
-		if (!(item.getType().isEdible() || item.getType() == Material.MELON)) return;
+		if (!(item.hasItemMeta() && item.getItemMeta() instanceof PotionMeta)) return;
 
-		// get the current saturation from the lunch box
-		int saturation = Utilities.getIntFromItem(getMain(), uber, "saturation");
-		int food = Utilities.getIntFromItem(getMain(), uber, "food");
+		// store the potion in the malk bucket
+		ItemStack[] itemArray = new ItemStack[1]; itemArray[0] = item; // store the potion as a 1 item inventory
+		Utilities.saveCompactInventory(getMain(), uber, itemArray);
 
-		// add the appropriate amount of saturation and food to the total
-		//if (item.getItemMeta() instanceof FoodMetaData) {
-		//	FoodMetaData meta = (FoodMetaData) item.getItemMeta();
-		//	food += meta.getFoodLevel() * item.getAmount();
-		//	saturation += meta.getSaturationLevel() * item.getAmount();
-		//}
-
-
-
-		// save the new saturation and food amounts in the item, update lore
-		player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_CLOSE, 1, 1);
-		Utilities.storeIntInItem(getMain(), uber, saturation, "saturation");
-		Utilities.storeIntInItem(getMain(), uber, food, "food");
+		// update lore and play confirmation sound
+		player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 1, 1);
+		PotionMeta meta = (PotionMeta) item.getItemMeta();
+		if (meta.getDisplayName().equals(""))
+			Utilities.storeStringInItem(getMain(), uber, meta.getBasePotionData().getType().name().replace('_', ' '), "potion-name");
+		else
+			Utilities.storeStringInItem(getMain(), uber, meta.getDisplayName(), "potion-name");
 		updateLore(uber);
 
 		// delete the item being clicked onto the Uber Item
@@ -80,5 +73,4 @@ public class lunch_box extends UberItem {
 	}
 
 	public void activeEffect(Player player, ItemStack item) { }
-
 }

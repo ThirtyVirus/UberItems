@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,9 +27,9 @@ public abstract class UberItem {
     private Material material;
 
     private List<String> defaultLore;
-    private boolean canBreakBlocks;
-    private boolean stackable;
-    private boolean hasActive;
+    private boolean canBreakBlocks = false;
+    private boolean stackable = false;
+    private boolean hasActive = false;
 
     private List<UberAbility> abilities = new ArrayList<>();
 
@@ -127,8 +128,14 @@ public abstract class UberItem {
 
     // generate an UberItem ItemStack from a given string
     public static ItemStack fromString(UberItems main, String name, int stackSize) {
+
+        String effectiveName = name;
         UberItem item;
-        if (Utilities.isInteger(name)) item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
+        if (Utilities.isInteger(name)) {
+            item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
+            effectiveName = UberItems.itemIDs.get(Integer.parseInt(name));
+            Bukkit.getLogger().info(item.getName());
+        }
         else item = UberItems.items.get(name);
 
         // verify that the item is in fact an UberItem
@@ -138,7 +145,7 @@ public abstract class UberItem {
         ItemStack newItemStack = new ItemStack(item.getMaterial());
         Utilities.nameItem(newItemStack, item.getRarity().getColor() + item.getName());
         Utilities.storeStringInItem(main, newItemStack, "true", "is-uber");
-        Utilities.storeStringInItem(main, newItemStack, name, "uber-name");
+        Utilities.storeStringInItem(main, newItemStack, effectiveName, "uber-name");
         Utilities.storeIntInItem(main, newItemStack, item.getID(), "uber-id");
 
         item.enforceStackability(newItemStack);

@@ -56,6 +56,8 @@ public class PlayerUseUberItem implements Listener {
         Player player = event.getPlayer();
         UberItem uber = Utilities.getUber(main, item);
 
+        event.setCancelled(true);
+
         // air and block interaction
         if (event.getAction() == Action.LEFT_CLICK_AIR) {
             if (!player.isSneaking()) { uber.leftClickAirAction(player, item); }

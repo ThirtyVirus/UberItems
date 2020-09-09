@@ -21,6 +21,7 @@ public class FoodLevelChange implements Listener {
     public FoodLevelChange(UberItems main) { this.main = main; }
 
     @EventHandler
+    // handle the lunch box ability
     public void onPlayerHungerChange(FoodLevelChangeEvent event) {
         Player player = (Player) event.getEntity();
 
@@ -53,6 +54,5 @@ public class FoodLevelChange implements Listener {
         saturation = (double)Math.round(saturation * 100d) / 100d;
         Utilities.storeIntInItem(main, lunchBox, (int)saturation, "saturation");
         uber.updateLore(lunchBox);
-        Bukkit.getLogger().info("" + saturation);
     }
 }
