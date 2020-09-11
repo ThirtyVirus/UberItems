@@ -3,12 +3,7 @@ package thirtyvirus.uber.items;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
@@ -20,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import org.bukkit.util.Vector;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.UberAbility;
@@ -27,10 +23,10 @@ import thirtyvirus.uber.helpers.UberRarity;
 
 public class builders_wand extends UberItem {
 	// TODO /wandoops command to undo wand action
-	// TODO simplify code and fix the wand taking too many blocks in survival
+	// TODO make the wand obey area build permissions
 
-	public builders_wand(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	public builders_wand(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.DIG_SPEED, 10);
@@ -43,8 +39,10 @@ public class builders_wand extends UberItem {
 	public void rightClickAirAction(Player player, ItemStack item) { }
 
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		BlockFace face = event.getBlockFace();
-		fillConnectedFaces(player, block, face, item);
+		fillConnectedFaces(player, block, event.getBlockFace(), item);
+
+		// confirm that the item's ability has been successfully used
+		onItemUse(player, item);
 	}
 
 	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
@@ -58,320 +56,77 @@ public class builders_wand extends UberItem {
 	public void activeEffect(Player player, ItemStack item) { }
 	
 	// main logic for builder's wand
-	public void fillConnectedFaces(Player player, Block origin, BlockFace face, ItemStack item){
-		
-		ArrayList<Block> blocks = new ArrayList<>(); blocks.add(origin);
+	public void fillConnectedFaces(Player player, Block origin, BlockFace face, ItemStack item) {
 		Material fillMaterial = origin.getType();
-		int blockLimit = 2048; int blocksPlaced = 0; boolean needBlocks = true;
-
 		int blocksInInventory = countBlocks(player.getInventory(), origin.getType());
-		if (player.getGameMode() == GameMode.CREATIVE) { needBlocks = false; }
-		if (blocksInInventory < blockLimit && needBlocks) { blockLimit = blocksInInventory; }
-		
+		boolean needBlocks = (player.getGameMode() != GameMode.CREATIVE);
+		int blockLimit = 2048; if (blocksInInventory < blockLimit && needBlocks) blockLimit = blocksInInventory;
+		ArrayList<Block> blocks = new ArrayList<>(); blocks.add(origin);
+		Location l; World w = player.getWorld(); Vector[] check = null; Vector translate = null;
+		int blocksPlaced = 0;
+
+		// establish which blocks to check, depending on the block face's axis
 		switch (face) {
-		case NORTH: //Z-
-			
-			while(blocks.size() > 0 && blockLimit > 0){
-				Block block1 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				Block b1test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() - 1));
-				if (block1.getType() == fillMaterial && b1test.getType() == Material.AIR){ blocks.add(block1); }
-				
-				Block block2 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ()));
-				Block b2test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				if (block2.getType() == fillMaterial && b2test.getType() == Material.AIR){ blocks.add(block2); }
-				
-				Block block3 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				Block b3test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() - 1));
-				if (block3.getType() == fillMaterial && b3test.getType() == Material.AIR){ blocks.add(block3); }
-				
-				Block block4 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				Block b4test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ() - 1));
-				if (block4.getType() == fillMaterial && b4test.getType() == Material.AIR){ blocks.add(block4); }
-				
-				Block block5 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				Block b5test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ() - 1));
-				if (block5.getType() == fillMaterial && b5test.getType() == Material.AIR){ blocks.add(block5); }
-				
-				Block block6 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				Block b6test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() - 1));
-				if (block6.getType() == fillMaterial && b6test.getType() == Material.AIR){ blocks.add(block6); }
-				
-				Block block7 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ()));
-				Block b7test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				if (block7.getType() == fillMaterial && b7test.getType() == Material.AIR){ blocks.add(block7); }
-				
-				Block block8 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				Block b8test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() - 1));
-				if (block8.getType() == fillMaterial && b8test.getType() == Material.AIR){ blocks.add(block8); }
-				
-				Block fillBlock = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				
-				if (canPlaceBlock(player, fillBlock.getLocation())){
-					fillBlock.setType(fillMaterial); blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1; blocksPlaced++;
-					if (needBlocks) { removeBlocks(player.getInventory(), origin.getType(), 1); }
-					if (needBlocks && blocksPlaced == blockLimit) { break; }
-				}
-				else {
-					blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1;
-				}
-			}
-			break;
-			
-		case SOUTH: //Z+
-			
-			while(blocks.size() > 0 && blockLimit > 0){
-				Block block1 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				Block b1test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() + 1));
-				if (block1.getType() == fillMaterial && b1test.getType() == Material.AIR){ blocks.add(block1); }
-				
-				Block block2 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ()));
-				Block b2test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				if (block2.getType() == fillMaterial && b2test.getType() == Material.AIR){ blocks.add(block2); }
-				
-				Block block3 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				Block b3test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() + 1));
-				if (block3.getType() == fillMaterial && b3test.getType() == Material.AIR){ blocks.add(block3); }
-				
-				Block block4 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				Block b4test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ() + 1));
-				if (block4.getType() == fillMaterial && b4test.getType() == Material.AIR){ blocks.add(block4); }
-				
-				Block block5 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				Block b5test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ() + 1));
-				if (block5.getType() == fillMaterial && b5test.getType() == Material.AIR){ blocks.add(block5); }
-				
-				Block block6 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				Block b6test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() + 1));
-				if (block6.getType() == fillMaterial && b6test.getType() == Material.AIR){ blocks.add(block6); }
-				
-				Block block7 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ()));
-				Block b7test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				if (block7.getType() == fillMaterial && b7test.getType() == Material.AIR){ blocks.add(block7); }
-				
-				Block block8 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				Block b8test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() + 1));
-				if (block8.getType() == fillMaterial && b8test.getType() == Material.AIR){ blocks.add(block8); }
-				
-				Block fillBlock = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				
-				if (canPlaceBlock(player, fillBlock.getLocation())){
-					fillBlock.setType(fillMaterial); blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1; blocksPlaced++;
-					if (needBlocks) { removeBlocks(player.getInventory(), origin.getType(), 1); }
-					if (needBlocks && blocksPlaced == blockLimit) { break; }
-				}
-				else {
-					blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1;
-				}
-			}
-			break;
-			
-		case EAST: //X+
-			
-			while(blocks.size() > 0 && blockLimit > 0){
-				Block block1 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ() - 1));
-				Block b1test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() - 1));
-				if (block1.getType() == fillMaterial && b1test.getType() == Material.AIR){ blocks.add(block1); }
-				
-				Block block2 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				Block b2test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				if (block2.getType() == fillMaterial && b2test.getType() == Material.AIR){ blocks.add(block2); }
-				
-				Block block3 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ() + 1));
-				Block b3test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() + 1));
-				if (block3.getType() == fillMaterial && b3test.getType() == Material.AIR){ blocks.add(block3); }
-				
-				Block block4 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				Block b4test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				if (block4.getType() == fillMaterial && b4test.getType() == Material.AIR){ blocks.add(block4); }
-				
-				Block block5 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				Block b5test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				if (block5.getType() == fillMaterial && b5test.getType() == Material.AIR){ blocks.add(block5); }
-				
-				Block block6 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ() - 1));
-				Block b6test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() - 1));
-				if (block6.getType() == fillMaterial && b6test.getType() == Material.AIR){ blocks.add(block6); }
-				
-				Block block7 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				Block b7test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				if (block7.getType() == fillMaterial && b7test.getType() == Material.AIR){ blocks.add(block7); }
-				
-				Block block8 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ() + 1));
-				Block b8test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() + 1));
-				if (block8.getType() == fillMaterial && b8test.getType() == Material.AIR){ blocks.add(block8); }
-				
-				Block fillBlock = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ()));
-				
-				if (canPlaceBlock(player, fillBlock.getLocation())){
-					fillBlock.setType(fillMaterial); blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1; blocksPlaced++;
-					if (needBlocks) { removeBlocks(player.getInventory(), origin.getType(), 1); }
-					if (needBlocks && blocksPlaced == blockLimit) { break; }
-				}
-				else {
-					blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1;
-				}
-			}
-			break;
-			
-		case WEST: //X-
-			
-			while(blocks.size() > 0 && blockLimit > 0){
-				Block block1 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ() - 1));
-				Block b1test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() - 1));
-				if (block1.getType() == fillMaterial && b1test.getType() == Material.AIR){ blocks.add(block1); }
-				
-				Block block2 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				Block b2test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				if (block2.getType() == fillMaterial && b2test.getType() == Material.AIR){ blocks.add(block2); }
-				
-				Block block3 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ() + 1));
-				Block b3test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() + 1));
-				if (block3.getType() == fillMaterial && b3test.getType() == Material.AIR){ blocks.add(block3); }
-				
-				Block block4 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				Block b4test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				if (block4.getType() == fillMaterial && b4test.getType() == Material.AIR){ blocks.add(block4); }
-				
-				Block block5 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				Block b5test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				if (block5.getType() == fillMaterial && b5test.getType() == Material.AIR){ blocks.add(block5); }
-				
-				Block block6 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ() - 1));
-				Block b6test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() - 1));
-				if (block6.getType() == fillMaterial && b6test.getType() == Material.AIR){ blocks.add(block6); }
-				
-				Block block7 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				Block b7test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				if (block7.getType() == fillMaterial && b7test.getType() == Material.AIR){ blocks.add(block7); }
-				
-				Block block8 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ() + 1));
-				Block b8test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() + 1));
-				if (block8.getType() == fillMaterial && b8test.getType() == Material.AIR){ blocks.add(block8); }
-				
-				Block fillBlock = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ()));
-				
-				if (canPlaceBlock(player, fillBlock.getLocation())){
-					fillBlock.setType(fillMaterial); blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1; blocksPlaced++;
-					if (needBlocks) { removeBlocks(player.getInventory(), origin.getType(), 1); }
-					if (needBlocks && blocksPlaced == blockLimit) { break; }
-				}
-				else {
-					blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1;
-				}
-			}
-			break;
-			
-		case UP: //Y+
-			
-			while(blocks.size() > 0 && blockLimit > 0){
-				Block block1 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				Block b1test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() - 1));
-				if (block1.getType() == fillMaterial && b1test.getType() == Material.AIR){ blocks.add(block1); }
-				
-				Block block2 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ()));
-				Block b2test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				if (block2.getType() == fillMaterial && b2test.getType() == Material.AIR){ blocks.add(block2); }
-				
-				Block block3 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				Block b3test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() + 1));
-				if (block3.getType() == fillMaterial && b3test.getType() == Material.AIR){ blocks.add(block3); }
-				
-				Block block4 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				Block b4test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ() - 1));
-				if (block4.getType() == fillMaterial && b4test.getType() == Material.AIR){ blocks.add(block4); }
-				
-				Block block5 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				Block b5test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ() + 1));
-				if (block5.getType() == fillMaterial && b5test.getType() == Material.AIR){ blocks.add(block5); }
-				
-				Block block6 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				Block b6test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() - 1));
-				if (block6.getType() == fillMaterial && b6test.getType() == Material.AIR){ blocks.add(block6); }
-				
-				Block block7 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ()));
-				Block b7test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				if (block7.getType() == fillMaterial && b7test.getType() == Material.AIR){ blocks.add(block7); }
-				
-				Block block8 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				Block b8test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() + 1, blocks.get(0).getZ() + 1));
-				if (block8.getType() == fillMaterial && b8test.getType() == Material.AIR){ blocks.add(block8); }
-				
-				Block fillBlock = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() + 1, blocks.get(0).getZ()));
-				
-				if (canPlaceBlock(player, fillBlock.getLocation())){
-					fillBlock.setType(fillMaterial); blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1; blocksPlaced++;
-					if (needBlocks) { removeBlocks(player.getInventory(), origin.getType(), 1); }
-					if (needBlocks && blocksPlaced == blockLimit) { break; }
-				}
-				else {
-					Bukkit.broadcastMessage("can't place here!");
-					blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1;
-				}
-			}
-			break;
-			
-		case DOWN: //Y-
-			
-			while(blocks.size() > 0 && blockLimit > 0){
-				Block block1 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				Block b1test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() - 1));
-				if (block1.getType() == fillMaterial && b1test.getType() == Material.AIR){ blocks.add(block1); }
-				
-				Block block2 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ()));
-				Block b2test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				if (block2.getType() == fillMaterial && b2test.getType() == Material.AIR){ blocks.add(block2); }
-				
-				Block block3 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				Block b3test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() - 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() + 1));
-				if (block3.getType() == fillMaterial && b3test.getType() == Material.AIR){ blocks.add(block3); }
-				
-				Block block4 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				Block b4test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ() - 1));
-				if (block4.getType() == fillMaterial && b4test.getType() == Material.AIR){ blocks.add(block4); }
-				
-				Block block5 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				Block b5test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ() + 1));
-				if (block5.getType() == fillMaterial && b5test.getType() == Material.AIR){ blocks.add(block5); }
-				
-				Block block6 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ() - 1));
-				Block b6test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() - 1));
-				if (block6.getType() == fillMaterial && b6test.getType() == Material.AIR){ blocks.add(block6); }
-				
-				Block block7 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ()));
-				Block b7test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				if (block7.getType() == fillMaterial && b7test.getType() == Material.AIR){ blocks.add(block7); }
-				
-				Block block8 = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY(), blocks.get(0).getZ() + 1));
-				Block b8test = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX() + 1, blocks.get(0).getY() - 1, blocks.get(0).getZ() + 1));
-				if (block8.getType() == fillMaterial && b8test.getType() == Material.AIR){ blocks.add(block8); }
-				
-				Block fillBlock = player.getWorld().getBlockAt(new Location(player.getWorld(), blocks.get(0).getX(), blocks.get(0).getY() - 1, blocks.get(0).getZ()));
-				
-				if (canPlaceBlock(player, fillBlock.getLocation())){
-					fillBlock.setType(fillMaterial); blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1; blocksPlaced++;
-					if (needBlocks) { removeBlocks(player.getInventory(), origin.getType(), 1); }
-					if (needBlocks && blocksPlaced == blockLimit) { break; }
-				}
-				else {
-					blocks.removeIf(blocks.get(0)::equals);; blockLimit -= 1;
-				}
-			}
-			break;
-			
+			case NORTH: //Z-
+			case SOUTH: //Z+
+				check = new Vector[] {
+						new Vector(-1,-1,0), new Vector(-1,0,0), new Vector(-1,1,0),
+						new Vector(0,-1,0), new Vector(0,1,0), new Vector(1,-1,0),
+						new Vector(1,0,0), new Vector(1,1,0) }; break;
+			case EAST: //X+
+			case WEST: //X-
+				check = new Vector[] {
+						new Vector(0,-1,-1), new Vector(0,-1,0), new Vector(0,-1,1),
+						new Vector(0,0,-1), new Vector(0,0,1), new Vector(0,1,-1),
+						new Vector(0,1,0), new Vector(0,1,1) }; break;
+			case UP: //Y+
+			case DOWN: //Y-
+				check = new Vector[] {
+						new Vector(-1,0,-1), new Vector(-1,0,0), new Vector(-1,0,1),
+						new Vector(0,0,-1), new Vector(0,0,1), new Vector(1,0,-1),
+						new Vector(1,0,0), new Vector(1,0,1) }; break;
 		}
-		
-		if (item.getDurability() > 1532){
-			player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_HURT, 1, 1);
-			return;
+		switch (face) {
+			case NORTH: translate = new Vector(0,0,-1); break;
+			case SOUTH: translate = new Vector(0,0,1); break;
+			case EAST: translate = new Vector(1,0,0); break;
+			case WEST: translate = new Vector(-1,0,0); break;
+			case UP: translate = new Vector(0,1,0); break;
+			case DOWN: translate = new Vector(0,-1,0); break;
 		}
-		
-		if (blocksPlaced != 0){
-			if (needBlocks) { removeBlocks(player.getInventory(), origin.getType(), blocksPlaced); }
-			
+
+		// place blocks
+		while(blocks.size() > 0 && blockLimit > 0) {
+			// search surrounding matching blocks for those that are "connected" on this axis
+			l = blocks.get(0).getLocation();
+			for (Vector vector : check) {
+				if (w.getBlockAt(l.clone().add(vector)).getType() == fillMaterial &&
+						w.getBlockAt(l.clone().add(vector).clone().add(translate)).getType() == Material.AIR)
+					blocks.add(w.getBlockAt(l.clone().add(vector)));
+			}
+
+			// place new material at the selected block
+			Block fillBlock = w.getBlockAt(l.clone().add(translate));
+			if (canPlaceBlock(player, fillBlock.getLocation())) {
+
+				blocks.removeIf(blocks.get(0)::equals);
+				if (fillBlock.getType() != fillMaterial) {
+					fillBlock.setType(fillMaterial);
+					blockLimit -= 1; blocksPlaced++;
+				}
+
+				if (needBlocks && blocksPlaced == blockLimit) break;
+			}
+			else { blocks.removeIf(blocks.get(0)::equals); blockLimit -= 1; }
+		}
+
+		// finalize block place action + take blocks from inv if in survival
+		if (blocksPlaced != 0) {
+			if (needBlocks) removeBlocks(player.getInventory(), origin.getType(), blocksPlaced);
+
 			player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_BULLET_HIT, 1, 1);
 			player.getWorld().playEffect(player.getEyeLocation(), Effect.SMOKE, 0);
 		}
-
 	}
 	
 	// counts amount of blocks of type m in inventory inv
@@ -403,4 +158,3 @@ public class builders_wand extends UberItem {
 		
 	}
 }
-

@@ -29,7 +29,7 @@ public class MenuUtils {
         pages.add(ChatColor.translateAlternateColorCodes('&',
                 "      &7&lWelcome to:" + "\n" +
                         "   &c&lUberItems&r" + "\n" +
-                        "This guide book will show you everything you need to know about template! Happy reading!" + "\n" +
+                        "This guide book will show you everything you need to know about UberItems! Happy reading!" + "\n" +
                         "" + "\n" +
                         " - ThirtyVirus" + "\n" +
                         "" + "\n" +

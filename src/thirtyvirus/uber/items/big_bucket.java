@@ -20,8 +20,8 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class big_bucket extends UberItem {
 
-	public big_bucket(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	public big_bucket(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
@@ -61,26 +61,11 @@ public class big_bucket extends UberItem {
 		Utilities.informPlayer(event.getPlayer(), Arrays.asList("mode: " + Utilities.getIntFromItem(getMain(), item, "mode"), "water: " + Utilities.getIntFromItem(getMain(), item, "water-count"), "lava: " + Utilities.getIntFromItem(getMain(), item, "lava-count"), ""));
 	}
 
-	public void shiftLeftClickAirAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void shiftRightClickAirAction(Player player, ItemStack item) {
-		
-
-	}
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void middleClickAction(Player player, ItemStack item) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
+	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void shiftRightClickAirAction(Player player, ItemStack item) { }
+	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void middleClickAction(Player player, ItemStack item) { }
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
 
@@ -101,5 +86,4 @@ public class big_bucket extends UberItem {
 				break;
 		}
 	}
-
 }

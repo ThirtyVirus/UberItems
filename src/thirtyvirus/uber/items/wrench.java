@@ -22,6 +22,7 @@ import thirtyvirus.uber.helpers.UberRarity;
 
 public class wrench extends UberItem{
 
+	// blocks that are supported by the face change
 	public static List<Material> supportedBlocks = Arrays.asList(Material.PISTON, Material.STICKY_PISTON, Material.DISPENSER, Material.DROPPER, Material.OBSERVER, Material.ACACIA_LOG, Material.BIRCH_LOG, Material.DARK_OAK_LOG,
 			Material.JUNGLE_LOG, Material.OAK_LOG, Material.SPRUCE_LOG,
 			Material.STRIPPED_ACACIA_LOG, Material.STRIPPED_BIRCH_LOG, Material.STRIPPED_DARK_OAK_LOG, Material.STRIPPED_JUNGLE_LOG, Material.STRIPPED_OAK_LOG, Material.STRIPPED_SPRUCE_LOG, Material.STRIPPED_ACACIA_WOOD,
@@ -33,8 +34,8 @@ public class wrench extends UberItem{
 			Material.JUNGLE_FENCE_GATE, Material.OAK_FENCE_GATE, Material.SPRUCE_FENCE_GATE, Material.FURNACE, Material.ENDER_CHEST, Material.ANVIL, Material.HAY_BLOCK, Material.CHEST, Material.TRAPPED_CHEST, Material.RAIL,
 			Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL);
 
-	public wrench(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	public wrench(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
@@ -51,7 +52,6 @@ public class wrench extends UberItem{
 			Bukkit.getServer().getPluginManager().callEvent(e);
 			if (!e.isCancelled()) {
 				String data = block.getBlockData().toString();
-				//Bukkit.broadcastMessage(data);
 				
 				if (block.getType().name().contains("CHEST") && !data.contains("type=single")) return;
 				
@@ -103,6 +103,9 @@ public class wrench extends UberItem{
 				player.playSound(block.getLocation(), Sound.BLOCK_LEVER_CLICK, 1, 1);
 			}
 		}
+
+		// confirm that the item's ability has been successfully used
+		onItemUse(player, item);
 	}
 
 	public void shiftLeftClickAirAction(Player player, ItemStack item) { }

@@ -16,10 +16,11 @@ import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberRarity;
 
+// a template class that can be copy - pasted and renamed when making new Uber Items
 public class UberItemTemplate extends UberItem{
 
-	public UberItemTemplate(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	public UberItemTemplate(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }

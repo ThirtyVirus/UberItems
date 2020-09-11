@@ -23,10 +23,9 @@ public class lunch_box extends UberItem {
 
 	// TODO fix to give hunger and saturation for faster healing
 	//  fix the values for each food type in addSaturation()
-	//  tweak FoodLevelChange.java to properly adjust saturation
 
-	public lunch_box(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	public lunch_box(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) {
@@ -65,8 +64,8 @@ public class lunch_box extends UberItem {
 		//	food += meta.getFoodLevel() * item.getAmount();
 		//	saturation += meta.getSaturationLevel() * item.getAmount();
 		//}
-
-
+		saturation += 10;
+		food += 10;
 
 		// save the new saturation and food amounts in the item, update lore
 		player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_CLOSE, 1, 1);
@@ -80,5 +79,4 @@ public class lunch_box extends UberItem {
 	}
 
 	public void activeEffect(Player player, ItemStack item) { }
-
 }

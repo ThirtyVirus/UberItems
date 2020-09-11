@@ -22,8 +22,8 @@ import thirtyvirus.uber.helpers.UberRarity;
 
 public class boom_stick extends UberItem{
 
-	public boom_stick(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	public boom_stick(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.KNOCKBACK, 4);
@@ -68,6 +68,9 @@ public class boom_stick extends UberItem{
 			mob.getWorld().playEffect(mob.getLocation().add(0,1,0), Effect.SMOKE, 0);
 			mob.remove();
 		} }, 40);
+
+		// confirm that the item's ability has been successfully used
+		onItemUse(player, item);
 	}
 
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }

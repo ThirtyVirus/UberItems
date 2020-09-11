@@ -19,8 +19,8 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class escape_rope extends UberItem{
 
-	public escape_rope(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	public escape_rope(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
@@ -38,9 +38,10 @@ public class escape_rope extends UberItem{
 			if (destination != null) player.teleport(destination);
 
 			player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
-
-			if (player.getGameMode() != GameMode.CREATIVE) destroy(item, 1);
 		}
+
+		// confirm that the item's ability has been successfully used
+		onItemUse(player, item);
 	}
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		rightClickAirAction(player, item);

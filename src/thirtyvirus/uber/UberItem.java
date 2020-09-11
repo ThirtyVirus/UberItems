@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -29,6 +30,7 @@ public abstract class UberItem {
     private List<String> defaultLore;
     private boolean canBreakBlocks = false;
     private boolean stackable = false;
+    private boolean oneTimeUse = false;
     private boolean hasActive = false;
 
     private List<UberAbility> abilities = new ArrayList<>();
@@ -36,7 +38,7 @@ public abstract class UberItem {
     private UberItems main;
 
     // new UberItem
-    public UberItem(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities){
+    public UberItem(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities){
         this.main = main;
 
         this.id = id;
@@ -46,6 +48,7 @@ public abstract class UberItem {
 
         this.canBreakBlocks = canBreakBlocks;
         this.stackable = stackable;
+        this.oneTimeUse = oneTimeUse;
         this.hasActive = hasActiveEffect;
 
         this.abilities = abilities;
@@ -54,6 +57,12 @@ public abstract class UberItem {
     // properly format the lore for Uber Items
     public List<String> getLore(ItemStack item) {
         List<String> lore = new ArrayList<>();
+
+        // warn players that an item is unfinished
+        if (rarity == UberRarity.UNFINISHED) {
+            lore.add(ChatColor.RED + "This item is UNFINISHED");
+            lore.add(ChatColor.RED + "It may not perform as expected");
+        }
 
         // put in item specific prefix
         getSpecificLorePrefix(lore, item);
@@ -67,6 +76,9 @@ public abstract class UberItem {
 
         // put in item specific suffix
         getSpecificLoreSuffix(lore, item);
+
+        // show the "consumed on use" msg if the item is a one time use
+        if (oneTimeUse) lore.add(ChatColor.DARK_GRAY + "(consumed on use)");
 
         // show the rarity of the item
         lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString());
@@ -94,6 +106,10 @@ public abstract class UberItem {
         if (!stackable) {
             Utilities.storeStringInItem(getMain(), uber,  UUID.randomUUID().toString(), "UUID");
         }
+    }
+    public void onItemUse(Player player, ItemStack item) {
+        // process one time use items
+        if (oneTimeUse && player.getGameMode() != GameMode.CREATIVE) destroy(item, 1);
     }
 
     public abstract void onItemStackCreate(ItemStack item);

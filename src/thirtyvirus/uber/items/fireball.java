@@ -21,8 +21,8 @@ import thirtyvirus.uber.helpers.UberRarity;
 
 public class fireball extends UberItem{
 
-	public fireball(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	public fireball(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
@@ -39,8 +39,9 @@ public class fireball extends UberItem{
 		thrown.setYield(5);
 		
 		thrown.setCustomName("UberFireBall");
-		
-		if (player.getGameMode() != GameMode.CREATIVE) destroy(item, 1);
+
+		// confirm that the item's ability has been successfully used
+		onItemUse(player, item);
 	}
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		rightClickAirAction(player, item);

@@ -30,29 +30,35 @@ public class FoodLevelChange implements Listener {
         if (lunchBox == null) return;
         UberItem uber = Utilities.getUber(main, lunchBox);
 
-        // get saturation, verify that the amount is urgent
-        final int max = 20; int now = event.getFoodLevel();
-        double amountNeeded = max - now; if (amountNeeded < 5) return;
-        double saturation = Utilities.getIntFromItem(main, lunchBox, "saturation");
+        // get food and saturation levels
+        final int max = 20; // maximum food and saturation
+        int availableFood = Utilities.getIntFromItem(main, lunchBox, "food");
+        int availableSaturation = Utilities.getIntFromItem(main, lunchBox, "saturation");
+        int playerFood = player.getFoodLevel();
+        int playerSaturation = (int) player.getSaturation();
+
+        // verify that the amount is urgent
+        int foodNeeded = max - playerFood;
+        int saturationNeeded = max - playerSaturation;
+        if (foodNeeded < 5) return;
+
+        // limit the given food and saturation to the amount available
+        if (availableFood < foodNeeded) foodNeeded = availableFood;
+        if (availableSaturation < saturationNeeded) saturationNeeded = availableSaturation;
+
+        // subtract food and saturation from lunch box
+        availableFood -= foodNeeded;
+        availableSaturation -= saturationNeeded;
 
         // feed player
-        if (saturation < amountNeeded) {
-            if (saturation == 0) return;
-            event.setFoodLevel((int) (now + saturation));
-            saturation = 0;
-            player.setSaturation((float) (player.getSaturation() + amountNeeded / 2));
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 1, 1);
-        }
-        else {
-            saturation -= amountNeeded;
-            event.setFoodLevel(max);
-            player.setSaturation((float) (player.getSaturation() + amountNeeded / 2));
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 1, 1);
-        }
+        player.setFoodLevel(playerFood + foodNeeded);
+        player.setSaturation(playerSaturation + saturationNeeded);
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 1, 1);
+        event.setCancelled(true); // prevents the food and saturation levels from being reset by the event
 
-        // save the new saturation amount in the item, update lore
-        saturation = (double)Math.round(saturation * 100d) / 100d;
-        Utilities.storeIntInItem(main, lunchBox, (int)saturation, "saturation");
+        // save the new saturation and food amounts in the item, update lore
+        Utilities.storeIntInItem(main, lunchBox, (int)availableFood, "food");
+        Utilities.storeIntInItem(main, lunchBox, (int)availableSaturation, "saturation");
         uber.updateLore(lunchBox);
     }
 }

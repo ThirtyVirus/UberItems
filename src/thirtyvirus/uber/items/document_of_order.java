@@ -26,8 +26,8 @@ public class document_of_order extends UberItem  {
 	// TODO make the sort respect area build permissions.
 	// TODO make smart sort smarter
 
-	public document_of_order(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, hasActiveEffect, abilities);
+	public document_of_order(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.MENDING, 10);
@@ -65,6 +65,9 @@ public class document_of_order extends UberItem  {
 		// sort the player's inventory
 		SortingUtilities.sortPlayerInventory(player.getInventory());
 		Utilities.playSound(CLICK, player);
+
+		// confirm that the item's ability has been successfully used
+		onItemUse(player, item);
 	}
 	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		// enforce external sorting setting
@@ -74,6 +77,9 @@ public class document_of_order extends UberItem  {
 		if (SortingUtilities.INVENTORY_BLOCKS.contains(event.getClickedBlock().getType())) {
 			SortingUtilities.sortBlock(event.getClickedBlock(), event.getPlayer(), getMain());
 		}
+
+		// confirm that the item's ability has been successfully used
+		onItemUse(player, item);
 	}
 
 	public void middleClickAction(Player player, ItemStack item) { }
