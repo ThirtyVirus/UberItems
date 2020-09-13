@@ -111,111 +111,64 @@ public class shooty_box extends UberItem {
 	private void shootItem(Player player, ItemStack item) {
 
 		switch (item.getType()) {
+			case ARROW:
+				player.launchProjectile(Arrow.class);
+				player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
+				break;
 			case TNT:
+				Entity tnt = player.getWorld().spawn(player.getEyeLocation(), TNTPrimed.class);
+				((TNTPrimed)tnt).setFuseTicks(30);
+				((TNTPrimed)tnt).setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
+				player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 				break;
 			case EGG:
+				Egg thrown = player.launchProjectile(Egg.class);
+				Vector v = player.getEyeLocation().getDirection().multiply(1.5);
+				thrown.setVelocity(v);
+				player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 				break;
 			case ENDER_PEARL:
+				EnderPearl pearl = player.launchProjectile(EnderPearl.class);
+				Vector vel = player.getEyeLocation().getDirection().multiply(3.0);
+				pearl.setVelocity(vel);
+				player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 				break;
 			case SPLASH_POTION:
+				ThrownPotion potion = player.launchProjectile(ThrownPotion.class);
+
+				Collection<PotionEffect>effects = potion.getEffects();
+				PotionMeta meta = (PotionMeta) item.getItemMeta();
+				int amplifier = 0; if (meta.getBasePotionData().isUpgraded()) amplifier = 1; //vanilla potion effect
+				potion.getEffects().clear();
+				potion.getEffects().add(meta.getBasePotionData().getType().getEffectType().createEffect(5*20*60, amplifier));
+				potion.getEffects().addAll(meta.getCustomEffects());
+
+				potion.setVelocity(player.getEyeLocation().getDirection().multiply(2.0));
+
+
+				player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
 				break;
 			case FIRE_CHARGE:
+				Fireball fireball = player.launchProjectile(SmallFireball.class);
+				Vector ve = player.getEyeLocation().getDirection().multiply(2.0);
+				fireball.setVelocity(ve);
+				player.getWorld().playEffect(player.getLocation(), Effect.BLAZE_SHOOT, 1);
+				break;
+			case WATER_BUCKET:
+				launchFallingBlock(player, Material.WATER, 2.0F, Effect.BOW_FIRE);
+				break;
+			case LAVA_BUCKET:
+				launchFallingBlock(player, Material.LAVA, 2.0F, Effect.BOW_FIRE);
 				break;
 			default:
 				if (item.getType().isBlock()) launchFallingBlock(player, item.getType(), 2.0F, Effect.BOW_FIRE);
 				break;
-		}
 
-		if (item.getType().name().toLowerCase().contains("arrow")) {
-
-			player.launchProjectile(Arrow.class);
-			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
-
-		}
-		else if (item.getType() == Material.ANVIL){
-
-			FallingBlock block = player.getWorld().spawnFallingBlock(player.getLocation().add(0,1,0), Material.ANVIL, (byte) 0);
-			block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
-			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
-
-		}
-		else if (item.getType() == Material.TORCH){
-
-			FallingBlock block = player.getWorld().spawnFallingBlock(player.getLocation().add(0,1,0), Material.TORCH, (byte) 0);
-			block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
-			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
-
-		}
-		else if (item.getType() == Material.WATER_BUCKET){
-
-			FallingBlock block = player.getWorld().spawnFallingBlock(player.getLocation().add(0,1,0), Material.WATER, (byte) 0);
-			block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
-			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
-
-		}
-		else if (item.getType() == Material.LAVA_BUCKET){
-
-			FallingBlock block = player.getWorld().spawnFallingBlock(player.getLocation().add(0,1,0), Material.LAVA, (byte) 0);
-			block.setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
-			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
-
-		}
-		else if (item.getType() == Material.TNT){
-			Entity tnt = player.getWorld().spawn(player.getEyeLocation(), TNTPrimed.class);
-			((TNTPrimed)tnt).setFuseTicks(30);
-			((TNTPrimed)tnt).setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
-			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
-
-		}
-		else if (item.getType() == Material.EGG){
-			Egg thrown = player.launchProjectile(Egg.class);
-			Vector v = player.getEyeLocation().getDirection().multiply(1.5);
-			thrown.setVelocity(v);
-			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
-
-		}
-		else if (item.getType() == Material.ENDER_PEARL) {
-			EnderPearl thrown = player.launchProjectile(EnderPearl.class);
-			Vector v = player.getEyeLocation().getDirection().multiply(3.0);
-			thrown.setVelocity(v);
-			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
-
-		}
-		else if (item.getType() == Material.SPLASH_POTION) {
-			ThrownPotion thrown = player.launchProjectile(ThrownPotion.class);
-
-			Collection<PotionEffect>effects = thrown.getEffects();
-			PotionMeta meta = (PotionMeta) item.getItemMeta();
-
-			for (PotionEffect e : meta.getCustomEffects()){
-				effects.add(e);
-			}
-
-			Vector v = player.getEyeLocation().getDirection().multiply(2.0);
-			thrown.setVelocity(v);
-
-			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
-
-		}
-		else if (item.getType() == Material.FIRE_CHARGE && !Utilities.isUber(getMain(), item, 6)){
-			Fireball thrown = player.launchProjectile(SmallFireball.class);
-			Vector v = player.getEyeLocation().getDirection().multiply(2.0);
-			thrown.setVelocity(v);
-			player.getWorld().playEffect(player.getLocation(), Effect.BLAZE_SHOOT, 1);
-
-		}
-		else if (Utilities.isUber(getMain(), item, 6)) {
-			Utilities.getUber(getMain(), item).rightClickAirAction(player, item);
-			player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
-
-		}
-		else {
-			// shoot item forward as default action
-			//ItemStack dropItem = item.clone(); dropItem.setAmount(1);
-			//Entity drop = (Entity) player.getWorld().dropItemNaturally(player.getEyeLocation(), dropItem);
-			//drop.setVelocity(player.getLocation().getDirection().multiply(0.5));
-			//player.getWorld().playEffect(player.getLocation(), Effect.CLICK2, 1);
-
+			// IDEAS
+			// any arrow type
+			// particles for water and lava as it flew
+			// splash potions
+			//
 		}
 
 		// update inventory

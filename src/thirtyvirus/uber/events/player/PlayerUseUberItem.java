@@ -13,7 +13,10 @@ import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
+
+import java.util.Arrays;
 
 public class PlayerUseUberItem implements Listener {
 
@@ -56,7 +59,11 @@ public class PlayerUseUberItem implements Listener {
         Player player = event.getPlayer();
         UberItem uber = Utilities.getUber(main, item);
 
-        event.setCancelled(true);
+        // enforce premium vs lite
+        if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) { Utilities.warnPlayer(player, Arrays.asList(main.getPhrase("not-premium-message"))); return; }
+
+        // don't cancel event for malk bucket
+        if (uber.getID() != 8) event.setCancelled(true);
 
         // air and block interaction
         if (event.getAction() == Action.LEFT_CLICK_AIR) {

@@ -28,23 +28,21 @@ public class MenuUtils {
         // exmaple main menu
         pages.add(ChatColor.translateAlternateColorCodes('&',
                 "      &7&lWelcome to:" + "\n" +
-                        "   &c&lUberItems&r" + "\n" +
+                        "     &c&lUberItems&r" + "\n" +
                         "This guide book will show you everything you need to know about UberItems! Happy reading!" + "\n" +
                         "" + "\n" +
                         " - ThirtyVirus" + "\n" +
-                        "" + "\n" +
-                        "&7&lGo to the next page for info on a second page!"));
+                        "" + "\n\n\n" +
+                        "&7&lNext: Getting Items!"));
 
         // example secondary page
         pages.add(ChatColor.translateAlternateColorCodes('&',
-                "&c&lIn-Inventory&r" + "\n" +
+                "&c&lGetting Items&r" + "\n" +
                         "" + "\n" +
-                        "Middle Click any slot in any container-block's open inventory, and it will instantly be sorted!" + "\n" +
+                        "Grab an uber item with /uber give ____. Then the available items will be available with tab completion." + "\n" +
                         "" + "\n" +
-                        "Use &c'/template inv'&r to sort your personal inventory." + "\n" +
-                        "" + "\n" +
-                        "&7&lNext: External Sorting" + "\n"));
-
+                        "Items have a tutorial built - in with their ability descriptions." + "\n" +
+                        "" + "\n"));
 
         meta.setPages(pages);
         book.setItemMeta(meta);

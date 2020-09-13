@@ -21,9 +21,6 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class lunch_box extends UberItem {
 
-	// TODO fix to give hunger and saturation for faster healing
-	//  fix the values for each food type in addSaturation()
-
 	public lunch_box(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
 		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
@@ -46,7 +43,6 @@ public class lunch_box extends UberItem {
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
 
 	// click food items onto the lunch box in your inventory to insert food
-	// TODO make actually work lol
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) {
 
 		// verify that the item is compatible with the lunchbox
@@ -59,13 +55,8 @@ public class lunch_box extends UberItem {
 		int food = Utilities.getIntFromItem(getMain(), uber, "food");
 
 		// add the appropriate amount of saturation and food to the total
-		//if (item.getItemMeta() instanceof FoodMetaData) {
-		//	FoodMetaData meta = (FoodMetaData) item.getItemMeta();
-		//	food += meta.getFoodLevel() * item.getAmount();
-		//	saturation += meta.getSaturationLevel() * item.getAmount();
-		//}
-		saturation += 10;
-		food += 10;
+		food += getFood(item.getType(), false) * item.getAmount();
+		saturation += getFood(item.getType(), true) * item.getAmount();
 
 		// save the new saturation and food amounts in the item, update lore
 		player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_CLOSE, 1, 1);
@@ -76,6 +67,53 @@ public class lunch_box extends UberItem {
 		// delete the item being clicked onto the Uber Item
 		event.getWhoClicked().setItemOnCursor(null);
 		event.setCancelled(true);
+	}
+
+	// get the food and saturation value of a food item
+	public int getFood(Material material, boolean saturation) {
+		switch (material) {
+			case APPLE:
+			case CHORUS_FRUIT: if (saturation) return 2; else return 4;
+			case BAKED_POTATO:
+			case BREAD:
+			case COOKED_COD:
+			case COOKED_RABBIT: if (saturation) return 6; else return 5;
+			case BEETROOT:
+			case DRIED_KELP:
+			case POTATO:
+			case TROPICAL_FISH: return 1;
+			case BEETROOT_SOUP:
+			case COOKED_CHICKEN:
+			case MUSHROOM_STEW:
+			case SUSPICIOUS_STEW: if (saturation) return 7; else return 6;
+			case CAKE: if (saturation) return 3; else return 14;
+			case CARROT: if (saturation) return 4; else return 3;
+			case COOKED_MUTTON:
+			case COOKED_SALMON: if (saturation) return 10; else return 6;
+			case COOKED_PORKCHOP:
+			case COOKED_BEEF: if (saturation) return 13; else return 8;
+			case COOKIE:
+			case MELON_SLICE:
+			case POISONOUS_POTATO:
+			case MUTTON:
+			case COD:
+			case CHICKEN:
+			case SALMON:
+			case SWEET_BERRIES: if (saturation) return 1; else return 2;
+			case ENCHANTED_GOLDEN_APPLE:
+			case GOLDEN_APPLE: if (saturation) return 10; else return 4;
+			case GOLDEN_CARROT: if (saturation) return 15; else return 6;
+			case HONEY_BOTTLE: if (saturation) return 2; else return 6;
+			case PUFFERFISH: if (saturation) return 0; else return 1;
+			case PUMPKIN_PIE: if (saturation) return 5; else return 8;
+			case RABBIT_STEW: if (saturation) return 12; else return 10;
+			case BEEF:
+			case PORKCHOP:
+			case RABBIT: if (saturation) return 2; else return 3;
+			case ROTTEN_FLESH: if (saturation) return 1; else return 4;
+			case SPIDER_EYE: if (saturation) return 3; else return 2;
+			default: return 0;
+		}
 	}
 
 	public void activeEffect(Player player, ItemStack item) { }

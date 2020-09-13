@@ -59,6 +59,9 @@ public class UberItems extends JavaPlugin {
 
     public static Map<Player, List<Block>> multisorts = new HashMap<>();
 
+    // other variables
+    public static boolean premium = true;
+
     // actions to be taken on plugin enable
     public void onEnable() {
         loadConfiguration(); // load config.yml (generate one if not there)
@@ -161,11 +164,10 @@ public class UberItems extends JavaPlugin {
     public void registerUberItems() {
         //putItem("NAME", new UberItemTemplate(this, 0, UberRarity.UNFINISHED, "NAME", Material.STONE, false, false, false, Arrays.asList(new UberAbility("Ability name!", AbilityType.RIGHT_CLICK, "Ability description"))));
         putItem("builders_wand", new builders_wand(this, 1, UberRarity.LEGENDARY, "Builder's Wand", XMaterial.STICK.parseMaterial(), false, false, false, true, Arrays.asList(new UberAbility("Contruction!", AbilityType.RIGHT_CLICK, "Right click the face of any block to\nextend all connected block faces.\n" + ChatColor.DARK_GRAY + "(consumes blocks from your inventory)"))));
-        putItem("lunch_box", new lunch_box(this,2, UberRarity.UNFINISHED, "Lunch Box", Material.CONDUIT, false, false, false, false, Arrays.asList(new UberAbility("Gluttony", AbilityType.NONE, "Automatically feeds you when hungry\n" + ChatColor.DARK_GRAY + "(drag and click food onto the box to fill)"))));
+        putItem("lunch_box", new lunch_box(this,2, UberRarity.RARE, "Lunch Box", Material.CONDUIT, false, false, false, false, Arrays.asList(new UberAbility("Gluttony", AbilityType.NONE, "Automatically feeds you when hungry\n" + ChatColor.DARK_GRAY + "(drag and click food onto the box to fill)"))));
         putItem("document_of_order", new document_of_order(this,3, UberRarity.EPIC, "Document of Order", Material.PAPER, false, false, false, false, Arrays.asList(new UberAbility("Bureaucracy", AbilityType.RIGHT_CLICK, "Use on a container block while crouched\nto sort that container's contents.\nCrouch use on air to sort own inventory."), new UberAbility("Multisort", AbilityType.LEFT_CLICK, "Select many containers at once, then\nleft click any non-container block to confirm,\ncr crouch left click any block to cancel.\n"+ ChatColor.DARK_GRAY + "(sorts everything as if one large inventory)"))));
-        putItem("big_bucket", new big_bucket(this,4, UberRarity.UNFINISHED,  "Big Bucket", Material.BUCKET, true, false, false, true, Arrays.asList(new UberAbility("Void Tech", AbilityType.RIGHT_CLICK, "Infinite liquid storage and retrieval\n" + ChatColor.DARK_GRAY + "(left click to swap modes)"))));
         putItem("escape_rope", new escape_rope(this,5, UberRarity.UNCOMMON,  "Escape Rope", XMaterial.LEAD.parseMaterial(), false, true, true, true, Arrays.asList(new UberAbility("Round Trip!", AbilityType.RIGHT_CLICK, "Instantly teleport back to the last\nlocation with the sky visible"))));
-        putItem("fireball", new fireball(this,6, UberRarity.UNCOMMON,  "FireBall", XMaterial.FIRE_CHARGE.parseMaterial(), false, false, true, false, Arrays.asList(new UberAbility("Throw em!", AbilityType.RIGHT_CLICK, "Throw a fireball which\nexplodes on impact\n" + ChatColor.DARK_GRAY + "(consumed on use)"))));
+        putItem("fireball", new fireball(this,6, UberRarity.UNCOMMON,  "FireBall", XMaterial.FIRE_CHARGE.parseMaterial(), false, true, true, false, Arrays.asList(new UberAbility("Throw em!", AbilityType.RIGHT_CLICK, "Throw a fireball which\nexplodes on impact"))));
         putItem("wrench", new wrench(this,7, UberRarity.COMMON,   "Wrench", Material.IRON_HOE, true, false, false, false, Arrays.asList(new UberAbility("Tinker", AbilityType.RIGHT_CLICK, "Change the direction of certain blocks"))));
         putItem("malk_bucket", new malk_bucket(this,8, UberRarity.RARE,  "Malk Bucket", Material.MILK_BUCKET, false, false, false, false, Arrays.asList(new UberAbility("Void Udder", AbilityType.NONE, "It's an infinite milk bucket!"), new UberAbility("Spiked Milk", AbilityType.NONE, "Place a potion onto this\nitem to spike the milk!\nSpiked milk is still infinite,\nbut also gives the potion effect"))));
         putItem("uncle_sams_wrath", new uncle_sams_wrath(this,9, UberRarity.RARE, ChatColor.RED + "Uncle " + ChatColor.WHITE + "Sam's " + ChatColor.AQUA + "Wrath", Material.FIREWORK_ROCKET, false, false, false, false, Arrays.asList(new UberAbility("July 4th", AbilityType.RIGHT_CLICK, "Shoot lethal fireworks at\nyour enemies. MURCA"))));

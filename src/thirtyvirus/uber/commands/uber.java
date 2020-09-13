@@ -142,7 +142,7 @@ public class uber implements CommandExecutor{
         sender.sendMessage(UberItems.prefix + "Listing UberItems:");
         for (String id : UberItems.itemIDs.values()) {
             UberItem item = UberItems.items.get(id);
-            sender.sendMessage(ChatColor.GOLD + "" + item.getID() + ": " + item.getName());
+            sender.sendMessage(ChatColor.GOLD + "" + item.getID() + ": " + item.getRarity().getColor() + item.getName());
         }
     }
 

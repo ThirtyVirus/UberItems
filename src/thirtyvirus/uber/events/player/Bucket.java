@@ -24,27 +24,9 @@ public class Bucket implements Listener {
     public Bucket(UberItems main) { this.main = main; }
 
     @EventHandler
-    public void onBucketFill(PlayerBucketFillEvent event) {
-
-        // the player is using a big bucket
-        if (Utilities.isUber(main, event.getPlayer().getInventory().getItemInMainHand(), 4)) {
-            Block block = event.getBlock();
-            ItemStack item = event.getPlayer().getInventory().getItemInMainHand();
-
-            int waterCount = 0; waterCount = Utilities.getIntFromItem(main, item, "water-count");
-            int lavaCount = 0; lavaCount = Utilities.getIntFromItem(main, item, "lava-count");
-
-            if (block.getType() == Material.WATER) { Utilities.storeIntInItem(main, item, waterCount + 1, "water-count"); item.setType(Material.BUCKET); event.setCancelled(false); event.getPlayer().getInventory().removeItem(event.getItemStack()); }
-            else if (block.getType() == Material.LAVA) { Utilities.storeIntInItem(main, item, lavaCount + 1, "lava-count"); item.setType(Material.BUCKET); event.setCancelled(false); event.getPlayer().getInventory().removeItem(event.getItemStack()); }
-        }
-
-    }
-
+    public void onBucketFill(PlayerBucketFillEvent event) { }
     @EventHandler
-    public void onBucketEmpty(PlayerBucketEmptyEvent event) {
-
-
-    }
+    public void onBucketEmpty(PlayerBucketEmptyEvent event) { }
 
     @EventHandler
     public void consumeEvent(PlayerItemConsumeEvent event) {

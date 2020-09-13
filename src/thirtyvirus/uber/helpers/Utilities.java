@@ -260,25 +260,36 @@ public final class Utilities {
     }
 
     // process active effets for uber items that are in use
-    //TODO: Find more efficient way to do this?
     //TODO: Do active effects for uber items not in hand?
     public static void uberActiveEffects(UberItems main) {
-
         for (Player player : Bukkit.getOnlinePlayers()) {
+
+            // main hand
             if (isUber(main, player.getInventory().getItemInMainHand())) {
-                if (getUber(main, player.getInventory().getItemInMainHand()).hasActiveEffect()) {
-                    getUber(main, player.getInventory().getItemInMainHand()).activeEffect(player, player.getInventory().getItemInMainHand());
-                }
+                UberItem uber = getUber(main, player.getInventory().getItemInMainHand());
+
+                // enforce premium vs lite
+                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
+
+                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInMainHand());
             }
+
+            // off hand
             if (isUber(main, player.getInventory().getItemInOffHand())) {
                 if (getUber(main, player.getInventory().getItemInOffHand()).hasActiveEffect()) {
-                    getUber(main, player.getInventory().getItemInOffHand()).activeEffect(player, player.getInventory().getItemInOffHand());
+                    UberItem uber = getUber(main, player.getInventory().getItemInOffHand());
+
+                    // enforce premium vs lite
+                    if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
+
+                    if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
                 }
             }
+
         }
     }
 
-    // find uber item of given ID in inventory (null if nothing)
+    // find the first uber item of given ID in inventory (null if nothing)
     public static ItemStack searchFor(UberItems main, Inventory inv, int id) {
         for (ItemStack item : inv) {
             if (isUber(main, item, id)) return item;

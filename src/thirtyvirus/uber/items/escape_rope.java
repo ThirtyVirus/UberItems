@@ -31,13 +31,15 @@ public class escape_rope extends UberItem{
 
 	// teleport player to the last known location exposed to the sky
 	public void rightClickAirAction(Player player, ItemStack item) {
-		if (player.getWorld().getHighestBlockYAt(player.getLocation()) != player.getLocation().getY()){
-			player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 
+		// if the player isn't outside
+		if (player.getWorld().getHighestBlockYAt(player.getLocation()) != player.getLocation().getY()) {
 			Location destination = Utilities.fromLocString(Utilities.getStringFromItem(getMain(), item, "destination"));
-			if (destination != null) player.teleport(destination);
-
-			player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+			if (destination != null) {
+				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+				player.teleport(destination);
+				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
+			}
 		}
 
 		// confirm that the item's ability has been successfully used
