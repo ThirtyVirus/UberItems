@@ -18,6 +18,7 @@ import thirtyvirus.uber.events.inventory.InventoryClose;
 import thirtyvirus.uber.events.inventory.RenameItem;
 import thirtyvirus.uber.events.player.Bucket;
 import thirtyvirus.uber.events.player.FoodLevelChange;
+import thirtyvirus.uber.events.player.PlayerInteract;
 import thirtyvirus.uber.events.player.PlayerUseUberItem;
 import thirtyvirus.uber.helpers.*;
 import thirtyvirus.uber.items.*;
@@ -158,11 +159,12 @@ public class UberItems extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new RenameItem(this), this);
         getServer().getPluginManager().registerEvents(new InventoryClose(this), this);
         getServer().getPluginManager().registerEvents(new Bucket(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteract(this), this);
     }
 
     // register UberItems
     public void registerUberItems() {
-        //putItem("NAME", new UberItemTemplate(this, 0, UberRarity.UNFINISHED, "NAME", Material.STONE, false, false, false, Arrays.asList(new UberAbility("Ability name!", AbilityType.RIGHT_CLICK, "Ability description"))));
+        //putItem("NAME", new UberItemTemplate(this, 0, UberRarity.UNFINISHED, "NAME", Material.STONE, false, false, false, false, Arrays.asList(new UberAbility("Ability name!", AbilityType.RIGHT_CLICK, "Ability description"))));
         putItem("builders_wand", new builders_wand(this, 1, UberRarity.LEGENDARY, "Builder's Wand", XMaterial.STICK.parseMaterial(), false, false, false, true, Arrays.asList(new UberAbility("Contruction!", AbilityType.RIGHT_CLICK, "Right click the face of any block to\nextend all connected block faces.\n" + ChatColor.DARK_GRAY + "(consumes blocks from your inventory)"))));
         putItem("lunch_box", new lunch_box(this,2, UberRarity.RARE, "Lunch Box", Material.CONDUIT, false, false, false, false, Arrays.asList(new UberAbility("Gluttony", AbilityType.NONE, "Automatically feeds you when hungry\n" + ChatColor.DARK_GRAY + "(drag and click food onto the box to fill)"))));
         putItem("document_of_order", new document_of_order(this,3, UberRarity.EPIC, "Document of Order", Material.PAPER, false, false, false, false, Arrays.asList(new UberAbility("Bureaucracy", AbilityType.RIGHT_CLICK, "Use on a container block while crouched\nto sort that container's contents.\nCrouch use on air to sort own inventory."), new UberAbility("Multisort", AbilityType.LEFT_CLICK, "Select many containers at once, then\nleft click any non-container block to confirm,\ncr crouch left click any block to cancel.\n"+ ChatColor.DARK_GRAY + "(sorts everything as if one large inventory)"))));
@@ -177,6 +179,10 @@ public class UberItems extends JavaPlugin {
         putItem("chisel", new chisel(this,13, UberRarity.UNFINISHED,   "Chisel", Material.SHEARS, true, false, false, false, Arrays.asList(new UberAbility("Transmutation", AbilityType.RIGHT_CLICK, "Use on a block to transmute\nit into a similar one"), new UberAbility("Machine Chisel", AbilityType.LEFT_CLICK, "Transmute many blocks at a time\nin your inventory"))));
         putItem("smart_pack", new smart_pack(this,14, UberRarity.UNFINISHED,  "Smart Pack", Material.LIME_SHULKER_BOX, false, false, false, true, Arrays.asList(new UberAbility("Black Box", AbilityType.NONE, "Any items with special properties\ninside will retain their active effects"), new UberAbility("Automation", AbilityType.RIGHT_CLICK, "Activating the pack will activate items\ninside with a Right-Click ability"))));
         putItem("boom_stick", new boom_stick(this,15, UberRarity.LEGENDARY, "BOOM Stick", Material.STICK, false, false, false, false, Arrays.asList(new UberAbility("BOOM", AbilityType.RIGHT_CLICK, "Blow up all nearby enemies"), new UberAbility("Banish", AbilityType.LEFT_CLICK, "Punch your enemies\ninto the shadow realm"))));
+        putItem("aspect_of_the_end", new aspect_of_the_end(this, 16, UberRarity.RARE, "Aspect Of The End", Material.DIAMOND_SWORD, false, false, false, false, Arrays.asList(new UberAbility("Instant Transmission", AbilityType.RIGHT_CLICK, "Teleport " + ChatColor.GREEN + "8 blocks" + ChatColor.GRAY + " ahead of\nyou and gain " + ChatColor.GREEN + "+50 " + ChatColor.WHITE + "✦ Speed" + ChatColor.GRAY + "\nfor " + ChatColor.GREEN + "3 seconds"))));
+        putItem("plumbers_sponge", new plumbers_sponge(this, 17, UberRarity.UNCOMMON, "Plumber's Sponge", Material.SPONGE, false, true, true, true, Arrays.asList(new UberAbility("Drain", AbilityType.RIGHT_CLICK, "Instructions:\n1. Place on water.\n2. Drains other water.\n3. Double-bill client.\n\n" + ChatColor.DARK_GRAY + "Thanks Plumber Joe!"))));
+        putItem("grappling_hook", new grappling_hook(this, 18, UberRarity.UNCOMMON, "Grappling Hook", Material.FISHING_ROD, true, false, false, false, Arrays.asList()));
+        putItem("ember_rod", new ember_rod(this, 19, UberRarity.EPIC, "Ember Rod", Material.BLAZE_ROD, false, false, false, false, Arrays.asList(new UberAbility("Fire Blast!", AbilityType.RIGHT_CLICK, "Shoot 3 FireBalls in rapid\nsuccession in front of you!"))));
     }
 
     // put the item into the 2 hashmaps

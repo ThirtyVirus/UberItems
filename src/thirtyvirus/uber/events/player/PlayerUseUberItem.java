@@ -63,7 +63,7 @@ public class PlayerUseUberItem implements Listener {
         if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) { Utilities.warnPlayer(player, Arrays.asList(main.getPhrase("not-premium-message"))); return; }
 
         // don't cancel event for malk bucket
-        if (uber.getID() != 8) event.setCancelled(true);
+        if (uber.getID() != 8 && uber.getID() != 18) event.setCancelled(true);
 
         // air and block interaction
         if (event.getAction() == Action.LEFT_CLICK_AIR) {

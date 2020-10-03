@@ -2,6 +2,7 @@ package thirtyvirus.uber.items;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -24,10 +25,12 @@ public class UberItemTemplate extends UberItem{
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
-	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
+	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) {
+		lore.add(ChatColor.YELLOW + "This is the template item");
+	}
 
 	public void leftClickAirAction(Player player, ItemStack item) { }
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { player.sendMessage("this is the template item");}
 	public void rightClickAirAction(Player player, ItemStack item) { }
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
