@@ -10,6 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -32,8 +33,8 @@ public class electromagnet extends UberItem{
 			EntityType.SHULKER, EntityType.SHULKER_BULLET, EntityType.SNOWBALL, EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR, EntityType.WITCH, EntityType.WITHER,
 			EntityType.WITHER_SKELETON, EntityType.WITHER_SKULL, EntityType.ZOMBIE_VILLAGER);
 
-	public electromagnet(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public electromagnet(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
@@ -49,9 +50,9 @@ public class electromagnet extends UberItem{
 	// toggle the 2 abilities
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
 		// status = 0 means off, 1 means on
-		if (Utilities.getIntFromItem(getMain(), item, "status") == 0) {
+		if (Utilities.getIntFromItem(item, "status") == 0) {
 			item.addUnsafeEnchantment(Enchantment.LURE, 10);
-			Utilities.storeIntInItem(getMain(), item, 1, "status");
+			Utilities.storeIntInItem(item, 1, "status");
 		}
 		else {
 			ItemMeta meta = item.getItemMeta();
@@ -59,7 +60,7 @@ public class electromagnet extends UberItem{
 				meta.removeEnchant(e);
 			}
 			item.setItemMeta(meta);
-			Utilities.storeIntInItem(getMain(), item, 0, "status");
+			Utilities.storeIntInItem(item, 0, "status");
 		}
 
 		player.playSound(player.getLocation(), Sound.ENTITY_ENDER_EYE_DEATH, 1, 1);
@@ -70,11 +71,12 @@ public class electromagnet extends UberItem{
 
 	public void middleClickAction(Player player, ItemStack item) { }
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
 
 	// actively repel entities
 	public void activeEffect(Player player, ItemStack item) {
-		if (Utilities.getIntFromItem(getMain(), item, "status") == 1) {
+		if (Utilities.getIntFromItem(item, "status") == 1) {
 			// teleport drops in range to the player
 			for (Entity e : player.getNearbyEntities(16, 16, 16)) {
 				if (e.getType() == EntityType.DROPPED_ITEM && e.hasGravity()) {

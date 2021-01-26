@@ -13,6 +13,8 @@ import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.Utilities;
 
+import java.util.Arrays;
+
 public class PlayerInteract implements Listener {
 
     UberItems main;
@@ -23,8 +25,17 @@ public class PlayerInteract implements Listener {
         if (event.getState() == PlayerFishEvent.State.REEL_IN || event.getState() == PlayerFishEvent.State.CAUGHT_FISH || event.getState() == PlayerFishEvent.State.IN_GROUND) {
             Player player = event.getPlayer();
             ItemStack item = player.getInventory().getItemInMainHand();
-            UberItem uber = Utilities.getUber(main, item);
+            UberItem uber = Utilities.getUber(item);
             if (uber != null && uber.getID() == 18) {
+
+                // repair rod each time it is used
+                Utilities.repairItem(item);
+
+                // enforce 1.5s cooldown on the grappling hook
+                if (!Utilities.enforceCooldown(player, "grapple", 1.5, item, false)) {
+                    Utilities.warnPlayer(player, Arrays.asList("Whow! Slow down there!"));
+                    return;
+                }
 
                 Location l1 = player.getLocation();
                 Location l2 = event.getHook().getLocation();

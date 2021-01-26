@@ -26,14 +26,14 @@ public class FoodLevelChange implements Listener {
         Player player = (Player) event.getEntity();
 
         // check if the player has a lunch box
-        ItemStack lunchBox = Utilities.searchFor(main, player.getInventory(), 2);
+        ItemStack lunchBox = Utilities.searchFor(player.getInventory(), 2);
         if (lunchBox == null) return;
-        UberItem uber = Utilities.getUber(main, lunchBox);
+        UberItem uber = Utilities.getUber(lunchBox);
 
         // get food and saturation levels
         final int max = 20; // maximum food and saturation
-        int availableFood = Utilities.getIntFromItem(main, lunchBox, "food");
-        int availableSaturation = Utilities.getIntFromItem(main, lunchBox, "saturation");
+        int availableFood = Utilities.getIntFromItem(lunchBox, "food");
+        int availableSaturation = Utilities.getIntFromItem(lunchBox, "saturation");
         int playerFood = player.getFoodLevel();
         int playerSaturation = (int) player.getSaturation();
 
@@ -57,8 +57,8 @@ public class FoodLevelChange implements Listener {
         event.setCancelled(true); // prevents the food and saturation levels from being reset by the event
 
         // save the new saturation and food amounts in the item, update lore
-        Utilities.storeIntInItem(main, lunchBox, (int)availableFood, "food");
-        Utilities.storeIntInItem(main, lunchBox, (int)availableSaturation, "saturation");
+        Utilities.storeIntInItem(lunchBox, (int)availableFood, "food");
+        Utilities.storeIntInItem(lunchBox, (int)availableSaturation, "saturation");
         uber.updateLore(lunchBox);
     }
 }

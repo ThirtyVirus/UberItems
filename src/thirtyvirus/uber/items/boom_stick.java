@@ -8,6 +8,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -19,11 +20,12 @@ import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberRarity;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class boom_stick extends UberItem{
 
-	public boom_stick(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public boom_stick(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.KNOCKBACK, 4);
@@ -36,11 +38,17 @@ public class boom_stick extends UberItem{
 
 	// use the explosive ability
 	public void rightClickAirAction(Player player, ItemStack item) {
-		for(Entity e : player.getNearbyEntities(10,10,10)) {
+
+		// enforce the 5 second cooldown of the boom stick's BOOM ability
+		if (!Utilities.enforceCooldown(player, "boom", 5, item, true)) return;
+
+		for(Entity e : player.getNearbyEntities(15,15,15)) {
 			if (e instanceof LivingEntity && e != player) {
 				player.getLocation().getWorld().createExplosion(e.getLocation().add(0,0,0), 1);
 			}
 		}
+
+		onItemUse(player, item); // confirm that the item's ability has been successfully used
 	}
 
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
@@ -62,16 +70,16 @@ public class boom_stick extends UberItem{
 		mob.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 120, 1));
 
 		// perform the teleport ability
-		Bukkit.getScheduler().scheduleSyncDelayedTask(super.getMain(), new Runnable() { public void run() {
+		Utilities.scheduleTask(new Runnable() { public void run() {
 
 			player.playSound(mob.getLocation(), Sound.ENTITY_ENDER_EYE_DEATH, 5, 1);
 			mob.getWorld().playEffect(mob.getLocation().add(0,1,0), Effect.SMOKE, 0);
 			mob.remove();
 		} }, 40);
 
-		// confirm that the item's ability has been successfully used
-		onItemUse(player, item);
+		onItemUse(player, item); // confirm that the item's ability has been successfully used
 	}
+	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
 
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
 	public void activeEffect(Player player, ItemStack item) { }

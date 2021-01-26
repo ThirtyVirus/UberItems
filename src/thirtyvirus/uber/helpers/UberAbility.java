@@ -12,9 +12,14 @@ public class UberAbility {
     private String name;
     private AbilityType type;
     private String description = "This item wasn't given a description!";
+    private int cooldown = 0;
 
     public UberAbility(String name, AbilityType type, String description) {
         this.name = name; this.type = type; this.description = description;
+    }
+
+    public UberAbility(String name, AbilityType type, String description, int cooldown) {
+        this.name = name; this.type = type; this.description = description; this.cooldown = cooldown;
     }
 
     // convert the ability into Item Lore
@@ -25,6 +30,8 @@ public class UberAbility {
 
         List<String> desc = Arrays.asList(description.split("\n"));
         for (String item : desc) { item = ChatColor.GRAY + item; lore.add(item); }
+
+        if (cooldown > 0) lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + cooldown + "s.");
 
         return lore;
     }

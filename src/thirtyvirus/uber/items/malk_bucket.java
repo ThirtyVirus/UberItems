@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -22,14 +23,14 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class malk_bucket extends UberItem{
 
-	public malk_bucket(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public malk_bucket(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) {
-		Utilities.storeStringInItem(getMain(), item, "none", "potion-name");
+		Utilities.storeStringInItem(item, "none", "potion-name");
 	}
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) {
-		lore.add(ChatColor.GREEN + "Spiked with: " + ChatColor.GRAY + Utilities.getStringFromItem(getMain(), item, "potion-name"));
+		lore.add(ChatColor.GREEN + "Spiked with: " + ChatColor.GRAY + Utilities.getStringFromItem(item, "potion-name"));
 	}
 
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
@@ -45,6 +46,7 @@ public class malk_bucket extends UberItem{
 
 	public void middleClickAction(Player player, ItemStack item) { }
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
 
 	// apply potion effect to malk bucket
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) {
@@ -56,15 +58,15 @@ public class malk_bucket extends UberItem{
 
 		// store the potion in the malk bucket
 		ItemStack[] itemArray = new ItemStack[1]; itemArray[0] = item; // store the potion as a 1 item inventory
-		Utilities.saveCompactInventory(getMain(), uber, itemArray);
+		Utilities.saveCompactInventory(uber, itemArray);
 
 		// update lore and play confirmation sound
 		player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 1, 1);
 		PotionMeta meta = (PotionMeta) item.getItemMeta();
 		if (meta.getDisplayName().equals(""))
-			Utilities.storeStringInItem(getMain(), uber, meta.getBasePotionData().getType().name().replace('_', ' '), "potion-name");
+			Utilities.storeStringInItem(uber, meta.getBasePotionData().getType().name().replace('_', ' '), "potion-name");
 		else
-			Utilities.storeStringInItem(getMain(), uber, meta.getDisplayName(), "potion-name");
+			Utilities.storeStringInItem(uber, meta.getDisplayName(), "potion-name");
 		updateLore(uber);
 
 		// delete the item being clicked onto the Uber Item

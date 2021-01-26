@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
@@ -83,6 +84,15 @@ public final class Utilities {
         return item;
     }
 
+    // repair a (repairable) item
+    public static void repairItem(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta instanceof Damageable) {
+            ((Damageable)meta).setDamage(0);
+            item.setItemMeta(meta);
+        }
+    }
+
     // send player a collection of error messages and play error noise
     public static void warnPlayer(CommandSender sender, List<String> messages) {
 
@@ -131,7 +141,7 @@ public final class Utilities {
                 Sound.ANVIL_LAND.playSound(player);
                 break;
             case ERROR:
-                Sound.BAT_DEATH.playSound(player);
+                Sound.ENDERMAN_TELEPORT.playSound(player,1,0.5f);
                 break;
         }
 
@@ -148,8 +158,8 @@ public final class Utilities {
     }
 
     // store a string value in the meta of an item, completely invisible to player
-    public static void storeStringInItem(UberItems main, ItemStack host, String string, String key) {
-        NamespacedKey k = new NamespacedKey(main, key);
+    public static void storeStringInItem(ItemStack host, String string, String key) {
+        NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
 
         // make sure that the item isn't null, meta isn't null
         if (host == null) return;
@@ -161,8 +171,8 @@ public final class Utilities {
     }
 
     // retrieve a string value from the meta of an item, completely invisible to player
-    public static String getStringFromItem(UberItems main, ItemStack host, String key) {
-        NamespacedKey k = new NamespacedKey(main, key);
+    public static String getStringFromItem(ItemStack host, String key) {
+        NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
 
         // make sure that the item isn't null, meta isn't null
         if (host == null) return null;
@@ -178,8 +188,8 @@ public final class Utilities {
     }
 
     // store an int value in the meta of an item, completely invisible to player
-    public static void storeIntInItem(UberItems main, ItemStack host, Integer i, String key) {
-        NamespacedKey k = new NamespacedKey(main, key);
+    public static void storeIntInItem(ItemStack host, Integer i, String key) {
+        NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
 
         // make sure that the item isn't null, meta isn't null
         if (host == null) return;
@@ -191,8 +201,8 @@ public final class Utilities {
     }
 
     // retrieve an int value from the meta of an item, completely invisible to player
-    public static Integer getIntFromItem(UberItems main, ItemStack host, String key) {
-        NamespacedKey k = new NamespacedKey(main, key);
+    public static Integer getIntFromItem(ItemStack host, String key) {
+        NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
 
         // make sure that the item isn't null, meta isn't null
         if (host == null) return 0;
@@ -208,16 +218,16 @@ public final class Utilities {
     }
 
     // store a list of items in the meta of an item, completely invisible to the player
-    public static void saveCompactInventory(UberItems main, ItemStack host, ItemStack[] items) {
-        NamespacedKey key = new NamespacedKey(main, "compact-inventory");
+    public static void saveCompactInventory(ItemStack host, ItemStack[] items) {
+        NamespacedKey key = new NamespacedKey(UberItems.getInstance(), "compact-inventory");
         ItemMeta itemMeta = host.getItemMeta();
         itemMeta.getPersistentDataContainer().set(key, new CompactInventory(), items);
         host.setItemMeta(itemMeta);
     }
 
     // retrieve a list of items from the meta of an item, completely invisible to the player
-    public static ItemStack[] getCompactInventory(UberItems main, ItemStack host) {
-        NamespacedKey key = new NamespacedKey(main, "compact-inventory");
+    public static ItemStack[] getCompactInventory(ItemStack host) {
+        NamespacedKey key = new NamespacedKey(UberItems.getInstance(), "compact-inventory");
         ItemMeta itemMeta = host.getItemMeta();
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
@@ -230,24 +240,28 @@ public final class Utilities {
         return new ItemStack[0];
     }
 
+    public static void scheduleTask(Runnable run, int i) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), run, i);
+    }
+
     // UBER ITEM CENTRIC FUNCTIONS
     // _____________________________________________________________________________ \\
 
     // test if given item is an UberItem
-    public static boolean isUber(UberItems main, ItemStack item) {
-        return getStringFromItem(main, item, "is-uber") != null;
+    public static boolean isUber(ItemStack item) {
+        return getStringFromItem(item, "is-uber") != null;
     }
 
     // test if given item is a specific UberItem
-    public static boolean isUber(UberItems main, ItemStack item, int id) {
-        if (!isUber(main, item)) return false;
-        return (getIntFromItem(main, item, "uber-id") == id);
+    public static boolean isUber(ItemStack item, int id) {
+        if (!isUber(item)) return false;
+        return (getIntFromItem(item, "uber-id") == id);
     }
 
     // get the type of UberItem (null if not an UberItem)
-    public static UberItem getUber(UberItems main, ItemStack item) {
-        if (!isUber(main, item)) return null;
-        return UberItems.items.get(getStringFromItem(main, item, "uber-name"));
+    public static UberItem getUber(ItemStack item) {
+        if (!isUber(item)) return null;
+        return UberItems.items.get(getStringFromItem(item, "uber-name"));
     }
 
     // return UberItem with given name
@@ -261,12 +275,12 @@ public final class Utilities {
 
     // process active effets for uber items that are in use
     //TODO: Do active effects for uber items not in hand?
-    public static void uberActiveEffects(UberItems main) {
+    public static void uberActiveEffects() {
         for (Player player : Bukkit.getOnlinePlayers()) {
 
             // main hand
-            if (isUber(main, player.getInventory().getItemInMainHand())) {
-                UberItem uber = getUber(main, player.getInventory().getItemInMainHand());
+            if (isUber(player.getInventory().getItemInMainHand())) {
+                UberItem uber = getUber(player.getInventory().getItemInMainHand());
 
                 // enforce premium vs lite
                 if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
@@ -275,9 +289,9 @@ public final class Utilities {
             }
 
             // off hand
-            if (isUber(main, player.getInventory().getItemInOffHand())) {
-                if (getUber(main, player.getInventory().getItemInOffHand()).hasActiveEffect()) {
-                    UberItem uber = getUber(main, player.getInventory().getItemInOffHand());
+            if (isUber(player.getInventory().getItemInOffHand())) {
+                if (getUber(player.getInventory().getItemInOffHand()).hasActiveEffect()) {
+                    UberItem uber = getUber(player.getInventory().getItemInOffHand());
 
                     // enforce premium vs lite
                     if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
@@ -290,12 +304,40 @@ public final class Utilities {
     }
 
     // find the first uber item of given ID in inventory (null if nothing)
-    public static ItemStack searchFor(UberItems main, Inventory inv, int id) {
+    public static ItemStack searchFor(Inventory inv, int id) {
         for (ItemStack item : inv) {
-            if (isUber(main, item, id)) return item;
+            if (isUber(item, id)) return item;
         }
 
         return null;
+    }
+
+    // delays code based on stored int in UberItem,
+    public static boolean enforceCooldown(Player player, String key, double seconds, ItemStack item, boolean throwError) {
+        double time = (double)System.currentTimeMillis() / 1000;
+
+        // get time last used from item
+        int lastTime = getIntFromItem(item, key);
+
+        // add "time last used" key if not already there
+        if (lastTime == 0) {
+            storeIntInItem(item, (int)time, key);
+            return true;
+        }
+
+        // was the item  last used longer than "seconds" seconds ago?
+        else {
+            if (time - seconds > lastTime) {
+                storeIntInItem(item, (int)time, key);
+                return true; // yes, allow the action (plus update the last time used)
+            }
+            else {
+                int timeLeft = (int)time - lastTime;
+                timeLeft = (int)seconds - timeLeft;
+                if (throwError) warnPlayer(player, Arrays.asList("This ability is on cooldown for " + timeLeft + "s."));
+                return false; // no, disallow the action
+            }
+        }
     }
 
 }

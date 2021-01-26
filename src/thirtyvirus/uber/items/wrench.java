@@ -34,8 +34,8 @@ public class wrench extends UberItem{
 			Material.JUNGLE_FENCE_GATE, Material.OAK_FENCE_GATE, Material.SPRUCE_FENCE_GATE, Material.FURNACE, Material.ENDER_CHEST, Material.ANVIL, Material.HAY_BLOCK, Material.CHEST, Material.TRAPPED_CHEST, Material.RAIL,
 			Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL);
 
-	public wrench(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public wrench(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
@@ -104,8 +104,7 @@ public class wrench extends UberItem{
 			}
 		}
 
-		// confirm that the item's ability has been successfully used
-		onItemUse(player, item);
+		onItemUse(player, item); // confirm that the item's ability has been successfully used
 	}
 
 	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
@@ -114,6 +113,7 @@ public class wrench extends UberItem{
 	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 	public void middleClickAction(Player player, ItemStack item) { }
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
 	public void activeEffect(Player player, ItemStack item) { }
 }

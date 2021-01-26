@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -25,8 +26,8 @@ public class builders_wand extends UberItem {
 	// TODO /wandoops command to undo wand action
 	// TODO make the wand obey area build permissions
 
-	public builders_wand(UberItems main, int id, UberRarity rarity, String name, Material material, Boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public builders_wand(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.DIG_SPEED, 10);
@@ -40,9 +41,7 @@ public class builders_wand extends UberItem {
 
 	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		fillConnectedFaces(player, block, event.getBlockFace(), item);
-
-		// confirm that the item's ability has been successfully used
-		onItemUse(player, item);
+		onItemUse(player, item); // confirm that the item's ability has been successfully used
 	}
 
 	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
@@ -52,6 +51,7 @@ public class builders_wand extends UberItem {
 	public void middleClickAction(Player player, ItemStack item) { }
 
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
 	public void activeEffect(Player player, ItemStack item) { }
 	

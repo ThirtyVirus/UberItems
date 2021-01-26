@@ -27,8 +27,8 @@ public class InventoryClick implements Listener {
     // TODO make work for creative mode
     @EventHandler
     public void clickItemOntoUber(InventoryClickEvent event) {
-        if (event.getAction() == InventoryAction.SWAP_WITH_CURSOR && Utilities.isUber(main, event.getCurrentItem())) {
-            Utilities.getUber(main, event.getCurrentItem()).clickedInInventoryAction((Player)event.getWhoClicked(), event);
+        if (event.getAction() == InventoryAction.SWAP_WITH_CURSOR && Utilities.isUber(event.getCurrentItem())) {
+            Utilities.getUber(event.getCurrentItem()).clickedInInventoryAction((Player)event.getWhoClicked(), event);
         }
     }
 

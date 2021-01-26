@@ -101,8 +101,8 @@ public class uber implements CommandExecutor{
 
         // identify UberItem(s) held by the player (main or offhand)
         if (args.length == 1) {
-            UberItem mainHand = Utilities.getUber(main, player.getInventory().getItemInMainHand());
-            UberItem offHand = Utilities.getUber(main, player.getInventory().getItemInOffHand());
+            UberItem mainHand = Utilities.getUber(player.getInventory().getItemInMainHand());
+            UberItem offHand = Utilities.getUber(player.getInventory().getItemInOffHand());
 
             if (mainHand != null && offHand != null) {
                 player.sendMessage(UberItems.prefix + ChatColor.YELLOW + "Main Hand - " + mainHand.getID() + ": " + mainHand.getName());

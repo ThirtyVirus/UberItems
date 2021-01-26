@@ -95,7 +95,7 @@ public class SortingUtilities {
 
     // sort the inventory of a single container block
     // assumes the block given is a supported inventory block
-    public static void sortBlock(Block block, Player player, UberItems main) {
+    public static void sortBlock(Block block, Player player) {
 
         // enforce area build permissions
         //if (!UberItems.ignoreBuildPerms) {

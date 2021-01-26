@@ -1,11 +1,13 @@
 package thirtyvirus.uber.events.player;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -27,10 +29,10 @@ public class PlayerUseUberItem implements Listener {
     public void onPlayerUse(PlayerInteractEvent event) {
 
         // test if items in main and off hand are UberItems
-        if (Utilities.isUber(main, event.getPlayer().getInventory().getItemInMainHand())) {
+        if (Utilities.isUber(event.getPlayer().getInventory().getItemInMainHand())) {
             useUberItem(event, event.getPlayer().getInventory().getItemInMainHand());
         }
-        if (Utilities.isUber(main, event.getPlayer().getInventory().getItemInOffHand())) {
+        if (Utilities.isUber(event.getPlayer().getInventory().getItemInOffHand())) {
             useUberItem(event, event.getPlayer().getInventory().getItemInOffHand());
         }
     }
@@ -46,24 +48,36 @@ public class PlayerUseUberItem implements Listener {
 
         ItemStack mainhand = player.getInventory().getItemInMainHand();
         ItemStack offhand = player.getInventory().getItemInOffHand();
-        if (Utilities.isUber(main, mainhand)) {
-            Utilities.getUber(main, mainhand).hitEntityAction(player, event, event.getEntity(), mainhand);
+        if (Utilities.isUber(mainhand)) {
+            Utilities.getUber(mainhand).hitEntityAction(player, event, event.getEntity(), mainhand);
         }
-        if (Utilities.isUber(main, offhand)) {
-            Utilities.getUber(main, offhand).hitEntityAction(player, event, event.getEntity(), offhand);
+        if (Utilities.isUber(offhand)) {
+            Utilities.getUber(offhand).hitEntityAction(player, event, event.getEntity(), offhand);
         }
+    }
+
+    @EventHandler(priority=EventPriority.HIGH)
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = player.getInventory().getItemInMainHand();
+
+        // test if item in main hand is an UberItem
+        if (Utilities.isUber(item)) {
+            Utilities.getUber(item).breakBlockAction(player, event, event.getBlock(), item);
+        }
+
     }
 
     // handle interaction events (air and blocks)
     private void useUberItem(PlayerInteractEvent event, ItemStack item) {
         Player player = event.getPlayer();
-        UberItem uber = Utilities.getUber(main, item);
+        UberItem uber = Utilities.getUber(item);
 
         // enforce premium vs lite
         if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) { Utilities.warnPlayer(player, Arrays.asList(main.getPhrase("not-premium-message"))); return; }
 
         // don't cancel event for malk bucket
-        if (uber.getID() != 8 && uber.getID() != 18) event.setCancelled(true);
+        //if (uber.getID() != 8 && uber.getID() != 18) event.setCancelled(true);
 
         // air and block interaction
         if (event.getAction() == Action.LEFT_CLICK_AIR) {

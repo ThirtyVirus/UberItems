@@ -8,6 +8,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -21,13 +22,13 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class lunch_box extends UberItem {
 
-	public lunch_box(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public lunch_box(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) {
-		lore.add(ChatColor.GREEN + "Food: " + ChatColor.GRAY + Utilities.getIntFromItem(getMain(), item, "food"));
-		lore.add(ChatColor.GREEN + "Saturation: " + ChatColor.GRAY + Utilities.getIntFromItem(getMain(), item, "saturation"));
+		lore.add(ChatColor.GREEN + "Food: " + ChatColor.GRAY + Utilities.getIntFromItem(item, "food"));
+		lore.add(ChatColor.GREEN + "Saturation: " + ChatColor.GRAY + Utilities.getIntFromItem(item, "saturation"));
 	}
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
@@ -41,6 +42,7 @@ public class lunch_box extends UberItem {
 	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
 	public void middleClickAction(Player player, ItemStack item) { }
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
 
 	// click food items onto the lunch box in your inventory to insert food
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) {
@@ -51,8 +53,8 @@ public class lunch_box extends UberItem {
 		if (!(item.getType().isEdible() || item.getType() == Material.MELON)) return;
 
 		// get the current saturation from the lunch box
-		int saturation = Utilities.getIntFromItem(getMain(), uber, "saturation");
-		int food = Utilities.getIntFromItem(getMain(), uber, "food");
+		int saturation = Utilities.getIntFromItem(uber, "saturation");
+		int food = Utilities.getIntFromItem(uber, "food");
 
 		// add the appropriate amount of saturation and food to the total
 		food += getFood(item.getType(), false) * item.getAmount();
@@ -60,8 +62,8 @@ public class lunch_box extends UberItem {
 
 		// save the new saturation and food amounts in the item, update lore
 		player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_CLOSE, 1, 1);
-		Utilities.storeIntInItem(getMain(), uber, saturation, "saturation");
-		Utilities.storeIntInItem(getMain(), uber, food, "food");
+		Utilities.storeIntInItem(uber, saturation, "saturation");
+		Utilities.storeIntInItem(uber, food, "food");
 		updateLore(uber);
 
 		// delete the item being clicked onto the Uber Item

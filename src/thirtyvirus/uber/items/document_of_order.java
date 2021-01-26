@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -26,8 +27,8 @@ public class document_of_order extends UberItem  {
 	// TODO make the sort respect area build permissions.
 	// TODO make smart sort smarter
 
-	public document_of_order(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(main, id, rarity, name, material, canBreakBlocks, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public document_of_order(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
 	}
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.MENDING, 10);
@@ -49,6 +50,8 @@ public class document_of_order extends UberItem  {
 		else {
 			SortingUtilities.multiSort(event.getPlayer());
 		}
+
+		onItemUse(player, item); // confirm that the item's ability has been successfully used
 	}
 
 	public void rightClickAirAction(Player player, ItemStack item) { }
@@ -75,15 +78,15 @@ public class document_of_order extends UberItem  {
 
 		// sort a single inventory
 		if (SortingUtilities.INVENTORY_BLOCKS.contains(event.getClickedBlock().getType())) {
-			SortingUtilities.sortBlock(event.getClickedBlock(), event.getPlayer(), getMain());
+			SortingUtilities.sortBlock(event.getClickedBlock(), event.getPlayer());
 		}
 
-		// confirm that the item's ability has been successfully used
-		onItemUse(player, item);
+		onItemUse(player, item); // confirm that the item's ability has been successfully used
 	}
 
 	public void middleClickAction(Player player, ItemStack item) { }
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
+	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
 	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
 
 	public void activeEffect(Player player, ItemStack item) { }

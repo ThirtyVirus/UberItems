@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -28,25 +29,19 @@ public abstract class UberItem {
     private Material material;
 
     private List<String> defaultLore;
-    private boolean canBreakBlocks = false;
     private boolean stackable = false;
     private boolean oneTimeUse = false;
     private boolean hasActive = false;
 
     private List<UberAbility> abilities = new ArrayList<>();
 
-    private UberItems main;
-
     // new UberItem
-    public UberItem(UberItems main, int id, UberRarity rarity, String name, Material material, boolean canBreakBlocks, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities){
-        this.main = main;
-
+    public UberItem(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities){
         this.id = id;
         this.rarity = rarity;
         this.name = name;
         this.material = material;
 
-        this.canBreakBlocks = canBreakBlocks;
         this.stackable = stackable;
         this.oneTimeUse = oneTimeUse;
         this.hasActive = hasActiveEffect;
@@ -104,7 +99,7 @@ public abstract class UberItem {
         if (uber == null) return;
 
         if (!stackable) {
-            Utilities.storeStringInItem(getMain(), uber,  UUID.randomUUID().toString(), "UUID");
+            Utilities.storeStringInItem(uber,  UUID.randomUUID().toString(), "UUID");
         }
     }
     public void onItemUse(Player player, ItemStack item) {
@@ -130,6 +125,7 @@ public abstract class UberItem {
 
     public abstract void middleClickAction(Player player, ItemStack item);
     public abstract void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item);
+    public abstract void breakBlockAction(Player player, BlockBreakEvent event, Block target, ItemStack item);
     public abstract void clickedInInventoryAction(Player player, InventoryClickEvent event);
 
     public abstract void activeEffect(Player player, ItemStack item);
@@ -138,7 +134,6 @@ public abstract class UberItem {
     public UberRarity getRarity() { return rarity; }
     public String getName() { return name; }
     public Material getMaterial() { return material; }
-    public boolean getCanBreakBlocks() { return canBreakBlocks; }
     public boolean isStackable() { return stackable; }
     public boolean hasActiveEffect() { return hasActive; }
 
@@ -160,9 +155,9 @@ public abstract class UberItem {
         // apply UberItem properties to item
         ItemStack newItemStack = new ItemStack(item.getMaterial());
         Utilities.nameItem(newItemStack, item.getRarity().getColor() + item.getName());
-        Utilities.storeStringInItem(main, newItemStack, "true", "is-uber");
-        Utilities.storeStringInItem(main, newItemStack, effectiveName, "uber-name");
-        Utilities.storeIntInItem(main, newItemStack, item.getID(), "uber-id");
+        Utilities.storeStringInItem(newItemStack, "true", "is-uber");
+        Utilities.storeStringInItem(newItemStack, effectiveName, "uber-name");
+        Utilities.storeIntInItem(newItemStack, item.getID(), "uber-id");
 
         item.enforceStackability(newItemStack);
         item.onItemStackCreate(newItemStack);
@@ -179,6 +174,4 @@ public abstract class UberItem {
         else item.setAmount(item.getAmount() - quantity);
     }
 
-    // get an instance of the main class
-    public UberItems getMain() { return main; }
 }

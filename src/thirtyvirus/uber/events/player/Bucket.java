@@ -32,15 +32,15 @@ public class Bucket implements Listener {
     public void consumeEvent(PlayerItemConsumeEvent event) {
 
         // the player is drinking from a malk bucket
-        if (Utilities.isUber(main, event.getItem(), 8)) {
+        if (Utilities.isUber(event.getItem(), 8)) {
             // remove all potion effects
             ArrayList<PotionEffect> effects = new ArrayList<>();
             for (PotionEffect e : event.getPlayer().getActivePotionEffects()) { effects.add(e); }
             for (PotionEffect e : effects) event.getPlayer().removePotionEffect(e.getType());
 
             // retrieve potion from malk bucket
-            UberItem uber = Utilities.getUber(main, event.getItem());
-            ItemStack[] itemArray = Utilities.getCompactInventory(uber.getMain(), event.getItem());
+            UberItem uber = Utilities.getUber(event.getItem());
+            ItemStack[] itemArray = Utilities.getCompactInventory(event.getItem());
             if (itemArray.length == 0) return; // ensure that the malk bucket has a spiked potion effect
             ItemStack potion = itemArray[0]; PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
 

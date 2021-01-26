@@ -23,7 +23,7 @@ public class InventoryClose implements Listener {
             Player player = (Player) event.getPlayer();
             ItemStack shootyBox = player.getInventory().getItemInMainHand();
 
-            Utilities.saveCompactInventory(main, shootyBox, event.getInventory().getContents());
+            Utilities.saveCompactInventory(shootyBox, event.getInventory().getContents());
             player.playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
         }
 
