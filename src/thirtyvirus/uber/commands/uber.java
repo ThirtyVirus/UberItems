@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
@@ -56,6 +57,10 @@ public class uber implements CommandExecutor{
                     if (sender.hasPermission("uber.admin")) give(sender, args);
                     else Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-permissions-message")));
                     break;
+                case "browse":
+                    if (sender.hasPermission("uber.admin")) browse(sender, args);
+                    else Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-permissions-message")));
+                    break;
                 case "reload":
                     if (sender.hasPermission("uber.admin")) reload(sender);
                     else Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-permissions-message")));
@@ -90,6 +95,28 @@ public class uber implements CommandExecutor{
         // give the item to the player
         player.getInventory().addItem(uber);
         player.sendMessage(UberItems.prefix + "Given " + uber.getItemMeta().getDisplayName());
+    }
+
+    // open a menu to browse all Uber Items (putting a number afterwards brings you to that page)
+    private void browse(CommandSender sender, String[] args) {
+        // verify that the command is executed by a player
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-console-message"))); return; }
+        Player player = (Player) sender;
+
+        Inventory browseMenu = Bukkit.createInventory(player, 54, "UberItems Admin Menu");
+
+        int page = 0; if (args.length > 1) page = Integer.parseInt(args[1]);
+        int counter = 0;
+        for (String name : UberItems.itemIDs.values()) {
+            if (counter < page * 54 || counter > 54 * (page + 1)) continue;
+
+            UberItem item = UberItems.items.get(name);
+            int stack = 1; if (item.isStackable()) stack = 64;
+            browseMenu.setItem(counter, UberItem.fromString(main, "" + item.getID() + "", stack));
+            counter++;
+        }
+
+        player.openInventory(browseMenu);
     }
 
     // identify Command

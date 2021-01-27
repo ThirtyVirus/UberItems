@@ -41,7 +41,7 @@ public class UberItems extends JavaPlugin {
     public static String consolePrefix = "[UberItems] ";
 
     public static int activeEffectsCheckID = 0;
-    public static int activeEffectsDelay = 5; //in ticks
+    public static int activeEffectsDelay = 2; //in ticks
 
     // getter for main class
     private static UberItems instance;
@@ -197,6 +197,7 @@ public class UberItems extends JavaPlugin {
         putItem("builders_wand", new builders_wand(1, UberRarity.LEGENDARY, "Builder's Wand", XMaterial.STICK.parseMaterial(),  false, false, true, Arrays.asList(new UberAbility("Contruction!", AbilityType.RIGHT_CLICK, "Right click the face of any block to\nextend all connected block faces.\n" + ChatColor.DARK_GRAY + "(consumes blocks from your inventory)"))));
         putItem("lunch_box", new lunch_box(2, UberRarity.RARE, "Lunch Box", Material.CONDUIT,  false, false, false, Arrays.asList(new UberAbility("Gluttony", AbilityType.NONE, "Automatically feeds you when hungry\n" + ChatColor.DARK_GRAY + "(drag and click food onto the box to fill)"))));
         putItem("document_of_order", new document_of_order(3, UberRarity.EPIC, "Document of Order", Material.PAPER, false, false, false, Arrays.asList(new UberAbility("Bureaucracy", AbilityType.RIGHT_CLICK, "Use on a container block while crouched\nto sort that container's contents.\nCrouch use on air to sort own inventory."), new UberAbility("Multisort", AbilityType.LEFT_CLICK, "Select many containers at once, then\nleft click any non-container block to confirm,\ncr crouch left click any block to cancel.\n"+ ChatColor.DARK_GRAY + "(sorts everything as if one large inventory)"))));
+        putItem("cheat_code", new cheat_code(4, UberRarity.EPIC, "Cheat Code", Material.STONE, false, false, false, Arrays.asList(new UberAbility("↑↑↓↓←→←→ⒷⒶ[start]", AbilityType.LEFT_CLICK, "Toggle creative mode"), new UberAbility("Game End", AbilityType.RIGHT_CLICK, "Instantly win the game"))));
         putItem("escape_rope", new escape_rope(5, UberRarity.UNCOMMON,  "Escape Rope", XMaterial.LEAD.parseMaterial(),true, true, true, Arrays.asList(new UberAbility("Round Trip!", AbilityType.RIGHT_CLICK, "Instantly teleport back to the last\nlocation with the sky visible"))));
         putItem("fireball", new fireball(6, UberRarity.UNCOMMON,  "FireBall", XMaterial.FIRE_CHARGE.parseMaterial(),  true, true, false, Arrays.asList(new UberAbility("Throw em!", AbilityType.RIGHT_CLICK, "Throw a fireball which\nexplodes on impact"))));
         putItem("wrench", new wrench(7, UberRarity.COMMON,   "Wrench", Material.IRON_HOE,  false, false, false, Arrays.asList(new UberAbility("Tinker", AbilityType.RIGHT_CLICK, "Change the direction of certain blocks"))));
@@ -213,6 +214,10 @@ public class UberItems extends JavaPlugin {
         putItem("grappling_hook", new grappling_hook(18, UberRarity.UNCOMMON, "Grappling Hook", Material.FISHING_ROD,  false, false, false, Arrays.asList()));
         putItem("ember_rod", new ember_rod(19, UberRarity.EPIC, "Ember Rod", Material.BLAZE_ROD,  false, false, false, Arrays.asList(new UberAbility("Fire Blast!", AbilityType.RIGHT_CLICK, "Shoot 3 FireBalls in rapid\nsuccession in front of you!", 30))));
         putItem("treecapitator", new treecapitator(20, UberRarity.EPIC, "Treecapitator", Material.GOLDEN_AXE,  false, false, false, Arrays.asList()));
+        putItem("world_eater", new world_eater(21, UberRarity.LEGENDARY, "World Eater", Material.DIAMOND_PICKAXE, false, false, false, Arrays.asList()));
+        putItem("lightning_rod", new lightning_rod(22, UberRarity.EPIC, "Lightning Rod", Material.END_ROD, false, false, false, Arrays.asList(new UberAbility("Smite", AbilityType.RIGHT_CLICK, "Strike lightning up to 150 blocks away"))));
+        putItem("aspect_of_the_virus", new aspect_of_the_virus(23, UberRarity.MYTHIC, "Aspect of the Virus", Material.NETHERITE_SWORD, false, false, false, Arrays.asList(new UberAbility("Shadow Death", AbilityType.RIGHT_CLICK, "While crouched, teleport behind the closest mob"))));
+        putItem("hackerman", new hackerman(24, UberRarity.RARE, "Hackerman", Material.TOTEM_OF_UNDYING, false, false, true, Arrays.asList(new UberAbility("Scaffold!", AbilityType.RIGHT_CLICK, "banned"))));
     }
 
     // put the item into the 2 hashmaps
