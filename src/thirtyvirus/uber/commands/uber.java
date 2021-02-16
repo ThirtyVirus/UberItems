@@ -14,6 +14,7 @@ import thirtyvirus.uber.helpers.MenuUtils;
 import thirtyvirus.uber.helpers.Utilities;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class uber implements CommandExecutor{
 
@@ -41,7 +42,7 @@ public class uber implements CommandExecutor{
                     break;
                 case "tutorial":
                     if (sender instanceof Player) MenuUtils.tutorialMenu((Player) sender);
-                    else Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-console-message")));
+                    else Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("no-console-message")));
                     break;
 
                 // plugin specific user commands
@@ -55,25 +56,25 @@ public class uber implements CommandExecutor{
                 // staff commands
                 case "give":
                     if (sender.hasPermission("uber.admin")) give(sender, args);
-                    else Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-permissions-message")));
+                    else Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("no-permissions-message")));
                     break;
                 case "browse":
                     if (sender.hasPermission("uber.admin")) browse(sender, args);
-                    else Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-permissions-message")));
+                    else Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("no-permissions-message")));
                     break;
                 case "reload":
                     if (sender.hasPermission("uber.admin")) reload(sender);
-                    else Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-permissions-message")));
+                    else Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("no-permissions-message")));
                     break;
 
                 default:
-                    Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-a-command-message")));
+                    Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("not-a-command-message")));
                     help(sender);
                     break;
             }
 
         } catch(Exception e) {
-            Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("formatting-error-message")));
+            Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("formatting-error-message")));
         }
 
         return true;

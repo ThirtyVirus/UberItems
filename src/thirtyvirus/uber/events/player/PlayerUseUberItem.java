@@ -1,6 +1,8 @@
 package thirtyvirus.uber.events.player;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.ActionSound;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
@@ -60,6 +63,16 @@ public class PlayerUseUberItem implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItemInMainHand();
+
+        // determine whether or not a player is trying to make an Uber Workbench
+        // breaking a workbench with a lever to make the table, and delete the components
+        if (item.getType() == Material.LEVER && event.getBlock().getType() == Material.CRAFTING_TABLE) {
+            if (player.getGameMode() != GameMode.CREATIVE)
+                player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
+            event.setDropItems(false);
+            player.getInventory().addItem(UberItem.fromString(UberItems.getInstance(), "0", 1));
+            Utilities.playSound(ActionSound.POP, player);
+        }
 
         // test if item in main hand is an UberItem
         if (Utilities.isUber(item)) {

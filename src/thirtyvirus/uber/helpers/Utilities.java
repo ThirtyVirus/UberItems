@@ -273,6 +273,15 @@ public final class Utilities {
         return null;
     }
 
+    // return UberItem with given item ID
+    public static UberItem getUber(int id) {
+        for (String key : UberItems.items.keySet()) {
+            UberItem uberr = UberItems.items.get(key);
+            if (uberr.getID() == id) return uberr;
+        }
+        return null;
+    }
+
     // process active effets for uber items that are in use
     //TODO: Do active effects for uber items not in hand?
     public static void uberActiveEffects() {

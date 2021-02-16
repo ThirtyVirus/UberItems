@@ -34,6 +34,7 @@ public abstract class UberItem {
     private boolean hasActive = false;
 
     private List<UberAbility> abilities = new ArrayList<>();
+    private List<ItemStack> craftingRecipe = new ArrayList<>();
 
     // new UberItem
     public UberItem(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities){
@@ -136,6 +137,9 @@ public abstract class UberItem {
     public Material getMaterial() { return material; }
     public boolean isStackable() { return stackable; }
     public boolean hasActiveEffect() { return hasActive; }
+    public boolean hasCraftingRecipe() { return (craftingRecipe.size() > 0); }
+    public List<ItemStack> getCraftingRecipe() { return craftingRecipe; }
+    public void setCraftingRecipe(List<ItemStack> recipe) { this.craftingRecipe = recipe; }
 
     // generate an UberItem ItemStack from a given string
     public static ItemStack fromString(UberItems main, String name, int stackSize) {
