@@ -21,6 +21,7 @@ import org.bukkit.util.Vector;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.helpers.UberAbility;
+import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
@@ -33,8 +34,8 @@ public class electromagnet extends UberItem{
 			EntityType.SHULKER, EntityType.SHULKER_BULLET, EntityType.SNOWBALL, EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR, EntityType.WITCH, EntityType.WITHER,
 			EntityType.WITHER_SKELETON, EntityType.WITHER_SKULL, EntityType.ZOMBIE_VILLAGER);
 
-	public electromagnet(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public electromagnet(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
@@ -51,7 +52,7 @@ public class electromagnet extends UberItem{
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
 		// status = 0 means off, 1 means on
 		if (Utilities.getIntFromItem(item, "status") == 0) {
-			item.addUnsafeEnchantment(Enchantment.LURE, 10);
+			Utilities.addEnchantGlint(item);
 			Utilities.storeIntInItem(item, 1, "status");
 		}
 		else {

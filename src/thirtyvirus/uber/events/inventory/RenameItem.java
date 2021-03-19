@@ -30,6 +30,10 @@ public class RenameItem implements Listener {
                         event.setCancelled(true);
                         Utilities.playSound(ActionSound.ERROR, player);
                     }
+                    if (Utilities.isUberMaterial(event.getView().getItem(0)) || Utilities.isUberMaterial(event.getView().getItem(1)) || Utilities.isUberMaterial(event.getView().getItem(2))) {
+                        event.setCancelled(true);
+                        Utilities.playSound(ActionSound.ERROR, player);
+                    }
                 }
             }
         }
@@ -40,9 +44,16 @@ public class RenameItem implements Listener {
     public void playerCraftEvent(CraftItemEvent event) {
         Player player = (Player) event.getWhoClicked();
         ItemStack[] item = event.getInventory().getMatrix();
-        if (Utilities.isUber(item[0]) || Utilities.isUber(item[1]) || Utilities.isUber(item[2]) || Utilities.isUber(item[3]) || Utilities.isUber(item[4]) || Utilities.isUber(item[5]) || Utilities.isUber(item[6]) || Utilities.isUber(item[7]) || Utilities.isUber(item[8])){
-            event.setCancelled(true);
-            Utilities.playSound(ActionSound.ERROR, player);
+
+        for (int counter = 0; counter < 9; counter++) {
+            if (Utilities.isUber(item[counter])) {
+                event.setCancelled(true);
+                Utilities.playSound(ActionSound.ERROR, player);
+            }
+            if (Utilities.isUberMaterial(item[counter]) && !Utilities.getUberMaterial(item[counter]).isVanillaCraftable()) {
+                event.setCancelled(true);
+                Utilities.playSound(ActionSound.ERROR, player);
+            }
         }
     }
 

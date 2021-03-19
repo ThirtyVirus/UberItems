@@ -1,7 +1,6 @@
 package thirtyvirus.uber.helpers;
 
 import org.bukkit.ChatColor;
-import thirtyvirus.multiversion.Version;
 
 public enum UberRarity {
     COMMON(ChatColor.WHITE),

@@ -1,10 +1,12 @@
 package thirtyvirus.uber.items;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -20,15 +22,15 @@ import thirtyvirus.uber.helpers.*;
 // a template class that can be copy - pasted and renamed when making new Uber Items
 public class uber_workbench extends UberItem {
 
-    public uber_workbench(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-        super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
+    public uber_workbench(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+        super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
     }
-    public void onItemStackCreate(ItemStack item) { }
+    public void onItemStackCreate(ItemStack item) { Utilities.addEnchantGlint(item); }
     public void getSpecificLorePrefix(List<String> lore, ItemStack item) { lore.add(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "a more powerful crafting table"); }
     public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
     public void leftClickAirAction(Player player, ItemStack item) { }
-    public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+    public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { leftClickAirAction(player, item); }
     public void rightClickAirAction(Player player, ItemStack item) {
         player.openInventory(MenuUtils.createCustomCraftingMenu());
         Utilities.playSound(ActionSound.CLICK, player);

@@ -1,11 +1,9 @@
 package thirtyvirus.uber;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -18,6 +16,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.helpers.UberAbility;
+import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
@@ -34,10 +33,10 @@ public abstract class UberItem {
     private boolean hasActive = false;
 
     private List<UberAbility> abilities = new ArrayList<>();
-    private List<ItemStack> craftingRecipe = new ArrayList<>();
+    private UberCraftingRecipe craftingRecipe;
 
     // new UberItem
-    public UberItem(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities){
+    public UberItem(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe){
         this.id = id;
         this.rarity = rarity;
         this.name = name;
@@ -48,6 +47,7 @@ public abstract class UberItem {
         this.hasActive = hasActiveEffect;
 
         this.abilities = abilities;
+        this.craftingRecipe = craftingRecipe;
     }
 
     // properly format the lore for Uber Items
@@ -83,25 +83,22 @@ public abstract class UberItem {
     }
 
     // convenience functions (facilitates understanding of the code by giving an official name for these actions)
-    public void updateLore(ItemStack uber) {
+    public void updateLore(ItemStack item) {
         // verify that the UberItem isn't null
-        if (uber == null) return;
+        if (item == null) return;
 
-        Utilities.loreItem(uber, getLore(uber));
+        Utilities.loreItem(item, getLore(item));
     }
-    public void changeMaterial(ItemStack uber, Material material) {
+    public void changeMaterial(ItemStack item, Material material) {
         // verify that the UberItem isn't null
-        if (uber == null) return;
+        if (item == null) return;
 
-        uber.setType(material);
+        item.setType(material);
     }
-    public void enforceStackability(ItemStack uber) {
+    public void enforceStackability(ItemStack item) {
         // verify that the UberItem isn't null
-        if (uber == null) return;
-
-        if (!stackable) {
-            Utilities.storeStringInItem(uber,  UUID.randomUUID().toString(), "UUID");
-        }
+        if (item == null) return;
+        if (!stackable) Utilities.storeStringInItem(item,  UUID.randomUUID().toString(), "UUID");
     }
     public void onItemUse(Player player, ItemStack item) {
         // process one time use items
@@ -137,19 +134,18 @@ public abstract class UberItem {
     public Material getMaterial() { return material; }
     public boolean isStackable() { return stackable; }
     public boolean hasActiveEffect() { return hasActive; }
-    public boolean hasCraftingRecipe() { return (craftingRecipe.size() > 0); }
-    public List<ItemStack> getCraftingRecipe() { return craftingRecipe; }
-    public void setCraftingRecipe(List<ItemStack> recipe) { this.craftingRecipe = recipe; }
+    public boolean hasCraftingRecipe() { return (craftingRecipe != null); }
+    public UberCraftingRecipe getCraftingRecipe() { return craftingRecipe; }
+    public void setCraftingRecipe(UberCraftingRecipe recipe) { this.craftingRecipe = recipe; }
 
     // generate an UberItem ItemStack from a given string
-    public static ItemStack fromString(UberItems main, String name, int stackSize) {
+    public static ItemStack fromString(String name, int stackSize) {
 
         String effectiveName = name;
         UberItem item;
         if (Utilities.isInteger(name)) {
             item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
             effectiveName = UberItems.itemIDs.get(Integer.parseInt(name));
-            Bukkit.getLogger().info(item.getName());
         }
         else item = UberItems.items.get(name);
 

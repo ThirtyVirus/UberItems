@@ -26,14 +26,12 @@ import org.bukkit.util.Vector;
 
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
-import thirtyvirus.uber.helpers.UberAbility;
-import thirtyvirus.uber.helpers.UberRarity;
-import thirtyvirus.uber.helpers.Utilities;
+import thirtyvirus.uber.helpers.*;
 
 public class shooty_box extends UberItem {
 
-	public shooty_box(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public shooty_box(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
@@ -74,12 +72,12 @@ public class shooty_box extends UberItem {
 		rightClickAirAction(player, item);
 	}
 
-	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public void shiftLeftClickAirAction(Player player, ItemStack item) { player.openInventory(MenuUtils.createShootyBoxAmmoGuide()); }
+	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { shiftLeftClickAirAction(player, item); }
 
 	// open the box's inventory
 	public void shiftRightClickAirAction(Player player, ItemStack item) {
-		Inventory inventory = Bukkit.createInventory(player, InventoryType.DISPENSER, UberItems.itemPrefix + ChatColor.DARK_GRAY + "Shooty Box");
+		Inventory inventory = Bukkit.createInventory(player, InventoryType.DISPENSER, "Shooty Box");
 		
 		ItemStack[] items = Utilities.getCompactInventory(item);
 		if (items != null) { for (ItemStack i : items) { if (i != null) { inventory.addItem(i); } } }
@@ -99,11 +97,13 @@ public class shooty_box extends UberItem {
 
 	// perform dispenser action
 	private void shootItem(Player player, ItemStack item) {
+		float recoil = 0.5F;
 
 		switch (item.getType()) {
 			case ARROW:
 				player.launchProjectile(Arrow.class);
 				player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
+				recoil = 0;
 				break;
 			case TIPPED_ARROW:
 				Arrow arrow = player.launchProjectile(Arrow.class);
@@ -118,16 +118,19 @@ public class shooty_box extends UberItem {
 				((TNTPrimed)tnt).setFuseTicks(30);
 				((TNTPrimed)tnt).setVelocity(player.getEyeLocation().add(0, 1, 0).getDirection().multiply(2.0));
 				player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
+				recoil = 2;
 				break;
 			case EGG:
 				Egg thrown = player.launchProjectile(Egg.class);
 				thrown.setVelocity(player.getEyeLocation().getDirection().multiply(1.5));
 				player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
+				recoil = 0;
 				break;
 			case ENDER_PEARL:
 				EnderPearl pearl = player.launchProjectile(EnderPearl.class);
 				pearl.setVelocity(player.getEyeLocation().getDirection().multiply(3.0));
 				player.getWorld().playEffect(player.getLocation(), Effect.BOW_FIRE, 1);
+				recoil = 0;
 				break;
 			case SPLASH_POTION:
 				ThrownPotion potion = player.launchProjectile(ThrownPotion.class);
@@ -147,7 +150,42 @@ public class shooty_box extends UberItem {
 				break;
 			// TODO add particles to projectile
 			case LAVA_BUCKET:
+				//FallingBlock proj = launchFallingBlock(player, Material.LAVA, 2.0F, Effect.BOW_FIRE);
 				launchFallingBlock(player, Material.LAVA, 2.0F, Effect.BOW_FIRE);
+				break;
+			case FIREWORK_ROCKET:
+				recoil = 5;
+				player.getWorld().playEffect(player.getLocation(), Effect.FIREWORK_SHOOT, 1);
+				break;
+			case SAND:
+				spritzAttack(player, 7, 5);
+				player.getWorld().playEffect(player.getLocation(), Effect.EXTINGUISH, 1);
+				recoil = 0.6F;
+				break;
+			case GRAVEL:
+				spritzAttack(player, 10, 6);
+				player.getWorld().playEffect(player.getLocation(), Effect.EXTINGUISH, 1);
+				recoil = 0.6F;
+				break;
+			case GLASS:
+				spritzAttack(player, 15, 8);
+				player.getWorld().playEffect(player.getLocation(), Effect.INSTANT_POTION_BREAK, 1);
+				recoil = 0.6F;
+				break;
+			case GUNPOWDER:
+				knockbackAttack(player, 8);
+				player.getWorld().playSound(player.getLocation().add(0,1,0), Sound.ENTITY_GENERIC_EXPLODE, 1,1);
+				recoil = 2.5F;
+				break;
+			case FLINT:
+				Block target = Utilities.getBlockLookingAt(player);
+				if (target.getType() == Material.GRAVEL) {
+					player.getWorld().dropItemNaturally(target.getLocation(), new ItemStack(Material.FLINT, 5));
+					target.setType(Material.AIR);
+				}
+				else if (target.getType().getBlastResistance() <= 1200 && !target.isLiquid()) target.breakNaturally();
+				recoil = 0.2F;
+				target.getWorld().playEffect(target.getLocation(), Effect.WITHER_BREAK_BLOCK, 1);
 				break;
 			case SALMON_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.SALMON, 3.0F, Effect.BLAZE_SHOOT); break;
 			case SHEEP_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.SHEEP, 3.0F, Effect.BLAZE_SHOOT); break;
@@ -215,12 +253,16 @@ public class shooty_box extends UberItem {
 
 			default:
 				// shoot blocks as falling sand
-				if (item.getType().isBlock()) launchFallingBlock(player, item.getType(), 2.0F, Effect.BOW_FIRE);
+				if (item.getType().isBlock()) {
+					FallingBlock bl = launchFallingBlock(player, item.getType(), 2.0F, Effect.BOW_FIRE);
+					bl.setHurtEntities(true); 
+				}
 				else {
 					// shoot item forward as default action
 					ItemStack dropItem = item.clone(); dropItem.setAmount(1);
 					Entity drop = (Entity) player.getWorld().dropItemNaturally(player.getEyeLocation(), dropItem);
 					drop.setVelocity(player.getLocation().getDirection().multiply(1.5));
+					recoil = 1;
 					player.getWorld().playEffect(player.getLocation(), Effect.CLICK2, 1);
 				}
 				break;
@@ -236,8 +278,71 @@ public class shooty_box extends UberItem {
 			// scattershot shift left click ability
 		}
 
-		// update inventory
-		if (player.getGameMode() != GameMode.CREATIVE) item.setAmount(item.getAmount() - 1);
+		// update inventory, apply recoil
+		if (player.getGameMode() != GameMode.CREATIVE) {
+			item.setAmount(item.getAmount() - 1);
+
+			Vector v = player.getLocation().getDirection();
+			v.multiply(recoil * -1);
+			player.setVelocity(v);
+		}
+	}
+
+	// sends a splash damage attack at enemies in front of the player
+	private void spritzAttack(Player player, double damage, float range) {
+		Vector looking = player.getLocation().getDirection();
+		List<Entity> entities = player.getNearbyEntities(range, range, range);
+
+		for (Entity e : entities) {
+			// test if the entity can be damaged and isnt the player
+			if (e instanceof LivingEntity && !e.equals(player)) {
+				Vector direction = e.getLocation().toVector().subtract(player.getLocation().toVector());
+				double angle = looking.angle(direction);
+
+				// scale damage depending on how close you are to the mob
+				double distance = player.getLocation().distance(e.getLocation());
+				damage -= damage * distance / (range - 1) / 2;
+
+				if (angle < 1) {
+					((LivingEntity) e).damage(damage);
+					double x = direction.getX() / Math.abs(direction.getX());
+					double y = direction.getY();
+					double z = direction.getZ() / Math.abs(direction.getZ());
+					direction = new Vector(x, y, z);
+
+					direction.multiply(0.5);
+					e.setVelocity(direction);
+					player.getWorld().playEffect(e.getLocation().add(0,1,0), Effect.SMOKE, 10);
+				}
+			}
+		}
+	}
+
+	private void knockbackAttack(Player player, float range) {
+		Vector looking = player.getLocation().getDirection();
+		List<Entity> entities = player.getNearbyEntities(range, range, range);
+
+		for (Entity e : entities) {
+			// test if the entity can be damaged and isnt the player
+			if (e instanceof LivingEntity && !e.equals(player)) {
+				Vector direction = e.getLocation().toVector().subtract(player.getLocation().toVector());
+				double angle = looking.angle(direction);
+
+				// scale damage depending on how close you are to the mob
+				double distance = player.getLocation().distance(e.getLocation());
+				double kb = 5 - (5 * distance / (range - 1) / 2);
+
+				if (angle < 1) {
+					double x = direction.getX() / Math.abs(direction.getX());
+					double y = direction.getY();
+					double z = direction.getZ() / Math.abs(direction.getZ());
+					direction = new Vector(x, y, z);
+
+					direction.multiply(kb);
+					e.setVelocity(direction);
+				}
+			}
+		}
 	}
 
 	// launch a falling block (duh lol)
@@ -255,6 +360,5 @@ public class shooty_box extends UberItem {
 		player.getWorld().playEffect(player.getLocation(), sound, 1);
 		return mob;
 	}
-
 
 }

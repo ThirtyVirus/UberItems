@@ -20,17 +20,19 @@ import org.bukkit.util.Vector;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.UberAbility;
+import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class builders_wand extends UberItem {
 	// TODO /wandoops command to undo wand action
 	// TODO make the wand obey area build permissions
 
-	public builders_wand(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public builders_wand(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) {
-		item.addUnsafeEnchantment(Enchantment.DIG_SPEED, 10);
+		Utilities.addEnchantGlint(item);
 	}
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }

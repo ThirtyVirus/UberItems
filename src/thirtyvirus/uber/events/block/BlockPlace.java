@@ -16,5 +16,6 @@ public class BlockPlace implements Listener {
     @EventHandler(priority= EventPriority.HIGH)
     public void onBlockPlace (BlockPlaceEvent event) {
         if (Utilities.isUber(event.getItemInHand())) event.setCancelled(true);
+        if (Utilities.isUberMaterial(event.getItemInHand())) event.setCancelled(true);
     }
 }

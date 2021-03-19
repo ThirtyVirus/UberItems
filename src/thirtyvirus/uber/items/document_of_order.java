@@ -15,10 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.helpers.SortingUtilities;
-import thirtyvirus.uber.helpers.UberAbility;
-import thirtyvirus.uber.helpers.UberRarity;
-import thirtyvirus.uber.helpers.Utilities;
+import thirtyvirus.uber.helpers.*;
 
 import static thirtyvirus.uber.helpers.ActionSound.CLICK;
 
@@ -27,8 +24,8 @@ public class document_of_order extends UberItem  {
 	// TODO make the sort respect area build permissions.
 	// TODO make smart sort smarter
 
-	public document_of_order(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities);
+	public document_of_order(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.MENDING, 10);

@@ -4,8 +4,10 @@ import com.google.common.io.ByteStreams;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,11 +17,16 @@ import thirtyvirus.multiversion.Sound;
 import thirtyvirus.multiversion.XMaterial;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.UberMaterial;
 
 import java.io.*;
 import java.util.*;
 
 public final class Utilities {
+
+    public static List<ItemStack> noRecipe = Arrays.asList(new ItemStack(Material.AIR),
+            new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR),
+            new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR));
 
     // list of transparent blocks to be ignored when a player looks at a block
     private static final Set<Material> TRANSPARENT = EnumSet.of(XMaterial.AIR.parseMaterial(), XMaterial.BLACK_CARPET.parseMaterial(), XMaterial.BLUE_CARPET.parseMaterial(),
@@ -82,6 +89,14 @@ public final class Utilities {
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
+    }
+
+    // add enchantment glint to item
+    public static void addEnchantGlint(ItemStack item) {
+        item.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        item.setItemMeta(meta);
     }
 
     // repair a (repairable) item
@@ -155,6 +170,18 @@ public final class Utilities {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    // make a string into a key that can be used with the Random class
+    public static int stringToSeed(String s) {
+        if (s == null) {
+            return 0;
+        }
+        int hash = 0;
+        for (char c : s.toCharArray()) {
+            hash = 31*hash + c;
+        }
+        return hash;
     }
 
     // store a string value in the meta of an item, completely invisible to player
@@ -244,6 +271,30 @@ public final class Utilities {
         Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), run, i);
     }
 
+    // seperate a single string into mulitple lines that can be used as Item Lore
+    public static List<String> stringToLore(String string, int characterLimit, ChatColor prefixColor) {
+        String[] words = string.split(" ");
+        List<String> lines = new ArrayList<>();
+
+        String currentLine = "";
+        for (String word : words) {
+
+            // add word to line
+            if (currentLine.equals("")) currentLine = word;
+            else currentLine = currentLine + " " + word;
+
+            // test if adding the word would make the line too long, start new line if so
+            if (currentLine.length() + word.length() >= characterLimit) {
+                String newLine = currentLine;
+                lines.add("" + prefixColor + newLine);
+                currentLine = "";
+            }
+        }
+        if (currentLine.length() > 0) lines.add("" + prefixColor + currentLine);
+
+        return lines;
+    }
+
     // UBER ITEM CENTRIC FUNCTIONS
     // _____________________________________________________________________________ \\
 
@@ -251,20 +302,24 @@ public final class Utilities {
     public static boolean isUber(ItemStack item) {
         return getStringFromItem(item, "is-uber") != null;
     }
-
-    // test if given item is a specific UberItem
     public static boolean isUber(ItemStack item, int id) {
         if (!isUber(item)) return false;
         return (getIntFromItem(item, "uber-id") == id);
     }
+    public static boolean isUberMaterial(ItemStack item) { return getIntFromItem(item, "MaterialUUID") != 0;}
 
     // get the type of UberItem (null if not an UberItem)
     public static UberItem getUber(ItemStack item) {
         if (!isUber(item)) return null;
         return UberItems.items.get(getStringFromItem(item, "uber-name"));
     }
+    public static UberMaterial getUberMaterial(ItemStack item) {
+        int UUID = getIntFromItem(item, "MaterialUUID");
+        if (UUID == 0) return null;
+        else return UberItems.materialIDs.get(UUID);
+    }
 
-    // return UberItem with given name
+    // return UberItem with given name or ID
     public static UberItem getUber(String name) {
         for (String key : UberItems.items.keySet()) {
             UberItem uberr = UberItems.items.get(key);
@@ -272,8 +327,6 @@ public final class Utilities {
         }
         return null;
     }
-
-    // return UberItem with given item ID
     public static UberItem getUber(int id) {
         for (String key : UberItems.items.keySet()) {
             UberItem uberr = UberItems.items.get(key);
@@ -347,6 +400,27 @@ public final class Utilities {
                 return false; // no, disallow the action
             }
         }
+    }
+
+    // TODO standardize this?
+
+    // apply upgrade to UberItem, and update lore
+    public static void addUpgrade(ItemStack item, String upgradeName) {
+        UberItem uber = getUber(item);
+        if (uber == null) return;
+        storeIntInItem(item, 1, "UberUpgrade:" + upgradeName);
+        uber.updateLore(item);
+    }
+    // remove upgrade from UberItem, and update lore
+    public static void removeUpgrade(ItemStack item, String upgradeName) {
+        UberItem uber = getUber(item);
+        if (uber == null) return;
+        storeIntInItem(item, 0, "UberUpgrade:" + upgradeName);
+        uber.updateLore(item);
+    }
+    // test whether or not an item has an upgrade
+    public static boolean hasUpgrade(ItemStack item, String upgradeName) {
+        return getIntFromItem(item, "UberUpgrade:" + upgradeName) == 1;
     }
 
 }
