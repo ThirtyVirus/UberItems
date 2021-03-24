@@ -6,22 +6,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.Utilities;
 
 import java.util.Arrays;
 
 public class PlayerInteract implements Listener {
 
-    UberItems main;
-    public PlayerInteract(UberItems main) { this.main = main; }
-
+    // process grappling hook ability
     @EventHandler(priority= EventPriority.HIGH)
-    public void onFish(PlayerFishEvent event) {
+    private void onFish(PlayerFishEvent event) {
         if (event.getState() == PlayerFishEvent.State.REEL_IN || event.getState() == PlayerFishEvent.State.CAUGHT_FISH || event.getState() == PlayerFishEvent.State.IN_GROUND) {
             Player player = event.getPlayer();
             ItemStack item = player.getInventory().getItemInMainHand();

@@ -1,10 +1,6 @@
 package thirtyvirus.uber.events.player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -15,21 +11,18 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.Utilities;
 
 public class Bucket implements Listener {
-
-    UberItems main;
-    public Bucket(UberItems main) { this.main = main; }
 
     @EventHandler
     public void onBucketFill(PlayerBucketFillEvent event) { }
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) { }
 
+    // process malk bucket
     @EventHandler
-    public void consumeEvent(PlayerItemConsumeEvent event) {
+    private void consumeEvent(PlayerItemConsumeEvent event) {
 
         // the player is drinking from a malk bucket
         if (Utilities.isUber(event.getItem(), 8)) {

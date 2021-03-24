@@ -8,8 +8,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.Utilities;
 
 import java.util.Arrays;
@@ -17,11 +15,8 @@ import java.util.List;
 
 public class InventoryClose implements Listener {
 
-    UberItems main;
-    public InventoryClose(UberItems main) { this.main = main; }
-
     @EventHandler
-    public void onCloseInventory(InventoryCloseEvent event){
+    private void onCloseInventory(InventoryCloseEvent event){
 
         // save ShootyBox inventory on close
         if (event.getView().getTitle().contains("Shooty Box")){

@@ -1,6 +1,5 @@
 package thirtyvirus.uber.events.chat;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -15,9 +14,6 @@ import java.util.List;
 
 public class TabComplete implements TabCompleter {
 
-    private UberItems main = null;
-    public TabComplete(UberItems main) { this.main = main; }
-
     @EventHandler
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
@@ -27,11 +23,11 @@ public class TabComplete implements TabCompleter {
 
         ArrayList<String> arguments = new ArrayList<>();
 
-        // tab completion for /exchange command
+        // tab completion for /uber command
         if (command.getName().equals("uber")) {
             // no arguments
             if (args.length == 1) {
-                if (player.hasPermission("uber.user")) { arguments.addAll(Arrays.asList("help", "info", "tutorial", "identify", "list")); }
+                if (player.hasPermission("uber.user")) { arguments.addAll(Arrays.asList("help", "info", "identify", "list")); }
                 if (player.hasPermission("uber.admin")) { arguments.addAll(Arrays.asList("give", "reload")); }
 
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[0].toLowerCase())) iter.remove(); }

@@ -17,12 +17,9 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class FoodLevelChange implements Listener {
 
-    UberItems main;
-    public FoodLevelChange(UberItems main) { this.main = main; }
-
+    // process lunch box ability
     @EventHandler
-    // handle the lunch box ability
-    public void onPlayerHungerChange(FoodLevelChangeEvent event) {
+    private void onPlayerHungerChange(FoodLevelChangeEvent event) {
         Player player = (Player) event.getEntity();
 
         // check if the player has a lunch box

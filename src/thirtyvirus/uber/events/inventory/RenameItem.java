@@ -16,12 +16,9 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class RenameItem implements Listener {
 
-    UberItems main;
-    public RenameItem(UberItems main) { this.main = main; }
-
+    // prevent renaming UberItems or UberMaterials with an anvil
     @EventHandler
-    // prevent breaking UberItem using an Anvil
-    public void playerRenameItem(InventoryClickEvent event){
+    private void playerRenameItem(InventoryClickEvent event){
         Player player = (Player) event.getWhoClicked();
         if (event.getView().getType() == InventoryType.ANVIL) {
             if (event.getRawSlot() == 2) {
@@ -39,18 +36,14 @@ public class RenameItem implements Listener {
         }
     }
 
+    // prevent crafting using UberItems or (unwanted) UberMaterials into vanilla recipes
     @EventHandler
-    // prevent breaking UberItem using a crafting table
-    public void playerCraftEvent(CraftItemEvent event) {
+    private void playerCraftEvent(CraftItemEvent event) {
         Player player = (Player) event.getWhoClicked();
         ItemStack[] item = event.getInventory().getMatrix();
 
         for (int counter = 0; counter < 9; counter++) {
-            if (Utilities.isUber(item[counter])) {
-                event.setCancelled(true);
-                Utilities.playSound(ActionSound.ERROR, player);
-            }
-            if (Utilities.isUberMaterial(item[counter]) && !Utilities.getUberMaterial(item[counter]).isVanillaCraftable()) {
+            if (Utilities.isUber(item[counter]) ||(Utilities.isUberMaterial(item[counter]) && !Utilities.getUberMaterial(item[counter]).isVanillaCraftable())) {
                 event.setCancelled(true);
                 Utilities.playSound(ActionSound.ERROR, player);
             }

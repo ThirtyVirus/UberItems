@@ -8,6 +8,6 @@ public enum AbilityType {
 
     private String text;
 
-    private AbilityType(String text) { this.text = text; }
+    AbilityType(String text) { this.text = text; }
     public String getText() { return text; }
 }

@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import thirtyvirus.uber.commands.uber;
+import thirtyvirus.uber.commands.UberCommand;
 import thirtyvirus.uber.events.block.BlockPlace;
 import thirtyvirus.uber.events.chat.TabComplete;
 import thirtyvirus.uber.events.inventory.InventoryClick;
@@ -25,7 +25,7 @@ import java.util.*;
 
 public class UberItems extends JavaPlugin {
 
-    // data for all UberItems
+    // data for UberItems
     public static Map<String, UberItem> items = new HashMap<>();
     public static Map<Integer, String> itemIDs = new HashMap<>();
 
@@ -34,15 +34,14 @@ public class UberItems extends JavaPlugin {
     public static Map<Integer, UberMaterial> materialIDs = new HashMap<>();
 
     // chat messages
-    private Map<String, String> phrases = new HashMap<>();
+    private static Map<String, String> phrases = new HashMap<>();
 
     // global plugin settings
-    public static String prefix = "&8&l[&5&lUberItems&8&l] &8&l"; // generally unchanged unless otherwise stated in config
-    public static String itemPrefix = ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "[" + ChatColor.AQUA + "UBER" + ChatColor.DARK_GRAY + "] " + ChatColor.GRAY;
+    public static String prefix = "&8&l[&5&lUberItems&8&l] &8&l";
     public static String consolePrefix = "[UberItems] ";
 
     public static int activeEffectsCheckID = 0;
-    public static int activeEffectsDelay = 2; //in ticks
+    public static int activeEffectsDelay = 2; // in ticks
 
     // getter for main class
     private static UberItems instance;
@@ -58,7 +57,6 @@ public class UberItems extends JavaPlugin {
 
     public static boolean useWhiteList = true;
     public static boolean useBlackList = false;
-
     public static List<String> whiteList = new ArrayList<>();
     public static List<String> blackList = new ArrayList<>();
 
@@ -72,19 +70,23 @@ public class UberItems extends JavaPlugin {
         // set static instance of the main class, for use in other parts of the plugin & the API
         instance = this;
 
-        loadConfiguration(); // load config.yml (generate one if not there)
-        loadLangFile(); // load language.yml (generate one if not there)
+        // load config.yml and language.yml (generate them if not there)
+        loadConfiguration();
+        loadLangFile();
 
-        // register commands, events, UberMaterials, and UberItems
+        // register commands, events
         registerCommands();
         registerEvents();
+
+        // register UberMaterials, UberItems
         RegisterItems.registerUberMaterials();
         RegisterItems.registerUberItems();
 
-        // schedule repeating task for processing Uber Item active effects
-        activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() { public void run() { Utilities.uberActiveEffects(); } }, activeEffectsDelay, activeEffectsDelay);
+        // schedule repeating task for processing UberItem active effects
+        activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this,new Runnable()
+        { public void run() { Utilities.uberActiveEffects(); } }, activeEffectsDelay, activeEffectsDelay);
 
-        // schedule checking of recent added containers
+        // schedule checking of recent added containers (Document of Order)
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             public void run() { SortingUtilities.checkCancelMultisort(multisorts, multiSortTimeout); }
         }, 20 * multiSortTimeout, 20 * multiSortTimeout);
@@ -114,7 +116,7 @@ public class UberItems extends JavaPlugin {
     }
 
     // load config.yml (generate one if not there)
-    public void loadConfiguration() {
+    private void loadConfiguration() {
         File configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()){
             Utilities.loadResource(this, "config.yml");
@@ -147,7 +149,7 @@ public class UberItems extends JavaPlugin {
     }
 
     // load language.yml (generate one if not there)
-    public void loadLangFile() {
+    private void loadLangFile() {
         // console and IO
         File langFile = new File(getDataFolder(), "language.yml");
         FileConfiguration langFileConfig = new YamlConfiguration();
@@ -163,36 +165,43 @@ public class UberItems extends JavaPlugin {
 
     // register commands
     private void registerCommands() {
-        getCommand("uber").setExecutor(new uber(this));
-        getCommand("uber").setTabCompleter(new TabComplete(this)); // set up tab completion
+        getCommand("uber").setExecutor(new UberCommand());
+        getCommand("uber").setTabCompleter(new TabComplete()); // set up tab completion
     }
 
     // register event handlers
     private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new BlockPlace(this), this);
-        getServer().getPluginManager().registerEvents(new FoodLevelChange(this), this);
-        getServer().getPluginManager().registerEvents(new InventoryClick(this),this);
-        getServer().getPluginManager().registerEvents(new PlayerUseUberItem(this), this);
-        getServer().getPluginManager().registerEvents(new RenameItem(this), this);
-        getServer().getPluginManager().registerEvents(new InventoryClose(this), this);
-        getServer().getPluginManager().registerEvents(new Bucket(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerInteract(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerUseUberItem(), this);
+        getServer().getPluginManager().registerEvents(new InventoryClick(),this);
+        getServer().getPluginManager().registerEvents(new InventoryClose(), this);
+        getServer().getPluginManager().registerEvents(new RenameItem(), this);
+        getServer().getPluginManager().registerEvents(new BlockPlace(), this);
+
+        getServer().getPluginManager().registerEvents(new PlayerInteract(), this);
+        getServer().getPluginManager().registerEvents(new FoodLevelChange(), this);
+        getServer().getPluginManager().registerEvents(new Bucket(), this);
     }
 
-    // put the item into the 2 hashmaps
+    // put an item into the 2 hashmaps
     public static void putItem(String name, UberItem item) {
         items.put(name, item);
         itemIDs.put(item.getID(), name);
     }
-
-    // put the material into the 2 hashmaps
+    // put a material into the 2 hashmaps
     public static void putMaterial(String name, UberMaterial material) {
         materials.put(name, material);
         materialIDs.put(material.getUUID(), material);
     }
+    // reload all plugin assets
+    public static void reload() {
+        getInstance().reloadConfig();
+        getInstance().loadConfiguration();
+        getInstance().loadLangFile();
+        Bukkit.getLogger().info("configuration, values, and language settings reloaded");
+    }
 
     // getters
-    public String getPhrase(String key) {
+    public static String getPhrase(String key) {
         return phrases.get(key);
     }
     public String getVersion() {

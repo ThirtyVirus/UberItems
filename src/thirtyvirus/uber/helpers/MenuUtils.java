@@ -4,42 +4,42 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-import thirtyvirus.multiversion.API;
-import thirtyvirus.multiversion.XMaterial;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MenuUtils {
 
-    private UberItems main = null;
-    public MenuUtils(UberItems main) { this.main = main; }
-
     public static final ItemStack EMPTY_SLOT_ITEM = Utilities.nameItem(Material.BLACK_STAINED_GLASS_PANE, " ");
     public static final ItemStack EMPTY_ERROR_SLOT_ITEM = Utilities.nameItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Item has no crafting recipe");
     public static final ItemStack CRAFTING_SLOT_ITEM = Utilities.loreItem(Utilities.nameItem(Material.BARRIER, ChatColor.RED + "Recipe Required"), Arrays.asList(ChatColor.GRAY + "Add the items for a valid", ChatColor.GRAY + "recipe in the crafting grid", ChatColor.GRAY + "to the left!"));
-
-    public static final ItemStack UPGRADE_MENU_BUTTON = Utilities.loreItem(Utilities.nameItem(Material.ANVIL, ChatColor.GREEN + "Upgrade UberItem"), Arrays.asList(ChatColor.GRAY + "Open the Upgrade Menu"));
     public static final ItemStack RECIPE_MENU_ITEM = Utilities.loreItem(Utilities.nameItem(Material.KNOWLEDGE_BOOK, ChatColor.GREEN + "Recipe Guide"), Arrays.asList(ChatColor.GRAY + "View all UberItems Recipes"));
-
+    private static final ItemStack PLUGIN_INFO = Utilities.loreItem(Utilities.nameItem(Material.WRITABLE_BOOK, ChatColor.GREEN + "About UberItems"), Arrays.asList(
+            ChatColor.GRAY + "Plugin made by " + ChatColor.RED + "ThirtyVirus", "", ChatColor.GRAY + "UberItems is a versatile custom item API, ", ChatColor.GRAY + "allowing for quick and easy advanced item", ChatColor.GRAY + "functionality on Minecraft Spigot servers!", "",
+            ChatColor.RED + "" + ChatColor.BOLD + "You" + ChatColor.WHITE + ChatColor.BOLD + "Tube" + ChatColor.GREEN + " - YouTube.com/ThirtyVirus",
+            ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Twitter" + ChatColor.GREEN + " - Twitter.com/ThirtyVirus"));
     public static final ItemStack BACK_BUTTON = Utilities.nameItem(Material.ARROW, ChatColor.GREEN + "Back");
     public static final ItemStack NEXT_BUTTON = Utilities.nameItem(Material.GREEN_CONCRETE, ChatColor.GREEN + "Next");
     public static final ItemStack PREVIOUS_BUTTON = Utilities.nameItem(Material.RED_CONCRETE, ChatColor.RED + "Previous");
 
-    public static final List<ItemStack> customItems = Arrays.asList(EMPTY_SLOT_ITEM, EMPTY_ERROR_SLOT_ITEM, CRAFTING_SLOT_ITEM, RECIPE_MENU_ITEM, UPGRADE_MENU_BUTTON, BACK_BUTTON, PREVIOUS_BUTTON, NEXT_BUTTON);
+    public static final List<ItemStack> customItems = Arrays.asList(EMPTY_SLOT_ITEM, EMPTY_ERROR_SLOT_ITEM, CRAFTING_SLOT_ITEM, RECIPE_MENU_ITEM, PLUGIN_INFO, BACK_BUTTON, NEXT_BUTTON, PREVIOUS_BUTTON);
 
     public static final List<Integer> CUSTOM_CRAFTING_MENU_EXCEPTIONS = Arrays.asList(10,11,12,19,20,21,28,29,30,23);
     public static final List<Integer> CRAFTING_GUIDE_MENU_EXCEPTIONS = Arrays.asList(0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,51,52,53);
     public static final List<Integer> CRAFTING_GUIDE_ITEM_SLOTS = Arrays.asList(10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,37,38,39,40,41,42,43);
     public static final int ITEMS_PER_GUIDE_PAGE = 28;
 
+    public static final List<InventoryAction> validCraftActions = Arrays.asList(InventoryAction.PICKUP_ALL, InventoryAction.MOVE_TO_OTHER_INVENTORY);
+
+    // create the "main" custom crafting menu
     public static Inventory createCustomCraftingMenu() {
         Inventory i = Bukkit.createInventory(null, 45, "UberItems - Craft Item");
 
@@ -48,13 +48,14 @@ public class MenuUtils {
         }
         i.setItem(23, CRAFTING_SLOT_ITEM);
 
-        i.setItem(16, UPGRADE_MENU_BUTTON);
-        i.setItem(25, RECIPE_MENU_ITEM);
+        i.setItem(16, RECIPE_MENU_ITEM);
+        i.setItem(25, PLUGIN_INFO);
         i.setItem(34, BACK_BUTTON);
 
         return i;
     }
 
+    // create the UberItems "main" Tutorial Menu
     public static Inventory createCustomCraftingTutorialMenu(int page) {
 
         // prep inventory elements
@@ -92,6 +93,35 @@ public class MenuUtils {
         return i;
     }
 
+    // creates a specific UberItem / UberMaterial's Guide Menu
+    public static Inventory createUnboundCraftingTutorialMenu(ItemStack example, UberCraftingRecipe recipe, int amount) {
+        Inventory i1 = createCustomCraftingMenu();
+        Inventory i2 = Bukkit.createInventory(null, 45, "UberItems Guide - " + example.getItemMeta().getDisplayName());
+        i2.setContents(i1.getContents());
+
+        ItemStack example2 = example.clone();
+        example2.setAmount(amount);
+        i2.setItem(23, example2);
+
+        // handle the specific crafting recipe
+        List<Integer> exceptions = Arrays.asList(10,11,12,19,20,21,28,29,30);
+
+        if (recipe == null) {
+            for (int counter = 0; counter < exceptions.size(); counter++) {
+                i2.setItem(exceptions.get(counter), EMPTY_ERROR_SLOT_ITEM);
+            }
+        }
+        else {
+            for (int counter = 0; counter < exceptions.size(); counter++) {
+                i2.setItem(exceptions.get(counter), recipe.get(counter));
+            }
+        }
+
+        return i2;
+
+    }
+
+    // create the UberItems ShootyBox ammo guide (Shift + Left Click while holding one)
     public static Inventory createShootyBoxAmmoGuide() {
         // prep inventory elements
         Inventory i = Bukkit.createInventory(null, 54, "UberItems ShootyBox Ammo Guide");
@@ -126,7 +156,6 @@ public class MenuUtils {
 
         return i;
     }
-
     // make guide item (MGI)
     private static ItemStack mgi(Material material, String description) {
         ItemStack item = new ItemStack(material);
@@ -134,70 +163,9 @@ public class MenuUtils {
         return item;
     }
 
-    // creates a tutorial menu that is not bound to the normal rules
-    public static Inventory createUnboundCraftingTutorialMenu(ItemStack example, UberCraftingRecipe recipe, int amount) {
-        Inventory i1 = createCustomCraftingMenu();
-        Inventory i2 = Bukkit.createInventory(null, 45, "UberItems Guide - " + example.getItemMeta().getDisplayName());
-        i2.setContents(i1.getContents());
+    // MENU UTILITY FUNCTIONS
 
-        ItemStack example2 = example.clone();
-        example2.setAmount(amount);
-        i2.setItem(23, example2);
-
-        // handle the specific crafting recipe
-        List<Integer> exceptions = Arrays.asList(10,11,12,19,20,21,28,29,30);
-
-        if (recipe == null) {
-            for (int counter = 0; counter < exceptions.size(); counter++) {
-                i2.setItem(exceptions.get(counter), EMPTY_ERROR_SLOT_ITEM);
-            }
-        }
-        else {
-            for (int counter = 0; counter < exceptions.size(); counter++) {
-                i2.setItem(exceptions.get(counter), recipe.get(counter));
-            }
-        }
-
-        return i2;
-
-    }
-
-    public static void tutorialMenu(Player player) {
-        ItemStack book = new ItemStack(XMaterial.WRITTEN_BOOK.parseMaterial());
-        BookMeta meta = (BookMeta) book.getItemMeta();
-
-        meta.setAuthor("ThirtyVirus");
-        meta.setTitle("Welcome to TemplatePlugin!");
-
-        List<String> pages = new ArrayList<String>();
-
-        // exmaple main menu
-        pages.add(ChatColor.translateAlternateColorCodes('&',
-                "      &7&lWelcome to:" + "\n" +
-                        "     &c&lUberItems&r" + "\n" +
-                        "This guide book will show you everything you need to know about UberItems! Happy reading!" + "\n" +
-                        "" + "\n" +
-                        " - ThirtyVirus" + "\n" +
-                        "" + "\n\n\n" +
-                        "&7&lNext: Getting Items!"));
-
-        // example secondary page
-        pages.add(ChatColor.translateAlternateColorCodes('&',
-                "&c&lGetting Items&r" + "\n" +
-                        "" + "\n" +
-                        "Grab an uber item with /uber give ____. Then the available items will be available with tab completion." + "\n" +
-                        "" + "\n" +
-                        "Items have a tutorial built - in with their ability descriptions." + "\n" +
-                        "" + "\n"));
-
-        meta.setPages(pages);
-        book.setItemMeta(meta);
-
-        Utilities.playSound(ActionSound.CLICK, player);
-        API.openBook(book, player);
-    }
-
-    // make the craftable UberItem appear in the crafted slot if
+    // make the craftable UberItem appear in the crafted slot if the appropriate materials are there
     public static void checkCraft(Inventory i) {
 
         // put all crafting grid items into a list
@@ -227,6 +195,80 @@ public class MenuUtils {
             }
             else i.setItem(23, MenuUtils.CRAFTING_SLOT_ITEM);
         }
+    }
+
+    // test if the item is NOT the barrier item, the action is trying to pickup, and
+    //   re-verify that the item's components are indeed in the crafting grid
+    // TODO fix buggy edge cases in crafting
+    public static void checkIfPullValid(InventoryClickEvent event) {
+        if (event.getCurrentItem() == CRAFTING_SLOT_ITEM) event.setCancelled(true);
+        else if (event.getClick() == ClickType.DOUBLE_CLICK) event.setCancelled(true);
+        else if (!validCraftActions.contains(event.getAction())) event.setCancelled(true);
+        else pullItem(event, event.getInventory(), event.getCurrentItem());
+    }
+
+    // pull crafted item from the slot
+    // assumes that the item was pulled from a craft
+    private static void pullItem(InventoryClickEvent event, Inventory i, ItemStack item) {
+        List<ItemStack> items = Arrays.asList(
+                i.getItem(10), i.getItem(11), i.getItem(12),
+                i.getItem(19), i.getItem(20), i.getItem(21),
+                i.getItem(28), i.getItem(29), i.getItem(30));
+
+        if (Utilities.isUber(item)) pullUberItem(event, items, item);
+        if (Utilities.isUberMaterial(item)) pullUberMaterial(event, items, item);
+
+        // update inventory on a 1 tick delay as to prevent visual bugs clientside
+        Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), new Runnable() {
+            public void run() { ((Player) event.getWhoClicked()).updateInventory(); } }, 1);
+    }
+    private static void pullUberItem(InventoryClickEvent event, List<ItemStack> items, ItemStack item) {
+        UberItem uber = Utilities.getUber(item);
+
+        // prevent null, double check if the item should be crafted
+        if (uber == null || !uber.getCraftingRecipe().isEqual(items)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        // the player has the go-ahead to pull the item, delete the components
+        for (int counter = 0; counter < items.size(); counter++) {
+            if (items.get(counter) == null) continue;
+            items.get(counter).setAmount(items.get(counter).getAmount() - uber.getCraftingRecipe().get(counter).getAmount());
+        }
+
+    }
+    private static void pullUberMaterial(InventoryClickEvent event, List<ItemStack> items, ItemStack item) {
+        UberMaterial mat = Utilities.getUberMaterial(item);
+
+        // prevent null, double check if the item should be crafted
+        if (mat == null || !mat.getCraftingRecipe().isEqual(items)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        // attempt to stack items together
+        //if (event.getAction() == InventoryAction.PLACE_ALL) {
+        //    ItemStack inHand = event.getWhoClicked().getItemOnCursor();
+        //    if (Utilities.getUberMaterial(inHand) == Utilities.getUberMaterial(event.getCurrentItem())
+        //            && inHand.getAmount() + event.getCurrentItem().getAmount() <= inHand.getMaxStackSize()) {
+        //        inHand.setAmount(inHand.getAmount() + event.getCurrentItem().getAmount());
+        //        event.setCancelled(true);
+        //        ((Player) event.getWhoClicked()).updateInventory();
+        //    }
+        //    else {
+        //        event.setCancelled(true);
+        //        return;
+        //    }
+        //    event.setCancelled(true);
+        //}
+
+        // the player has the go-ahead to pull the item, delete the components
+        for (int counter = 0; counter < items.size(); counter++) {
+            if (items.get(counter) == null) continue;
+            items.get(counter).setAmount(items.get(counter).getAmount() - mat.getCraftingRecipe().get(counter).getAmount());
+        }
+
     }
 
 }

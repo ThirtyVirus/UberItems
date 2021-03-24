@@ -13,8 +13,6 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
-import thirtyvirus.multiversion.Sound;
-import thirtyvirus.multiversion.XMaterial;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
@@ -24,15 +22,12 @@ import java.util.*;
 
 public final class Utilities {
 
-    public static List<ItemStack> noRecipe = Arrays.asList(new ItemStack(Material.AIR),
-            new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR),
-            new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR), new ItemStack(Material.AIR));
-
     // list of transparent blocks to be ignored when a player looks at a block
-    private static final Set<Material> TRANSPARENT = EnumSet.of(XMaterial.AIR.parseMaterial(), XMaterial.BLACK_CARPET.parseMaterial(), XMaterial.BLUE_CARPET.parseMaterial(),
-            XMaterial.BROWN_CARPET.parseMaterial(), XMaterial.CYAN_CARPET.parseMaterial(), XMaterial.GRAY_CARPET.parseMaterial(), XMaterial.GREEN_CARPET.parseMaterial(), XMaterial.LIGHT_BLUE_CARPET.parseMaterial(),
-            XMaterial.LIME_CARPET.parseMaterial(), XMaterial.MAGENTA_CARPET.parseMaterial(), XMaterial.ORANGE_CARPET.parseMaterial(), XMaterial.PINK_CARPET.parseMaterial(), XMaterial.PURPLE_CARPET.parseMaterial(),
-            XMaterial.RED_CARPET.parseMaterial(), XMaterial.WHITE_CARPET.parseMaterial(), XMaterial.YELLOW_CARPET.parseMaterial());
+    private static final Set<Material> TRANSPARENT = EnumSet.of(Material.AIR, Material.CAVE_AIR,
+            Material.BLACK_CARPET, Material.BLUE_CARPET, Material.BROWN_CARPET, Material.CYAN_CARPET,
+            Material.GRAY_CARPET, Material.GREEN_CARPET, Material.LIGHT_BLUE_CARPET, Material.LIME_CARPET,
+            Material.MAGENTA_CARPET, Material.ORANGE_CARPET, Material.PINK_CARPET, Material.PURPLE_CARPET,
+            Material.RED_CARPET, Material.WHITE_CARPET, Material.YELLOW_CARPET);
 
     private static Map<Player, Long> mostRecentSelect = new HashMap<>();
 
@@ -133,30 +128,30 @@ public final class Utilities {
         return player.getTargetBlock(TRANSPARENT, 120);
     }
 
-    // play sound at player (version independent)
+    // play sound at player
     public static void playSound(ActionSound sound, Player player) {
 
         switch (sound) {
             case OPEN:
-                Sound.CHEST_OPEN.playSound(player);
+                player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN,1,1);
                 break;
             case MODIFY:
-                Sound.ANVIL_USE.playSound(player);
+                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,1,1);
                 break;
             case SELECT:
-                Sound.LEVEL_UP.playSound(player);
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1);
                 break;
             case CLICK:
-                Sound.CLICK.playSound(player);
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK,1,1);
                 break;
             case POP:
-                Sound.CHICKEN_EGG_POP.playSound(player);
+                player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG,1,1);
                 break;
             case BREAK:
-                Sound.ANVIL_LAND.playSound(player);
+                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND,1,1);
                 break;
             case ERROR:
-                Sound.ENDERMAN_TELEPORT.playSound(player,1,0.5f);
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT,1,0.5f);
                 break;
         }
 

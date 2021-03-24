@@ -14,8 +14,7 @@ plugin-prefix: "&c&l[&5&lUberItems&c&l] &8&l"
 # Sorting Mode
 # 1 - Alphabetical
 # 2 - Smart (Alphabetical + item categories)
-# 3 - Numeric ID (only works 1.8 - 1.12)
-# 4 - Scramble (random)
+# 3 - Scramble (random)
 sorting-mode: 2
 
 # Reverse the sort

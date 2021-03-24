@@ -1,18 +1,14 @@
 package thirtyvirus.uber.helpers;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import thirtyvirus.multiversion.Version;
-import thirtyvirus.multiversion.XMaterial;
 import thirtyvirus.uber.UberItems;
 
 import java.util.*;
@@ -22,11 +18,12 @@ import static thirtyvirus.uber.helpers.ActionSound.*;
 public class SortingUtilities {
 
     // list of all supported inventory blocks in the plugin
-    public static final List<Material> INVENTORY_BLOCKS = Arrays.asList(XMaterial.CHEST.parseMaterial(),XMaterial.TRAPPED_CHEST.parseMaterial(), XMaterial.ENDER_CHEST.parseMaterial(), XMaterial.SHULKER_BOX.parseMaterial(), XMaterial.BLACK_SHULKER_BOX.parseMaterial(),
-            XMaterial.BLUE_SHULKER_BOX.parseMaterial(), XMaterial.BROWN_SHULKER_BOX.parseMaterial(), XMaterial.CYAN_SHULKER_BOX.parseMaterial(), XMaterial.GRAY_SHULKER_BOX.parseMaterial(),
-            XMaterial.GREEN_SHULKER_BOX.parseMaterial(), XMaterial.LIGHT_BLUE_SHULKER_BOX.parseMaterial(), XMaterial.LIGHT_GRAY_SHULKER_BOX.parseMaterial(), XMaterial.LIME_SHULKER_BOX.parseMaterial(),
-            XMaterial.MAGENTA_SHULKER_BOX.parseMaterial(), XMaterial.ORANGE_SHULKER_BOX.parseMaterial(), XMaterial.PINK_SHULKER_BOX.parseMaterial(), XMaterial.PURPLE_SHULKER_BOX.parseMaterial(),
-            XMaterial.RED_SHULKER_BOX.parseMaterial(), XMaterial.WHITE_SHULKER_BOX.parseMaterial(), XMaterial.YELLOW_SHULKER_BOX.parseMaterial());
+    public static final List<Material> INVENTORY_BLOCKS = Arrays.asList(
+            Material.CHEST,Material.TRAPPED_CHEST, Material.ENDER_CHEST, Material.SHULKER_BOX,
+            Material.BLACK_SHULKER_BOX, Material.BLUE_SHULKER_BOX, Material.BROWN_SHULKER_BOX, Material.CYAN_SHULKER_BOX,
+            Material.GRAY_SHULKER_BOX, Material.GREEN_SHULKER_BOX, Material.LIGHT_BLUE_SHULKER_BOX, Material.LIGHT_GRAY_SHULKER_BOX,
+            Material.LIME_SHULKER_BOX, Material.MAGENTA_SHULKER_BOX, Material.ORANGE_SHULKER_BOX, Material.PINK_SHULKER_BOX,
+            Material.PURPLE_SHULKER_BOX, Material.RED_SHULKER_BOX, Material.WHITE_SHULKER_BOX, Material.YELLOW_SHULKER_BOX);
 
     private static Map<Player, Long> mostRecentSelect = new HashMap<>();
 
@@ -134,7 +131,7 @@ public class SortingUtilities {
         }
 
         // shulker box
-        if (Version.getVersion().isBiggerThan(Version.v1_10) && block.getState() instanceof ShulkerBox) {
+        if (block.getState() instanceof ShulkerBox) {
             ShulkerBox box = (ShulkerBox)block.getState();
             sortInventory(box.getInventory());
         }
@@ -175,7 +172,7 @@ public class SortingUtilities {
         for (ItemStack i : inventory.getContents()){
             if (counter < 9) { counter++; continue; } // skip hotbar
             if (armorAndOffhand.contains(i)) { counter++; continue; } // skip armor
-            if (Version.getVersion().isBiggerThan(Version.v1_8) && inventory.getItemInOffHand().equals(i)) { counter++; continue; } // skip offhand
+            if (inventory.getItemInOffHand().equals(i)) { counter++; continue; } // skip offhand
 
             counter++;
             if (i == null) continue;
@@ -298,7 +295,7 @@ public class SortingUtilities {
                 continue;
             }
             // shulker boxes
-            if (Version.getVersion().isBiggerThan(Version.v1_10) && block.getState() instanceof ShulkerBox) {
+            if (block.getState() instanceof ShulkerBox) {
                 ShulkerBox box = (ShulkerBox) ((ShulkerBox) block.getState()).getInventory().getHolder();
                 safeAddInventory(inventories, box.getInventory());
             }
@@ -329,6 +326,26 @@ public class SortingUtilities {
         UberItems.multisorts.remove(player);
         Utilities.playSound(ERROR, player);
         mostRecentSelect.remove(player);
+    }
+
+    public static Location getInventoryLocation(Inventory inventory) {
+        // double chest
+        if (inventory.getHolder() instanceof DoubleChest) {
+            DoubleChest chest = (DoubleChest) inventory.getHolder();
+
+            BlockState state = (BlockState) chest.getLeftSide();
+            return state.getBlock().getLocation();
+        }
+        // chest
+        if (inventory.getHolder() instanceof Chest) {
+            Chest chest = (Chest) inventory.getHolder();
+            return chest.getBlock().getLocation();
+        }
+        // shulker boxes
+        if (inventory.getHolder() instanceof ShulkerBox) {
+            return inventory.getLocation();
+        }
+        return null;
     }
 
     // _______________________________________________________________ \\
@@ -400,14 +417,7 @@ public class SortingUtilities {
 
             // Double Chests
             if (inventory.getHolder() instanceof DoubleChest) {
-                if (Version.getVersion().isBiggerThan(Version.v1_8)) {
-                    if (Arrays.equals(inv.getContents(), inventory.getContents()) && inv.getLocation().equals(inventory.getLocation())) return;
-                } else {
-                    // get location of inventories and compare
-                    Location invLocation = getInventoryLocation(inv);
-                    Location inventoryLocation = getInventoryLocation(inventory);
-                    if (invLocation != null && inventoryLocation != null && invLocation.equals(inventoryLocation)) return;
-                }
+                if (Arrays.equals(inv.getContents(), inventory.getContents()) && inv.getLocation().equals(inventory.getLocation())) return;
             }
 
         }
@@ -426,25 +436,5 @@ public class SortingUtilities {
             if (hasFreeSlot(inventories.get(inventoryNum))) { inventories.get(inventoryNum).addItem(item); }
             else { inventoryNum++; inventories.get(inventoryNum).addItem(item); }
         }
-    }
-
-    public static Location getInventoryLocation(Inventory inventory) {
-        // double chest
-        if (inventory.getHolder() instanceof DoubleChest) {
-            DoubleChest chest = (DoubleChest) inventory.getHolder();
-
-            BlockState state = (BlockState) chest.getLeftSide();
-            return state.getBlock().getLocation();
-        }
-        // chest
-        if (inventory.getHolder() instanceof Chest) {
-            Chest chest = (Chest) inventory.getHolder();
-            return chest.getBlock().getLocation();
-        }
-        // shulker boxes
-        if (Version.getVersion().isBiggerThan(Version.v1_10) && inventory.getHolder() instanceof ShulkerBox) {
-            return inventory.getLocation();
-        }
-        return null;
     }
 }

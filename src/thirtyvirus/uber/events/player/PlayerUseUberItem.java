@@ -1,6 +1,5 @@
 package thirtyvirus.uber.events.player;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -12,7 +11,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
@@ -25,11 +23,8 @@ import java.util.Arrays;
 
 public class PlayerUseUberItem implements Listener {
 
-    UberItems main;
-    public PlayerUseUberItem(UberItems main) { this.main = main; }
-
     @EventHandler(priority=EventPriority.HIGH)
-    public void onPlayerUse(PlayerInteractEvent event) {
+    private void onPlayerUse(PlayerInteractEvent event) {
 
         // test if items in main and off hand are UberItems
         if (Utilities.isUber(event.getPlayer().getInventory().getItemInMainHand())) {
@@ -41,7 +36,7 @@ public class PlayerUseUberItem implements Listener {
     }
 
     @EventHandler(priority=EventPriority.HIGH)
-    public void onPlayerHit(EntityDamageByEntityEvent event) {
+    private void onPlayerHit(EntityDamageByEntityEvent event) {
 
         // enforce that only players can do damage (TODO support projectile hits from uber items in the future)
         if (event.getDamager().getType() != EntityType.PLAYER) return;
@@ -60,23 +55,24 @@ public class PlayerUseUberItem implements Listener {
     }
 
     @EventHandler(priority=EventPriority.HIGH)
-    public void onBlockBreak(BlockBreakEvent event) {
+    private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItemInMainHand();
-
-        // determine whether or not a player is trying to make an Uber Workbench
-        // breaking a workbench with a lever to make the table, and delete the components
-        if (item.getType() == Material.LEVER && event.getBlock().getType() == Material.CRAFTING_TABLE) {
-            if (player.getGameMode() != GameMode.CREATIVE)
-                player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
-            event.setDropItems(false);
-            player.getInventory().addItem(UberItem.fromString("0", 1));
-            Utilities.playSound(ActionSound.POP, player);
-        }
 
         // test if item in main hand is an UberItem
         if (Utilities.isUber(item)) {
             Utilities.getUber(item).breakBlockAction(player, event, event.getBlock(), item);
+        }
+        else {
+            // determine whether or not a player is trying to make an Uber Workbench
+            // breaking a workbench with a lever to make the table, and delete the components
+            if (item.getType() == Material.LEVER && event.getBlock().getType() == Material.CRAFTING_TABLE) {
+                if (player.getGameMode() != GameMode.CREATIVE)
+                    player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
+                event.setDropItems(false);
+                player.getInventory().addItem(UberItem.fromString("0", 1));
+                Utilities.playSound(ActionSound.POP, player);
+            }
         }
 
     }
@@ -87,10 +83,7 @@ public class PlayerUseUberItem implements Listener {
         UberItem uber = Utilities.getUber(item);
 
         // enforce premium vs lite
-        if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) { Utilities.warnPlayer(player, Arrays.asList(main.getPhrase("not-premium-message"))); return; }
-
-        // don't cancel event for malk bucket
-        //if (uber.getID() != 8 && uber.getID() != 18) event.setCancelled(true);
+        if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) { Utilities.warnPlayer(player, Arrays.asList(UberItems.getPhrase("not-premium-message"))); return; }
 
         // air and block interaction
         if (event.getAction() == Action.LEFT_CLICK_AIR) {

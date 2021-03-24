@@ -1,32 +1,26 @@
 package thirtyvirus.uber.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
-import thirtyvirus.uber.helpers.MenuUtils;
 import thirtyvirus.uber.helpers.Utilities;
 
 import java.util.Arrays;
 import java.util.Collections;
 
-public class uber implements CommandExecutor{
-
-    private UberItems main = null;
-    public uber(UberItems main) { this.main = main; }
+public class UberCommand implements CommandExecutor{
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         // verify that the user has proper permissions
         if (!sender.hasPermission("uber.user")) {
-            Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-permissions-message")));
+            Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("no-permissions-message")));
             return true;
         }
 
@@ -40,10 +34,6 @@ public class uber implements CommandExecutor{
                 case "info":
                     info(sender);
                     break;
-                case "tutorial":
-                    if (sender instanceof Player) MenuUtils.tutorialMenu((Player) sender);
-                    else Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("no-console-message")));
-                    break;
 
                 // plugin specific user commands
                 case "identify":
@@ -56,21 +46,21 @@ public class uber implements CommandExecutor{
                 // staff commands
                 case "give":
                     if (sender.hasPermission("uber.admin")) give(sender, args);
-                    else Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("no-permissions-message")));
+                    else Utilities.warnPlayer(sender, Collections.singletonList(UberItems.getPhrase("no-permissions-message")));
                     break;
                 case "reload":
                     if (sender.hasPermission("uber.admin")) reload(sender);
-                    else Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("no-permissions-message")));
+                    else Utilities.warnPlayer(sender, Collections.singletonList(UberItems.getPhrase("no-permissions-message")));
                     break;
 
                 default:
-                    Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("not-a-command-message")));
+                    Utilities.warnPlayer(sender, Collections.singletonList(UberItems.getPhrase("not-a-command-message")));
                     help(sender);
                     break;
             }
 
         } catch(Exception e) {
-            Utilities.warnPlayer(sender, Collections.singletonList(main.getPhrase("formatting-error-message")));
+            Utilities.warnPlayer(sender, Collections.singletonList(UberItems.getPhrase("formatting-error-message")));
         }
 
         return true;
@@ -79,7 +69,7 @@ public class uber implements CommandExecutor{
     // give command
     private void give(CommandSender sender, String[] args) {
         // verify that the command is executed by a player
-        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-console-message"))); return; }
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("no-console-message"))); return; }
         Player player = (Player) sender;
 
         // create the item from either ID or name
@@ -87,7 +77,7 @@ public class uber implements CommandExecutor{
         ItemStack uber = UberItem.fromString(args[1], stack);
 
         // verify that the item is in fact an UberItem
-        if (uber == null) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem"))); return; }
+        if (uber == null) { Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("not-uberitem"))); return; }
 
         // give the item to the player
         player.getInventory().addItem(uber);
@@ -95,10 +85,10 @@ public class uber implements CommandExecutor{
     }
 
     // identify Command
-    public void identify(CommandSender sender, String[] args) {
+    private void identify(CommandSender sender, String[] args) {
 
         // verify that the command is executed by a player
-        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("no-console-message"))); return; }
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("no-console-message"))); return; }
         Player player = (Player) sender;
 
         // identify UberItem(s) held by the player (main or offhand)
@@ -120,7 +110,7 @@ public class uber implements CommandExecutor{
                 return;
             }
             else {
-                Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem")));
+                Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("not-uberitem")));
                 return;
             }
         }
@@ -133,14 +123,14 @@ public class uber implements CommandExecutor{
         else item = UberItems.items.get(name);
 
         // verify that the item is in fact an UberItem
-        if (item == null) { Utilities.warnPlayer(sender, Arrays.asList(main.getPhrase("not-uberitem"))); return; }
+        if (item == null) { Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("not-uberitem"))); return; }
 
         // tell player what
         player.sendMessage(UberItems.prefix + ChatColor.YELLOW + item.getID() + ": " + item.getName());
     }
 
     // list Command
-    public void list(CommandSender sender){
+    private void list(CommandSender sender){
         sender.sendMessage(UberItems.prefix + "Listing UberItems:");
         for (String id : UberItems.itemIDs.values()) {
             UberItem item = UberItems.items.get(id);
@@ -151,13 +141,13 @@ public class uber implements CommandExecutor{
     // info command
     private void info(CommandSender sender) {
         sender.sendMessage(UberItems.prefix + ChatColor.GRAY + "UberItems Plugin Info");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GREEN + "Version " + main.getVersion() + " - By ThirtyVirus");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GREEN + "Version " + UberItems.getInstance().getVersion() + " - By ThirtyVirus");
         sender.sendMessage("");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GREEN + "~Add powerful and fun items to your Minecraft Server!");
         sender.sendMessage("");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.RESET + ChatColor.RED + "" + ChatColor.BOLD + "You" + ChatColor.WHITE + ChatColor.BOLD + "Tube" + ChatColor.GREEN + " - https://youtube.com/thirtyvirus");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.RESET + ChatColor.RED + "" + ChatColor.BOLD + "You" + ChatColor.WHITE + ChatColor.BOLD + "Tube" + ChatColor.GREEN + " - https://youtube.com/ThirtyVirus");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.RESET + ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Twitter" + ChatColor.GREEN + " - https://twitter.com/ThirtyVirus");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.RESET + ChatColor.GOLD + "" + ChatColor.BOLD + "SpigotMC" + ChatColor.GREEN + " - https://www.spigotmc.org/members/thirtyvirus.179587/");
+        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.RESET + ChatColor.GOLD + "" + ChatColor.BOLD + "SpigotMC" + ChatColor.GREEN + " - https://www.spigotmc.org/members/ThirtyVirus.179587");
         sender.sendMessage(ChatColor.DARK_PURPLE + "------------------------------");
     }
 
@@ -166,7 +156,6 @@ public class uber implements CommandExecutor{
         sender.sendMessage(UberItems.prefix + ChatColor.GRAY + "Commands");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber help");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber info");
-        sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber tutorial");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber identify");
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber list");
         if (sender.hasPermission("uber.admin")) {
@@ -178,11 +167,7 @@ public class uber implements CommandExecutor{
 
     // reload the config and language files in real time
     private void reload(CommandSender sender) {
-        main.reloadConfig();
-        main.loadConfiguration();
-
-        main.loadLangFile();
-
+        UberItems.reload();
         Utilities.informPlayer(sender, Arrays.asList("configuration, values, and language settings reloaded"));
     }
 
