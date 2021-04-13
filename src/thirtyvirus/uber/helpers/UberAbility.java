@@ -27,10 +27,7 @@ public class UberAbility {
         List<String> lore = new ArrayList<>();
 
         lore.add(ChatColor.GOLD + "Item Ability: " + name + " " + ChatColor.YELLOW + ChatColor.BOLD + type.getText());
-
-        List<String> desc = Arrays.asList(description.split("\n"));
-        for (String item : desc) { item = ChatColor.GRAY + item; lore.add(item); }
-
+        lore.addAll(Utilities.stringToLore(description, 40, ChatColor.GRAY));
         if (cooldown > 0) lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + cooldown + "s.");
 
         return lore;

@@ -99,7 +99,7 @@ public class SortingUtilities {
         //    BlockBreakEvent e = new BlockBreakEvent(block, player);
         //    Bukkit.getServer().getPluginManager().callEvent(e);
         //    if (e.isCancelled()) {
-        //        Utilities.warnPlayer(player, Arrays.asList(main.getPhrase("no-build-permissions-message")));
+        //        Utilities.warnPlayer(player, main.getPhrase("no-build-permissions-message"));
         //        e.setCancelled(true);
         //        return;
         //    }

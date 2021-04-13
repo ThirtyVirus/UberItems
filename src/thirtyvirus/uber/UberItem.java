@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -70,6 +71,21 @@ public abstract class UberItem {
             lore.add("");
         }
 
+        // show the item's upgrades
+        String[] rawUpgrades = Utilities.getUpgrades(item);
+        List<String> upgrades = new ArrayList<>();
+        if (rawUpgrades != null && rawUpgrades.length > 0) {
+            for (String upgrade : rawUpgrades) if (!upgrade.equals("")) upgrades.add(upgrade);
+        }
+
+        if (upgrades.size() > 0) {
+            lore.add(ChatColor.RED + "Upgrades:");
+            for (String upgrade : upgrades) {
+                lore.addAll(Utilities.stringToLore(upgrade + ": " + Utilities.getUpgradeDescription(item, upgrade), 43, ChatColor.YELLOW));
+            }
+            lore.add("");
+        }
+
         // put in item specific suffix
         getSpecificLoreSuffix(lore, item);
 
@@ -124,7 +140,7 @@ public abstract class UberItem {
     public abstract void middleClickAction(Player player, ItemStack item);
     public abstract void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item);
     public abstract void breakBlockAction(Player player, BlockBreakEvent event, Block target, ItemStack item);
-    public abstract void clickedInInventoryAction(Player player, InventoryClickEvent event);
+    public abstract void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition);
 
     public abstract void activeEffect(Player player, ItemStack item);
 

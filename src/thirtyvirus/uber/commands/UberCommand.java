@@ -20,7 +20,7 @@ public class UberCommand implements CommandExecutor{
 
         // verify that the user has proper permissions
         if (!sender.hasPermission("uber.user")) {
-            Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("no-permissions-message")));
+            Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
             return true;
         }
 
@@ -46,21 +46,21 @@ public class UberCommand implements CommandExecutor{
                 // staff commands
                 case "give":
                     if (sender.hasPermission("uber.admin")) give(sender, args);
-                    else Utilities.warnPlayer(sender, Collections.singletonList(UberItems.getPhrase("no-permissions-message")));
+                    else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
                     break;
                 case "reload":
                     if (sender.hasPermission("uber.admin")) reload(sender);
-                    else Utilities.warnPlayer(sender, Collections.singletonList(UberItems.getPhrase("no-permissions-message")));
+                    else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
                     break;
 
                 default:
-                    Utilities.warnPlayer(sender, Collections.singletonList(UberItems.getPhrase("not-a-command-message")));
+                    Utilities.warnPlayer(sender, UberItems.getPhrase("not-a-command-message"));
                     help(sender);
                     break;
             }
 
         } catch(Exception e) {
-            Utilities.warnPlayer(sender, Collections.singletonList(UberItems.getPhrase("formatting-error-message")));
+            Utilities.warnPlayer(sender, UberItems.getPhrase("formatting-error-message"));
         }
 
         return true;
@@ -69,7 +69,7 @@ public class UberCommand implements CommandExecutor{
     // give command
     private void give(CommandSender sender, String[] args) {
         // verify that the command is executed by a player
-        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("no-console-message"))); return; }
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
         Player player = (Player) sender;
 
         // create the item from either ID or name
@@ -77,7 +77,7 @@ public class UberCommand implements CommandExecutor{
         ItemStack uber = UberItem.fromString(args[1], stack);
 
         // verify that the item is in fact an UberItem
-        if (uber == null) { Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("not-uberitem"))); return; }
+        if (uber == null) { Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem")); return; }
 
         // give the item to the player
         player.getInventory().addItem(uber);
@@ -88,7 +88,7 @@ public class UberCommand implements CommandExecutor{
     private void identify(CommandSender sender, String[] args) {
 
         // verify that the command is executed by a player
-        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("no-console-message"))); return; }
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
         Player player = (Player) sender;
 
         // identify UberItem(s) held by the player (main or offhand)
@@ -110,20 +110,20 @@ public class UberCommand implements CommandExecutor{
                 return;
             }
             else {
-                Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("not-uberitem")));
+                Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem"));
                 return;
             }
         }
 
         // identify an UberItem by name
 
-        // get the item from either ID or name
+        // get the item from either numerical ID or name
         String name = args[1]; UberItem item;
         if (Utilities.isInteger(name)) item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
         else item = UberItems.items.get(name);
 
         // verify that the item is in fact an UberItem
-        if (item == null) { Utilities.warnPlayer(sender, Arrays.asList(UberItems.getPhrase("not-uberitem"))); return; }
+        if (item == null) { Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem")); return; }
 
         // tell player what
         player.sendMessage(UberItems.prefix + ChatColor.YELLOW + item.getID() + ": " + item.getName());
@@ -168,7 +168,7 @@ public class UberCommand implements CommandExecutor{
     // reload the config and language files in real time
     private void reload(CommandSender sender) {
         UberItems.reload();
-        Utilities.informPlayer(sender, Arrays.asList("configuration, values, and language settings reloaded"));
+        Utilities.informPlayer(sender, "configuration, values, and language settings reloaded");
     }
 
 }

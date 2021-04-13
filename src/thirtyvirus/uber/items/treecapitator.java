@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -20,7 +19,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
@@ -62,7 +60,7 @@ public class treecapitator extends UberItem{
         // repair axe each time it is used
         Utilities.repairItem(item);
     }
-    public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+    public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
     public void activeEffect(Player player, ItemStack item) { }
 
     public void doBlockEater(Player player, Block startingBlock, int amount) {

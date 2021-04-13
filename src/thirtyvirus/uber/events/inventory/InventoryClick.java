@@ -21,7 +21,7 @@ public class InventoryClick implements Listener {
     @EventHandler
     private void clickItemOntoUber(InventoryClickEvent event) {
         if (event.getAction() == InventoryAction.SWAP_WITH_CURSOR && Utilities.isUber(event.getCurrentItem())) {
-            Utilities.getUber(event.getCurrentItem()).clickedInInventoryAction((Player)event.getWhoClicked(), event);
+            Utilities.getUber(event.getCurrentItem()).clickedInInventoryAction((Player)event.getWhoClicked(), event, event.getCurrentItem(), event.getCursor());
         }
     }
 

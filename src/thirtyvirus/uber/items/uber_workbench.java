@@ -1,12 +1,10 @@
 package thirtyvirus.uber.items;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -16,7 +14,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.*;
 
 // a template class that can be copy - pasted and renamed when making new Uber Items
@@ -43,6 +40,6 @@ public class uber_workbench extends UberItem {
     public void middleClickAction(Player player, ItemStack item) { }
     public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
     public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-    public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+    public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
     public void activeEffect(Player player, ItemStack item) { }
 }

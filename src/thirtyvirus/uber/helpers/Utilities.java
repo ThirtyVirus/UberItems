@@ -29,7 +29,11 @@ public final class Utilities {
             Material.MAGENTA_CARPET, Material.ORANGE_CARPET, Material.PINK_CARPET, Material.PURPLE_CARPET,
             Material.RED_CARPET, Material.WHITE_CARPET, Material.YELLOW_CARPET);
 
+    // store the most recent attempts at sorting by each player on the server
     private static Map<Player, Long> mostRecentSelect = new HashMap<>();
+
+    // GENERAL PLUGIN FUNCTIONS
+    // _____________________________________________________________________________ \\
 
     // load file from JAR with comments
     public static File loadResource(Plugin plugin, String resource) {
@@ -51,6 +55,28 @@ public final class Utilities {
         return resourceFile;
     }
 
+    // warns player of something in plugin and plays error noise
+    public static void warnPlayer(CommandSender sender, List<String> messages) {
+        if (sender instanceof Player) { Player player = (Player) sender; playSound(ActionSound.ERROR, player); }
+        for (String message : messages) sender.sendMessage(UberItems.prefix + ChatColor.RESET + ChatColor.RED + message);
+    }
+    public static void warnPlayer(CommandSender sender, String message) {
+        warnPlayer(sender, message);
+    }
+
+    // informs player of something in plugin
+    public static void informPlayer(CommandSender sender, List<String> messages) {
+        for (String message : messages) sender.sendMessage(UberItems.prefix + ChatColor.RESET + ChatColor.GRAY + message);
+    }
+    public static void informPlayer(CommandSender sender, String message) {
+        informPlayer(sender, Collections.singletonList(message));
+    }
+
+    // return the block the player is looking at, ignoring transparent blocks
+    public static Block getBlockLookingAt(Player player) {
+        return player.getTargetBlock(TRANSPARENT, 120);
+    }
+
     // convert a location to formatted string (world,x,y,z)
     public static String toLocString(Location location) {
         if (location.equals(null)) return "";
@@ -63,6 +89,90 @@ public final class Utilities {
         String[] data = locString.split(",");
         return new Location(Bukkit.getWorld(data[0]), Integer.parseInt(data[1]), Integer.parseInt(data[2]), Integer.parseInt(data[3]));
     }
+
+    // play sound at player
+    public static void playSound(ActionSound sound, Player player) {
+
+        switch (sound) {
+            case OPEN:
+                player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN,1,1);
+                break;
+            case MODIFY:
+                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,1,1);
+                break;
+            case SELECT:
+                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1);
+                break;
+            case CLICK:
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK,1,1);
+                break;
+            case POP:
+                player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG,1,1);
+                break;
+            case BREAK:
+                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND,1,1);
+                break;
+            case ERROR:
+                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT,1,0.5f);
+                break;
+        }
+
+    }
+
+    // shorthand for using the bukkit scheduler to run a runnable after i ticks
+    public static void scheduleTask(Runnable run, int i) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), run, i);
+    }
+
+    // test if given number string is integer
+    public static boolean isInteger(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // make a string into a key that can be used with the Random class
+    public static int stringToSeed(String s) {
+        if (s == null) {
+            return 0;
+        }
+        int hash = 0;
+        for (char c : s.toCharArray()) {
+            hash = 31*hash + c;
+        }
+        return hash;
+    }
+
+    // seperate a single string into mulitple lines that can be used as Item Lore
+    // TODO "/n" can be used to force a new line
+    public static List<String> stringToLore(String string, int characterLimit, ChatColor prefixColor) {
+        String[] words = string.split(" ");
+        List<String> lines = new ArrayList<>();
+
+        String currentLine = "";
+        for (String word : words) {
+
+            // add word to line
+            if (currentLine.equals("")) currentLine = word;
+            else currentLine = currentLine + " " + word;
+
+            // test if adding the word would make the line too long, start new line if so
+            if (currentLine.length() + word.length() >= characterLimit) {
+                String newLine = currentLine;
+                lines.add("" + prefixColor + newLine);
+                currentLine = "";
+            }
+        }
+        if (currentLine.length() > 0) lines.add("" + prefixColor + currentLine);
+
+        return lines;
+    }
+
+    // ITEM FUNCTIONS
+    // _____________________________________________________________________________ \\
 
     // renames item
     public static ItemStack nameItem(ItemStack item, String name) {
@@ -101,82 +211,6 @@ public final class Utilities {
             ((Damageable)meta).setDamage(0);
             item.setItemMeta(meta);
         }
-    }
-
-    // send player a collection of error messages and play error noise
-    public static void warnPlayer(CommandSender sender, List<String> messages) {
-
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-            playSound(ActionSound.ERROR, player);
-        }
-
-        for (String message : messages) {
-            sender.sendMessage(UberItems.prefix + ChatColor.RESET + ChatColor.RED + message);
-        }
-    }
-
-    // send player a collection of messages
-    public static void informPlayer(CommandSender sender, List<String> messages) {
-        for (String message : messages) {
-            sender.sendMessage(UberItems.prefix + ChatColor.RESET + ChatColor.GRAY + message);
-        }
-    }
-
-    // return the block the player is looking at, ignoring transparent blocks
-    public static Block getBlockLookingAt(Player player) {
-        return player.getTargetBlock(TRANSPARENT, 120);
-    }
-
-    // play sound at player
-    public static void playSound(ActionSound sound, Player player) {
-
-        switch (sound) {
-            case OPEN:
-                player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN,1,1);
-                break;
-            case MODIFY:
-                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE,1,1);
-                break;
-            case SELECT:
-                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1);
-                break;
-            case CLICK:
-                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK,1,1);
-                break;
-            case POP:
-                player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG,1,1);
-                break;
-            case BREAK:
-                player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND,1,1);
-                break;
-            case ERROR:
-                player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT,1,0.5f);
-                break;
-        }
-
-    }
-
-    // test if given number string is integer
-    public static boolean isInteger(String input) {
-        try {
-            Integer.parseInt(input);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    // make a string into a key that can be used with the Random class
-    public static int stringToSeed(String s) {
-        if (s == null) {
-            return 0;
-        }
-        int hash = 0;
-        for (char c : s.toCharArray()) {
-            hash = 31*hash + c;
-        }
-        return hash;
     }
 
     // store a string value in the meta of an item, completely invisible to player
@@ -262,35 +296,7 @@ public final class Utilities {
         return new ItemStack[0];
     }
 
-    public static void scheduleTask(Runnable run, int i) {
-        Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), run, i);
-    }
-
-    // seperate a single string into mulitple lines that can be used as Item Lore
-    public static List<String> stringToLore(String string, int characterLimit, ChatColor prefixColor) {
-        String[] words = string.split(" ");
-        List<String> lines = new ArrayList<>();
-
-        String currentLine = "";
-        for (String word : words) {
-
-            // add word to line
-            if (currentLine.equals("")) currentLine = word;
-            else currentLine = currentLine + " " + word;
-
-            // test if adding the word would make the line too long, start new line if so
-            if (currentLine.length() + word.length() >= characterLimit) {
-                String newLine = currentLine;
-                lines.add("" + prefixColor + newLine);
-                currentLine = "";
-            }
-        }
-        if (currentLine.length() > 0) lines.add("" + prefixColor + currentLine);
-
-        return lines;
-    }
-
-    // UBER ITEM CENTRIC FUNCTIONS
+    // UBERITEM FUNCTIONS
     // _____________________________________________________________________________ \\
 
     // test if given item is an UberItem
@@ -391,31 +397,64 @@ public final class Utilities {
             else {
                 int timeLeft = (int)time - lastTime;
                 timeLeft = (int)seconds - timeLeft;
-                if (throwError) warnPlayer(player, Arrays.asList("This ability is on cooldown for " + timeLeft + "s."));
+                if (throwError) warnPlayer(player, "This ability is on cooldown for " + timeLeft + "s.");
                 return false; // no, disallow the action
             }
         }
     }
 
-    // TODO standardize this?
+    // UPGRADE RULES
+    // Upgrade name must be [a-z0-9A-Z/._-]
 
     // apply upgrade to UberItem, and update lore
-    public static void addUpgrade(ItemStack item, String upgradeName) {
-        UberItem uber = getUber(item);
-        if (uber == null) return;
-        storeIntInItem(item, 1, "UberUpgrade:" + upgradeName);
+    public static void addUpgrade(ItemStack item, String upgradeName, String upgradeDescription) {
+        UberItem uber = getUber(item); if (uber == null) return;
+
+        // generate an updated upgrade list
+        List<String> upgrades = new ArrayList<>(); String[] rawUpgrades = getUpgrades(item); String updatedUpgradeList = "";
+        if (rawUpgrades != null) for (String upgrade : rawUpgrades) { if (!upgrades.contains(upgrade)) upgrades.add(upgrade); }
+        if (!upgrades.contains(upgradeName)) upgrades.add(upgradeName);
+        for (String upgrade : upgrades) updatedUpgradeList = updatedUpgradeList + upgrade + ",";
+        if (updatedUpgradeList.length() > 0) updatedUpgradeList = updatedUpgradeList.substring(0, updatedUpgradeList.length() - 1);
+
+        storeStringInItem(item, updatedUpgradeList, "UberUpgrades");
+        storeStringInItem(item, upgradeDescription, "UberUpgrade-" + upgradeName);
+
+        // update the item lore to mirror the change
         uber.updateLore(item);
     }
     // remove upgrade from UberItem, and update lore
     public static void removeUpgrade(ItemStack item, String upgradeName) {
-        UberItem uber = getUber(item);
-        if (uber == null) return;
-        storeIntInItem(item, 0, "UberUpgrade:" + upgradeName);
+        UberItem uber = getUber(item); if (uber == null) return;
+
+        // generate an updated upgrade list
+        List<String> upgrades = new ArrayList<>(); String[] rawUpgrades = getUpgrades(item); String updatedUpgradeList = "";
+        if (rawUpgrades != null) for (String upgrade : rawUpgrades) { if (!upgrades.contains(upgrade)) upgrades.add(upgrade); }
+        upgrades.remove(upgradeName);
+        for (String upgrade : upgrades) updatedUpgradeList = updatedUpgradeList + upgrade + ",";
+        if (updatedUpgradeList.length() > 0) updatedUpgradeList = updatedUpgradeList.substring(0, updatedUpgradeList.length() - 1);
+
+        storeStringInItem(item, updatedUpgradeList, "UberUpgrades");
+        storeStringInItem(item, "", "UberUpgrade-" + upgradeName);
+
+        // update the item lore to mirror the change
         uber.updateLore(item);
     }
     // test whether or not an item has an upgrade
     public static boolean hasUpgrade(ItemStack item, String upgradeName) {
-        return getIntFromItem(item, "UberUpgrade:" + upgradeName) == 1;
+        String upgrade = getStringFromItem(item, "UberUpgrade-" + upgradeName);
+        if (upgrade == null) return false;
+        return !upgrade.equals("");
+    }
+    // get the description of an Uber Upgrade
+    public static String getUpgradeDescription(ItemStack item, String upgradeName) {
+        return getStringFromItem(item, "UberUpgrade-" + upgradeName);
+    }
+    // list all of the current upgrades on this item
+    public static String[] getUpgrades(ItemStack item) {
+        String rawList = getStringFromItem(item, "UberUpgrades");
+        if (rawList != null) return rawList.split(",");
+        else return null;
     }
 
 }

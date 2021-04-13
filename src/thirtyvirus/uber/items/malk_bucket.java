@@ -16,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.meta.PotionMeta;
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
@@ -50,25 +49,23 @@ public class malk_bucket extends UberItem{
 	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
 
 	// apply potion effect to malk bucket
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event) {
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) {
 
 		// verify that the item is compatible with the malk bucket
-		ItemStack item = event.getWhoClicked().getItemOnCursor();
-		ItemStack uber = event.getCurrentItem();
-		if (!(item.hasItemMeta() && item.getItemMeta() instanceof PotionMeta)) return;
+		if (!(addition.hasItemMeta() && addition.getItemMeta() instanceof PotionMeta)) return;
 
 		// store the potion in the malk bucket
-		ItemStack[] itemArray = new ItemStack[1]; itemArray[0] = item; // store the potion as a 1 item inventory
-		Utilities.saveCompactInventory(uber, itemArray);
+		ItemStack[] itemArray = new ItemStack[1]; itemArray[0] = addition; // store the potion as a 1 item inventory
+		Utilities.saveCompactInventory(item, itemArray);
 
 		// update lore and play confirmation sound
 		player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 1, 1);
-		PotionMeta meta = (PotionMeta) item.getItemMeta();
+		PotionMeta meta = (PotionMeta) addition.getItemMeta();
 		if (meta.getDisplayName().equals(""))
-			Utilities.storeStringInItem(uber, meta.getBasePotionData().getType().name().replace('_', ' '), "potion-name");
+			Utilities.storeStringInItem(item, meta.getBasePotionData().getType().name().replace('_', ' '), "potion-name");
 		else
-			Utilities.storeStringInItem(uber, meta.getDisplayName(), "potion-name");
-		updateLore(uber);
+			Utilities.storeStringInItem(item, meta.getDisplayName(), "potion-name");
+		updateLore(item);
 
 		// delete the item being clicked onto the Uber Item
 		event.getWhoClicked().setItemOnCursor(null);

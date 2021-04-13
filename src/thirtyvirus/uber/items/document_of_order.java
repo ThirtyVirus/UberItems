@@ -84,7 +84,7 @@ public class document_of_order extends UberItem  {
 	public void middleClickAction(Player player, ItemStack item) { }
 	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
 	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
 
 	public void activeEffect(Player player, ItemStack item) { }
 }

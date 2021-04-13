@@ -2,7 +2,6 @@ package thirtyvirus.uber.items;
 
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -38,7 +37,7 @@ public class hackerman extends UberItem {
     public void rightClickAirAction(Player player, ItemStack item) {
         // status = 0 means off, 1 means on
         if (Utilities.getIntFromItem(item, "status") == 0) {
-            item.addUnsafeEnchantment(Enchantment.DURABILITY, 10);
+            Utilities.addEnchantGlint(item);
             Utilities.storeIntInItem(item, 1, "status");
         }
         else {
@@ -62,13 +61,25 @@ public class hackerman extends UberItem {
     public void middleClickAction(Player player, ItemStack item) { }
     public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
     public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-    public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+    public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) {
+        if (UberItems.materials.get("enchanted_stone").compare(addition)) {
+            Utilities.addUpgrade(item, "Compacted", "Your Hackerman is now... heavier?");
+        }
+        if (addition.getType() == Material.DIAMOND) {
+            Utilities.addUpgrade(item, "Expensive", "Your Hackerman is now... more expensive???");
+        }
+        if (UberItems.materials.get("enchanted_cobblestone").compare(addition)) {
+            Utilities.removeUpgrade(item, "Compacted");
+        }
+    }
     public void activeEffect(Player player, ItemStack item) {
         if (Utilities.getIntFromItem(item, "status") == 1) {
             Block b = player.getLocation().add(0,-1,0).getBlock();
             if (b.getType() == Material.AIR || b.getType() == Material.WATER) {
                 Material old = b.getType();
-                b.setType(Material.STONE);
+                if (Utilities.hasUpgrade(item, "Compacted") && Utilities.hasUpgrade(item, "Expensive")) b.setType(Material.GOLD_BLOCK);
+                else if (Utilities.hasUpgrade(item, "Compacted")) b.setType(Material.IRON_BLOCK);
+                else b.setType(Material.STONE);
                 Utilities.scheduleTask(new Runnable() { public void run() { b.setType(old); } }, 60);
             }
         }

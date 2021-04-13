@@ -83,7 +83,7 @@ public class PlayerUseUberItem implements Listener {
         UberItem uber = Utilities.getUber(item);
 
         // enforce premium vs lite
-        if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) { Utilities.warnPlayer(player, Arrays.asList(UberItems.getPhrase("not-premium-message"))); return; }
+        if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) { Utilities.warnPlayer(player, UberItems.getPhrase("not-premium-message")); return; }
 
         // air and block interaction
         if (event.getAction() == Action.LEFT_CLICK_AIR) {

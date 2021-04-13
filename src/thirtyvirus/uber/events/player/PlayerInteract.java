@@ -29,7 +29,7 @@ public class PlayerInteract implements Listener {
 
                 // enforce 1.5s cooldown on the grappling hook
                 if (!Utilities.enforceCooldown(player, "grapple", 1.5, item, false)) {
-                    Utilities.warnPlayer(player, Arrays.asList("Whow! Slow down there!"));
+                    Utilities.warnPlayer(player, "Whow! Slow down there!");
                     return;
                 }
 

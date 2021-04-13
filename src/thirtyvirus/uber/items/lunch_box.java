@@ -14,7 +14,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberCraftingRecipe;
@@ -46,26 +45,24 @@ public class lunch_box extends UberItem {
 	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
 
 	// click food items onto the lunch box in your inventory to insert food
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event) {
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) {
 
 		// verify that the item is compatible with the lunchbox
-		ItemStack item = event.getWhoClicked().getItemOnCursor();
-		ItemStack uber = event.getCurrentItem();
-		if (!(item.getType().isEdible() || item.getType() == Material.MELON)) return;
+		if (!(addition.getType().isEdible() || addition.getType() == Material.MELON)) return;
 
 		// get the current saturation from the lunch box
-		int saturation = Utilities.getIntFromItem(uber, "saturation");
-		int food = Utilities.getIntFromItem(uber, "food");
+		int saturation = Utilities.getIntFromItem(item, "saturation");
+		int food = Utilities.getIntFromItem(item, "food");
 
 		// add the appropriate amount of saturation and food to the total
-		food += getFood(item.getType(), false) * item.getAmount();
-		saturation += getFood(item.getType(), true) * item.getAmount();
+		food += getFood(addition.getType(), false) * addition.getAmount();
+		saturation += getFood(addition.getType(), true) * addition.getAmount();
 
 		// save the new saturation and food amounts in the item, update lore
 		player.playSound(player.getLocation(), Sound.ENTITY_SHULKER_CLOSE, 1, 1);
-		Utilities.storeIntInItem(uber, saturation, "saturation");
-		Utilities.storeIntInItem(uber, food, "food");
-		updateLore(uber);
+		Utilities.storeIntInItem(item, saturation, "saturation");
+		Utilities.storeIntInItem(item, food, "food");
+		updateLore(item);
 
 		// delete the item being clicked onto the Uber Item
 		event.getWhoClicked().setItemOnCursor(null);

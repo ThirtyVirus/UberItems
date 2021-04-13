@@ -84,6 +84,6 @@ public class aspect_of_the_virus extends UberItem {
 
     }
     public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-    public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+    public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
     public void activeEffect(Player player, ItemStack item) { }
 }

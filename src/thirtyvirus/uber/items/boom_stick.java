@@ -1,9 +1,7 @@
 package thirtyvirus.uber.items;
 
 import java.util.List;
-import java.util.Vector;
 
-import net.minecraft.server.v1_16_R1.Explosion;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -82,6 +80,6 @@ public class boom_stick extends UberItem{
 	}
 	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
 
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event) { }
+	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
 	public void activeEffect(Player player, ItemStack item) { }
 }
