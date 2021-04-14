@@ -14,6 +14,8 @@ import thirtyvirus.uber.helpers.ActionSound;
 import thirtyvirus.uber.helpers.MenuUtils;
 import thirtyvirus.uber.helpers.Utilities;
 
+import java.util.Objects;
+
 public class InventoryClick implements Listener {
 
     // process clicking an ItemStack ONTO an UberItem in the inventory
@@ -21,7 +23,8 @@ public class InventoryClick implements Listener {
     @EventHandler
     private void clickItemOntoUber(InventoryClickEvent event) {
         if (event.getAction() == InventoryAction.SWAP_WITH_CURSOR && Utilities.isUber(event.getCurrentItem())) {
-            Utilities.getUber(event.getCurrentItem()).clickedInInventoryAction((Player)event.getWhoClicked(), event, event.getCurrentItem(), event.getCursor());
+            UberItem uber = Utilities.getUber(event.getCurrentItem());
+            if (uber != null) uber.clickedInInventoryAction((Player)event.getWhoClicked(), event, event.getCurrentItem(), event.getCursor());
         }
     }
 
@@ -60,7 +63,7 @@ public class InventoryClick implements Listener {
     @EventHandler
     private void interactInCraftingGuideMenu(InventoryClickEvent event) {
         // verify that the Player is in a UberItems crafting guide menu
-        if (!event.getView().getTitle().contains("UberItems Guide")) return;
+        if (!event.getView().getTitle().contains("Guide - ")) return;
         Player player = (Player) event.getWhoClicked();
 
         // cancel all clicks in this menu
@@ -98,6 +101,7 @@ public class InventoryClick implements Listener {
         // clicking on an UberItem functionality
         else if (Utilities.isUber(event.getCurrentItem())) {
             UberItem item = Utilities.getUber(event.getCurrentItem());
+            if (item == null) return;
 
             // allow Creative Mode players to take UberItems from the menu directly
             if (player.getGameMode() == GameMode.CREATIVE && event.getClick() == ClickType.SHIFT_LEFT) {
@@ -113,6 +117,7 @@ public class InventoryClick implements Listener {
         // clicking on an UberMaterial functionality
         else if (Utilities.isUberMaterial(event.getCurrentItem())) {
             UberMaterial item = Utilities.getUberMaterial(event.getCurrentItem());
+            if (item == null) return;
 
             // allow Creative Mode players to take UberItems from the menu directly
             if (player.getGameMode() == GameMode.CREATIVE && event.getClick() == ClickType.SHIFT_LEFT) {
@@ -138,7 +143,7 @@ public class InventoryClick implements Listener {
         event.setCancelled(true);
 
         // close inventory button functionality
-        if (event.getCurrentItem().equals(MenuUtils.BACK_BUTTON))
+        if (Objects.equals(event.getCurrentItem(), MenuUtils.BACK_BUTTON))
             event.getWhoClicked().closeInventory();
     }
 

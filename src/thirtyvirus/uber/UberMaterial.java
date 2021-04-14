@@ -13,13 +13,13 @@ import java.util.List;
 public class UberMaterial {
 
     private Material material;
-    private String name = "";
+    private String name;
     private UberRarity rarity;
     private boolean stackable;
     private int UUID;
-    private boolean enchantGlint = false;
-    private int craftAmount = 1;
-    private boolean isVanillaCraftable = false;
+    private boolean enchantGlint;
+    private int craftAmount;
+    private boolean isVanillaCraftable;
 
     private UberCraftingRecipe craftingRecipe;
 
@@ -56,7 +56,7 @@ public class UberMaterial {
     }
 
     // properly format the lore for Uber Items
-    public List<String> getLore() {
+    private List<String> getLore() {
         List<String> lore = new ArrayList<>();
 
         // show the rarity of the item

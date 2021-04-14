@@ -1,9 +1,5 @@
 package thirtyvirus.uber.events.player;
 
-import java.util.List;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +8,6 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.Utilities;
 
 public class FoodLevelChange implements Listener {
@@ -26,6 +21,7 @@ public class FoodLevelChange implements Listener {
         ItemStack lunchBox = Utilities.searchFor(player.getInventory(), 2);
         if (lunchBox == null) return;
         UberItem uber = Utilities.getUber(lunchBox);
+        if (uber == null) return;
 
         // get food and saturation levels
         final int max = 20; // maximum food and saturation
@@ -54,8 +50,8 @@ public class FoodLevelChange implements Listener {
         event.setCancelled(true); // prevents the food and saturation levels from being reset by the event
 
         // save the new saturation and food amounts in the item, update lore
-        Utilities.storeIntInItem(lunchBox, (int)availableFood, "food");
-        Utilities.storeIntInItem(lunchBox, (int)availableSaturation, "saturation");
+        Utilities.storeIntInItem(lunchBox, availableFood, "food");
+        Utilities.storeIntInItem(lunchBox, availableSaturation, "saturation");
         uber.updateLore(lunchBox);
     }
 }

@@ -4,13 +4,12 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.UberItems;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UberCraftingRecipe {
 
-    private List<ItemStack> components = new ArrayList<>();
-    private boolean shapeless = false;
+    private List<ItemStack> components;
+    private boolean shapeless;
 
     // make an UberCraftingRecipe from a list of strings, assumes 9 items
     public UberCraftingRecipe(List<ItemStack> components, boolean shapeless) {

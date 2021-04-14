@@ -18,8 +18,7 @@ import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 
-// a template class that can be copy - pasted and renamed when making new Uber Items
-public class grappling_hook extends UberItem{
+public class grappling_hook extends UberItem {
 
     public grappling_hook(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
         super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
@@ -28,6 +27,7 @@ public class grappling_hook extends UberItem{
     public void getSpecificLorePrefix(List<String> lore, ItemStack item) {
         lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Travel around in style using");
         lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "this Grappling Hook.");
+        lore.add(ChatColor.RESET + "" + ChatColor.DARK_GRAY + "2 second cooldown");
     }
     public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 

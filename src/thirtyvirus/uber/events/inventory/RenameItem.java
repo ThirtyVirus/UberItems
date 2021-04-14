@@ -1,7 +1,6 @@
 package thirtyvirus.uber.events.inventory;
 
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,7 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
-import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.UberMaterial;
 import thirtyvirus.uber.helpers.ActionSound;
 import thirtyvirus.uber.helpers.Utilities;
 
@@ -43,10 +42,20 @@ public class RenameItem implements Listener {
         ItemStack[] item = event.getInventory().getMatrix();
 
         for (int counter = 0; counter < 9; counter++) {
-            if (Utilities.isUber(item[counter]) ||(Utilities.isUberMaterial(item[counter]) && !Utilities.getUberMaterial(item[counter]).isVanillaCraftable())) {
+
+            if (Utilities.isUber(item[counter])) {
                 event.setCancelled(true);
                 Utilities.playSound(ActionSound.ERROR, player);
             }
+
+            if (Utilities.isUberMaterial(item[counter])) {
+                UberMaterial um = Utilities.getUberMaterial(item[counter]);
+                if (um == null || !um.isVanillaCraftable()) {
+                    event.setCancelled(true);
+                    Utilities.playSound(ActionSound.ERROR, player);
+                }
+            }
+
         }
     }
 

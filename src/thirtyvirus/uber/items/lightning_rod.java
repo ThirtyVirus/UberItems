@@ -19,7 +19,6 @@ import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 
-// a template class that can be copy - pasted and renamed when making new Uber Items
 public class lightning_rod extends UberItem {
 
     public lightning_rod (int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {

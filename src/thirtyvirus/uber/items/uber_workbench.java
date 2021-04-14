@@ -16,7 +16,6 @@ import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.helpers.*;
 
-// a template class that can be copy - pasted and renamed when making new Uber Items
 public class uber_workbench extends UberItem {
 
     public uber_workbench(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {

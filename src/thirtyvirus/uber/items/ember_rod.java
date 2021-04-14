@@ -20,7 +20,6 @@ import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
-// a template class that can be copy - pasted and renamed when making new Uber Items
 public class ember_rod extends UberItem{
 
     public ember_rod(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {

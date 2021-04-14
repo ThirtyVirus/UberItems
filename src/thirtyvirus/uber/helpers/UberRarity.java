@@ -15,7 +15,7 @@ public enum UberRarity {
 
     private ChatColor color;
 
-    private UberRarity(ChatColor color) { this.color = color; }
+    UberRarity(ChatColor color) { this.color = color; }
     public ChatColor getColor() { return color; }
 
     // determine if the item is "rarer than" a certain Rarity

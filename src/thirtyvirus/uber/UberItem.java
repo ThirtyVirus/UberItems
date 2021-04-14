@@ -1,10 +1,5 @@
 package thirtyvirus.uber;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -21,6 +16,10 @@ import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public abstract class UberItem {
 
     private int id;
@@ -28,12 +27,11 @@ public abstract class UberItem {
     private String name;
     private Material material;
 
-    private List<String> defaultLore;
-    private boolean stackable = false;
-    private boolean oneTimeUse = false;
-    private boolean hasActive = false;
+    private boolean stackable;
+    private boolean oneTimeUse;
+    private boolean hasActive;
 
-    private List<UberAbility> abilities = new ArrayList<>();
+    private List<UberAbility> abilities;
     private UberCraftingRecipe craftingRecipe;
 
     // new UberItem
@@ -52,7 +50,7 @@ public abstract class UberItem {
     }
 
     // properly format the lore for Uber Items
-    public List<String> getLore(ItemStack item) {
+    private List<String> getLore(ItemStack item) {
         List<String> lore = new ArrayList<>();
 
         // warn players that an item is unfinished

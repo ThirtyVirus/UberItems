@@ -14,6 +14,7 @@ import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class MenuUtils {
@@ -21,7 +22,7 @@ public class MenuUtils {
     public static final ItemStack EMPTY_SLOT_ITEM = Utilities.nameItem(Material.BLACK_STAINED_GLASS_PANE, " ");
     public static final ItemStack EMPTY_ERROR_SLOT_ITEM = Utilities.nameItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Item has no crafting recipe");
     public static final ItemStack CRAFTING_SLOT_ITEM = Utilities.loreItem(Utilities.nameItem(Material.BARRIER, ChatColor.RED + "Recipe Required"), Arrays.asList(ChatColor.GRAY + "Add the items for a valid", ChatColor.GRAY + "recipe in the crafting grid", ChatColor.GRAY + "to the left!"));
-    public static final ItemStack RECIPE_MENU_ITEM = Utilities.loreItem(Utilities.nameItem(Material.KNOWLEDGE_BOOK, ChatColor.GREEN + "Recipe Guide"), Arrays.asList(ChatColor.GRAY + "View all UberItems Recipes"));
+    public static final ItemStack RECIPE_MENU_ITEM = Utilities.loreItem(Utilities.nameItem(Material.KNOWLEDGE_BOOK, ChatColor.GREEN + "Recipe Guide"), Collections.singletonList(ChatColor.GRAY + "View all UberItems Recipes"));
     private static final ItemStack PLUGIN_INFO = Utilities.loreItem(Utilities.nameItem(Material.WRITABLE_BOOK, ChatColor.GREEN + "About UberItems"), Arrays.asList(
             ChatColor.GRAY + "Plugin made by " + ChatColor.RED + "ThirtyVirus", "", ChatColor.GRAY + "UberItems is a versatile custom item API, ", ChatColor.GRAY + "allowing for quick and easy advanced item", ChatColor.GRAY + "functionality on Minecraft Spigot servers!", "",
             ChatColor.RED + "" + ChatColor.BOLD + "You" + ChatColor.WHITE + ChatColor.BOLD + "Tube" + ChatColor.GREEN + " - YouTube.com/ThirtyVirus",
@@ -96,7 +97,7 @@ public class MenuUtils {
     // creates a specific UberItem / UberMaterial's Guide Menu
     public static Inventory createUnboundCraftingTutorialMenu(ItemStack example, UberCraftingRecipe recipe, int amount) {
         Inventory i1 = createCustomCraftingMenu();
-        Inventory i2 = Bukkit.createInventory(null, 45, "UberItems Guide - " + example.getItemMeta().getDisplayName());
+        Inventory i2 = Bukkit.createInventory(null, 45, "Guide - " + example.getItemMeta().getDisplayName());
         i2.setContents(i1.getContents());
 
         ItemStack example2 = example.clone();
@@ -106,16 +107,8 @@ public class MenuUtils {
         // handle the specific crafting recipe
         List<Integer> exceptions = Arrays.asList(10,11,12,19,20,21,28,29,30);
 
-        if (recipe == null) {
-            for (int counter = 0; counter < exceptions.size(); counter++) {
-                i2.setItem(exceptions.get(counter), EMPTY_ERROR_SLOT_ITEM);
-            }
-        }
-        else {
-            for (int counter = 0; counter < exceptions.size(); counter++) {
-                i2.setItem(exceptions.get(counter), recipe.get(counter));
-            }
-        }
+        if (recipe == null) for (Integer exception : exceptions) i2.setItem(exception, EMPTY_ERROR_SLOT_ITEM);
+        else for (int counter = 0; counter < exceptions.size(); counter++) i2.setItem(exceptions.get(counter), recipe.get(counter));
 
         return i2;
 
@@ -219,8 +212,7 @@ public class MenuUtils {
         if (Utilities.isUberMaterial(item)) pullUberMaterial(event, items, item);
 
         // update inventory on a 1 tick delay as to prevent visual bugs clientside
-        Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), new Runnable() {
-            public void run() { ((Player) event.getWhoClicked()).updateInventory(); } }, 1);
+        Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> ((Player) event.getWhoClicked()).updateInventory(), 1);
     }
     private static void pullUberItem(InventoryClickEvent event, List<ItemStack> items, ItemStack item) {
         UberItem uber = Utilities.getUber(item);

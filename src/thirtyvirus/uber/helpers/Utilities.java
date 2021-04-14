@@ -6,6 +6,7 @@ import org.bukkit.block.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -61,7 +62,7 @@ public final class Utilities {
         for (String message : messages) sender.sendMessage(UberItems.prefix + ChatColor.RESET + ChatColor.RED + message);
     }
     public static void warnPlayer(CommandSender sender, String message) {
-        warnPlayer(sender, message);
+        warnPlayer(sender, Collections.singletonList(message));
     }
 
     // informs player of something in plugin
@@ -79,7 +80,7 @@ public final class Utilities {
 
     // convert a location to formatted string (world,x,y,z)
     public static String toLocString(Location location) {
-        if (location.equals(null)) return "";
+        if (location == null || location.getWorld() == null) return "";
         return location.getWorld().getName() + "," + (int) location.getX() + "," + (int) location.getY() + "," + (int) location.getZ();
     }
 
@@ -147,23 +148,25 @@ public final class Utilities {
     }
 
     // seperate a single string into mulitple lines that can be used as Item Lore
-    // TODO "/n" can be used to force a new line
+    // "/newline" can be used to force a new line
     public static List<String> stringToLore(String string, int characterLimit, ChatColor prefixColor) {
         String[] words = string.split(" ");
         List<String> lines = new ArrayList<>();
 
-        String currentLine = "";
+        StringBuilder currentLine = new StringBuilder();
         for (String word : words) {
 
             // add word to line
-            if (currentLine.equals("")) currentLine = word;
-            else currentLine = currentLine + " " + word;
+            if (!word.equals("/newline")) {
+                if (currentLine.toString().equals("")) currentLine = new StringBuilder(word);
+                else currentLine.append(" ").append(word);
+            }
 
             // test if adding the word would make the line too long, start new line if so
-            if (currentLine.length() + word.length() >= characterLimit) {
-                String newLine = currentLine;
+            if (word.equals("/newline") || currentLine.length() + word.length() >= characterLimit) {
+                String newLine = currentLine.toString();
                 lines.add("" + prefixColor + newLine);
-                currentLine = "";
+                currentLine = new StringBuilder();
             }
         }
         if (currentLine.length() > 0) lines.add("" + prefixColor + currentLine);
@@ -287,11 +290,8 @@ public final class Utilities {
         ItemMeta itemMeta = host.getItemMeta();
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
-        if(container.has(key, new CompactInventory())) {
-            ItemStack[] items = container.get(key, new CompactInventory());
-
-            return items;
-        }
+        if(container.has(key, new CompactInventory()))
+            return container.get(key, new CompactInventory());
 
         return new ItemStack[0];
     }
@@ -344,6 +344,7 @@ public final class Utilities {
             // main hand
             if (isUber(player.getInventory().getItemInMainHand())) {
                 UberItem uber = getUber(player.getInventory().getItemInMainHand());
+                if (uber == null) continue;
 
                 // enforce premium vs lite
                 if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
@@ -353,14 +354,14 @@ public final class Utilities {
 
             // off hand
             if (isUber(player.getInventory().getItemInOffHand())) {
-                if (getUber(player.getInventory().getItemInOffHand()).hasActiveEffect()) {
-                    UberItem uber = getUber(player.getInventory().getItemInOffHand());
+                UberItem uber = getUber(player.getInventory().getItemInOffHand());
+                if (uber == null) continue;
 
-                    // enforce premium vs lite
-                    if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
+                // enforce premium vs lite
+                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
 
-                    if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
-                }
+                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
+
             }
 
         }
@@ -406,18 +407,54 @@ public final class Utilities {
     // UPGRADE RULES
     // Upgrade name must be [a-z0-9A-Z/._-]
 
+    // checks if the requested upgrade is already on the item, if not adds upgrade, cancels event and consumes item
+    public static void applyUpgrade(Player player, InventoryClickEvent event, ItemStack item, String upgradeName, String upgradeDescription) {
+        // verify that the upgrade isn't already on the item
+        if (hasUpgrade(item, upgradeName)) return;
+
+        // actually apply the upgrade to the item
+        addUpgrade(item, upgradeName, upgradeDescription);
+
+        // confirm application of the upgrade, play sound and consume addition item
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
+
+        ItemStack addition = event.getWhoClicked().getItemOnCursor();
+        if (addition.getAmount() > 1) addition.setAmount(addition.getAmount() - 1);
+        else event.getWhoClicked().setItemOnCursor(null);
+
+        event.setCancelled(true);
+    }
+
+    // checks if the requested upgrade is already on the item, if so remove upgrade, cancels event and consumes item
+    public static void unapplyUpgrade(Player player, InventoryClickEvent event, ItemStack item, String upgradeName) {
+        // verify that the upgrade is on the item
+        if (!hasUpgrade(item, upgradeName)) return;
+
+        // actually remove the upgrade from the item
+        removeUpgrade(item, upgradeName);
+
+        // confirm removal of the upgrade, play sound and consume addition item
+        player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1, 1);
+
+        ItemStack addition = event.getWhoClicked().getItemOnCursor();
+        if (addition.getAmount() > 1) addition.setAmount(addition.getAmount() - 1);
+        else event.getWhoClicked().setItemOnCursor(null);
+
+        event.setCancelled(true);
+    }
+
     // apply upgrade to UberItem, and update lore
     public static void addUpgrade(ItemStack item, String upgradeName, String upgradeDescription) {
         UberItem uber = getUber(item); if (uber == null) return;
 
         // generate an updated upgrade list
-        List<String> upgrades = new ArrayList<>(); String[] rawUpgrades = getUpgrades(item); String updatedUpgradeList = "";
+        List<String> upgrades = new ArrayList<>(); String[] rawUpgrades = getUpgrades(item); StringBuilder updatedUpgradeList = new StringBuilder();
         if (rawUpgrades != null) for (String upgrade : rawUpgrades) { if (!upgrades.contains(upgrade)) upgrades.add(upgrade); }
         if (!upgrades.contains(upgradeName)) upgrades.add(upgradeName);
-        for (String upgrade : upgrades) updatedUpgradeList = updatedUpgradeList + upgrade + ",";
-        if (updatedUpgradeList.length() > 0) updatedUpgradeList = updatedUpgradeList.substring(0, updatedUpgradeList.length() - 1);
+        for (String upgrade : upgrades) updatedUpgradeList.append(upgrade).append(",");
+        if (updatedUpgradeList.length() > 0) updatedUpgradeList = new StringBuilder(updatedUpgradeList.substring(0, updatedUpgradeList.length() - 1));
 
-        storeStringInItem(item, updatedUpgradeList, "UberUpgrades");
+        storeStringInItem(item, updatedUpgradeList.toString(), "UberUpgrades");
         storeStringInItem(item, upgradeDescription, "UberUpgrade-" + upgradeName);
 
         // update the item lore to mirror the change
@@ -428,13 +465,13 @@ public final class Utilities {
         UberItem uber = getUber(item); if (uber == null) return;
 
         // generate an updated upgrade list
-        List<String> upgrades = new ArrayList<>(); String[] rawUpgrades = getUpgrades(item); String updatedUpgradeList = "";
+        List<String> upgrades = new ArrayList<>(); String[] rawUpgrades = getUpgrades(item); StringBuilder updatedUpgradeList = new StringBuilder();
         if (rawUpgrades != null) for (String upgrade : rawUpgrades) { if (!upgrades.contains(upgrade)) upgrades.add(upgrade); }
         upgrades.remove(upgradeName);
-        for (String upgrade : upgrades) updatedUpgradeList = updatedUpgradeList + upgrade + ",";
-        if (updatedUpgradeList.length() > 0) updatedUpgradeList = updatedUpgradeList.substring(0, updatedUpgradeList.length() - 1);
+        for (String upgrade : upgrades) updatedUpgradeList.append(upgrade).append(",");
+        if (updatedUpgradeList.length() > 0) updatedUpgradeList = new StringBuilder(updatedUpgradeList.substring(0, updatedUpgradeList.length() - 1));
 
-        storeStringInItem(item, updatedUpgradeList, "UberUpgrades");
+        storeStringInItem(item, updatedUpgradeList.toString(), "UberUpgrades");
         storeStringInItem(item, "", "UberUpgrade-" + upgradeName);
 
         // update the item lore to mirror the change

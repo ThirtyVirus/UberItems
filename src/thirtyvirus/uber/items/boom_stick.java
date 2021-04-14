@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;

@@ -3,15 +3,13 @@ package thirtyvirus.uber.helpers;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 // an object that stores a name and string to describe the ability of an Uber Item. For display purposes only!
 public class UberAbility {
 
-    private String name;
+    private String name, description;
     private AbilityType type;
-    private String description = "This item wasn't given a description!";
     private int cooldown = 0;
 
     public UberAbility(String name, AbilityType type, String description) {

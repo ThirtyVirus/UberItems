@@ -19,8 +19,6 @@ import thirtyvirus.uber.helpers.ActionSound;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
-import java.util.Arrays;
-
 public class PlayerUseUberItem implements Listener {
 
     @EventHandler(priority=EventPriority.HIGH)
@@ -47,10 +45,12 @@ public class PlayerUseUberItem implements Listener {
         ItemStack mainhand = player.getInventory().getItemInMainHand();
         ItemStack offhand = player.getInventory().getItemInOffHand();
         if (Utilities.isUber(mainhand)) {
-            Utilities.getUber(mainhand).hitEntityAction(player, event, event.getEntity(), mainhand);
+            UberItem uber = Utilities.getUber(mainhand);
+            if (uber != null) uber.hitEntityAction(player, event, event.getEntity(), mainhand);
         }
         if (Utilities.isUber(offhand)) {
-            Utilities.getUber(offhand).hitEntityAction(player, event, event.getEntity(), offhand);
+            UberItem uber = Utilities.getUber(offhand);
+            if (uber != null) uber.hitEntityAction(player, event, event.getEntity(), offhand);
         }
     }
 
@@ -61,7 +61,8 @@ public class PlayerUseUberItem implements Listener {
 
         // test if item in main hand is an UberItem
         if (Utilities.isUber(item)) {
-            Utilities.getUber(item).breakBlockAction(player, event, event.getBlock(), item);
+            UberItem uber = Utilities.getUber(item);
+            if (uber != null) uber.breakBlockAction(player, event, event.getBlock(), item);
         }
         else {
             // determine whether or not a player is trying to make an Uber Workbench
@@ -81,6 +82,7 @@ public class PlayerUseUberItem implements Listener {
     private void useUberItem(PlayerInteractEvent event, ItemStack item) {
         Player player = event.getPlayer();
         UberItem uber = Utilities.getUber(item);
+        if (uber == null) return;
 
         // enforce premium vs lite
         if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) { Utilities.warnPlayer(player, UberItems.getPhrase("not-premium-message")); return; }

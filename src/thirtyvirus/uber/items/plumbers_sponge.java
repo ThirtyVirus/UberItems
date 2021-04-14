@@ -21,7 +21,6 @@ import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
-// a template class that can be copy - pasted and renamed when making new Uber Items
 public class plumbers_sponge extends UberItem{
 
     public plumbers_sponge(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {

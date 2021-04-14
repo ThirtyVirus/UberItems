@@ -18,7 +18,6 @@ import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
-// a template class that can be copy - pasted and renamed when making new Uber Items
 public class aspect_of_the_end extends UberItem{
 
     public aspect_of_the_end(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {

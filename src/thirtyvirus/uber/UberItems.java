@@ -2,6 +2,7 @@ package thirtyvirus.uber;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,6 +20,7 @@ import thirtyvirus.uber.events.player.FoodLevelChange;
 import thirtyvirus.uber.events.player.PlayerInteract;
 import thirtyvirus.uber.events.player.PlayerUseUberItem;
 import thirtyvirus.uber.helpers.*;
+import thirtyvirus.uber.items.uber_workbench;
 
 import java.io.File;
 import java.util.*;
@@ -39,6 +41,8 @@ public class UberItems extends JavaPlugin {
     // global plugin settings
     public static String prefix = "&8&l[&5&lUberItems&8&l] &8&l";
     public static String consolePrefix = "[UberItems] ";
+
+    public static boolean defaultUberItems = true;
 
     public static int activeEffectsCheckID = 0;
     public static int activeEffectsDelay = 2; // in ticks
@@ -79,25 +83,26 @@ public class UberItems extends JavaPlugin {
         registerEvents();
 
         // register UberMaterials, UberItems
-        RegisterItems.registerUberMaterials();
-        RegisterItems.registerUberItems();
+        putItem("uber_workbench", new uber_workbench(0, UberRarity.UNCOMMON, "Uber WorkBench",
+                Material.CRAFTING_TABLE, false, false, false,
+                Arrays.asList(new UberAbility("A new chapter", AbilityType.RIGHT_CLICK, "Opens the UberItems Crafting Menu")), null));
+
+        if (defaultUberItems) {
+            RegisterItems.registerUberMaterials();
+            RegisterItems.registerUberItems();
+        }
 
         // schedule repeating task for processing UberItem active effects
-        activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this,new Runnable()
-        { public void run() { Utilities.uberActiveEffects(); } }, activeEffectsDelay, activeEffectsDelay);
+        activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Utilities::uberActiveEffects, activeEffectsDelay, activeEffectsDelay);
 
         // schedule checking of recent added containers (Document of Order)
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            public void run() { SortingUtilities.checkCancelMultisort(multisorts, multiSortTimeout); }
-        }, 20 * multiSortTimeout, 20 * multiSortTimeout);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> SortingUtilities.checkCancelMultisort(multisorts, multiSortTimeout), 20 * multiSortTimeout, 20 * multiSortTimeout);
 
         // schedule checking if a player is in the crafting menu (to update the recipe)
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            public void run() {
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    if (player.getOpenInventory().getTitle().contains("UberItems - Craft Item")) {
-                        MenuUtils.checkCraft(player.getOpenInventory().getTopInventory());
-                    }
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (player.getOpenInventory().getTitle().contains("UberItems - Craft Item")) {
+                    MenuUtils.checkCraft(player.getOpenInventory().getTopInventory());
                 }
             }
         }, 10, 10);
@@ -125,6 +130,7 @@ public class UberItems extends JavaPlugin {
 
         // general settings
         prefix = ChatColor.translateAlternateColorCodes('&', config.getString("plugin-prefix"));
+        defaultUberItems = config.getBoolean("default-uber-items");
 
         // sorting settings
         sortingMode = config.getInt("sorting-mode");

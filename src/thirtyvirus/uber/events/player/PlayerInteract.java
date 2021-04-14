@@ -11,8 +11,6 @@ import org.bukkit.util.Vector;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.helpers.Utilities;
 
-import java.util.Arrays;
-
 public class PlayerInteract implements Listener {
 
     // process grappling hook ability
