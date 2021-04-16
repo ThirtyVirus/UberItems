@@ -13,24 +13,23 @@ import java.util.List;
 public class UberMaterial {
 
     private Material material;
-    private String name;
+    private String name, description;
     private UberRarity rarity;
     private boolean stackable;
     private int UUID;
     private boolean enchantGlint;
-    private int craftAmount;
     private boolean isVanillaCraftable;
 
     private UberCraftingRecipe craftingRecipe;
 
     // define a new UberMaterial type
-    public UberMaterial(Material material, String name, UberRarity rarity, boolean enchantGlint, boolean stackable, int craftAmount, boolean isVanillaCraftable, UberCraftingRecipe craftingRecipe) {
+    public UberMaterial(Material material, String name, UberRarity rarity, boolean enchantGlint, boolean stackable, boolean isVanillaCraftable, String description, UberCraftingRecipe craftingRecipe) {
         this.material = material;
         this.name = name;
+        this.description = description;
         this.rarity = rarity;
         this.enchantGlint = enchantGlint;
         this.stackable = stackable;
-        this.craftAmount = craftAmount;
         this.isVanillaCraftable = isVanillaCraftable;
         this.craftingRecipe = craftingRecipe;
 
@@ -59,6 +58,11 @@ public class UberMaterial {
     private List<String> getLore() {
         List<String> lore = new ArrayList<>();
 
+        if (!description.equals("")) {
+            lore.addAll(Utilities.stringToLore(description, 35, ChatColor.GRAY));
+            lore.add("");
+        }
+
         // show the rarity of the item
         lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString() + " MATERIAL");
 
@@ -71,7 +75,6 @@ public class UberMaterial {
     public UberRarity getRarity() { return rarity; }
     public boolean isStackable() { return stackable; }
     public int getUUID() { return UUID; }
-    public int getCraftAmount() { return craftAmount; }
     public boolean isVanillaCraftable() { return isVanillaCraftable; }
     public boolean hasCraftingRecipe() { return (craftingRecipe != null); }
     public UberCraftingRecipe getCraftingRecipe() { return craftingRecipe; }

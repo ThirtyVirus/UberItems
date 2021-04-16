@@ -25,6 +25,9 @@ public class PlayerInteract implements Listener {
                 // repair rod each time it is used
                 Utilities.repairItem(item);
 
+                // enforce premium vs lite, item rarity perms, item specific perms
+                if (!Utilities.enforcePermissions(player, uber)) return;
+
                 // enforce 1.5s cooldown on the grappling hook
                 if (!Utilities.enforceCooldown(player, "grapple", 1.5, item, false)) {
                     Utilities.warnPlayer(player, "Whow! Slow down there!");

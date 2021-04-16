@@ -12,7 +12,9 @@
 plugin-prefix: "&c&l[&5&lUberItems&c&l] &8&l"
 
 # Load the Default Items onto your server
+# WARNING: Disabling materials may break items including those materials in their recipe
 default-uber-items: true
+default-uber-materials: true
 
 # Sorting Mode
 # 1 - Alphabetical

@@ -28,19 +28,25 @@ public class TabComplete implements TabCompleter {
             // no arguments
             if (args.length == 1) {
                 if (player.hasPermission("uber.user")) { arguments.addAll(Arrays.asList("help", "info", "identify", "list")); }
-                if (player.hasPermission("uber.admin")) { arguments.addAll(Arrays.asList("give", "reload")); }
+                if (player.hasPermission("uber.admin")) { arguments.addAll(Arrays.asList("give", "giveMaterial", "reload")); }
 
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[0].toLowerCase())) iter.remove(); }
             }
 
             // give command
-            else if (args.length == 2 && args[0].equals("give") && player.hasPermission("uber.admin")) {
+            else if (args.length == 2 && args[0].toLowerCase().equals("give") && player.hasPermission("uber.admin")) {
                 arguments.addAll(UberItems.items.keySet());
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }
 
+            // give material command
+            else if (args.length == 2 && args[0].toLowerCase().equals("givematerial") && player.hasPermission("uber.admin")) {
+                arguments.addAll(UberItems.getMaterialNames()); arguments.remove("null");
+                Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
+            }
+
             // identify command
-            else if (args.length == 2 && args[0].equals("identify") && player.hasPermission("uber.admin")) {
+            else if (args.length == 2 && args[0].toLowerCase().equals("identify") && player.hasPermission("uber.admin")) {
                 arguments.addAll(UberItems.items.keySet());
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }

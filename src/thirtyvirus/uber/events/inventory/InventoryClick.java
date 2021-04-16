@@ -94,7 +94,7 @@ public class InventoryClick implements Listener {
         // next button
         else if (event.getCurrentItem().equals(MenuUtils.NEXT_BUTTON)) {
             int page = Integer.parseInt(event.getView().getTitle().split(" - ")[1]) - 1;
-            if (UberItems.itemIDs.values().size() + UberItems.materialIDs.values().size() > (page + 1) * MenuUtils.ITEMS_PER_GUIDE_PAGE)
+            if (UberItems.itemIDs.values().size() + UberItems.getMaterials().size() > (page + 1) * MenuUtils.ITEMS_PER_GUIDE_PAGE)
                 player.openInventory(MenuUtils.createCustomCraftingTutorialMenu(page + 1));
             Utilities.playSound(ActionSound.CLICK, player);
         }
@@ -111,7 +111,7 @@ public class InventoryClick implements Listener {
                 return;
             }
 
-            player.openInventory(MenuUtils.createUnboundCraftingTutorialMenu(event.getCurrentItem(), item.getCraftingRecipe(), 1));
+            player.openInventory(MenuUtils.createUnboundCraftingTutorialMenu(event.getCurrentItem(), item.getCraftingRecipe()));
             Utilities.playSound(ActionSound.CLICK, player);
         }
         // clicking on an UberMaterial functionality
@@ -127,7 +127,7 @@ public class InventoryClick implements Listener {
                 return;
             }
 
-            player.openInventory(MenuUtils.createUnboundCraftingTutorialMenu(event.getCurrentItem(), item.getCraftingRecipe(), item.getCraftAmount()));
+            player.openInventory(MenuUtils.createUnboundCraftingTutorialMenu(event.getCurrentItem(), item.getCraftingRecipe()));
             Utilities.playSound(ActionSound.CLICK, player);
         }
 

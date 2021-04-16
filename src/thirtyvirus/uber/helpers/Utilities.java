@@ -21,6 +21,8 @@ import thirtyvirus.uber.UberMaterial;
 import java.io.*;
 import java.util.*;
 
+import static thirtyvirus.uber.helpers.UberRarity.COMMON;
+
 public final class Utilities {
 
     // list of transparent blocks to be ignored when a player looks at a block
@@ -71,6 +73,52 @@ public final class Utilities {
     }
     public static void informPlayer(CommandSender sender, String message) {
         informPlayer(sender, Collections.singletonList(message));
+    }
+
+    // true = has proper permissions
+    // false = does NOT have proper permissions
+    // TODO add perms for specific items
+    public static boolean enforcePermissions(Player player, UberItem item) {
+
+        // test for premium and over Rare rarity
+        if (!UberItems.premium && item.getRarity().isRarerThan(UberRarity.RARE)) {
+            warnPlayer(player, UberItems.getPhrase("not-premium-message"));
+            return false;
+        }
+
+        // test for player's item specific permissions
+        if (!player.hasPermission("uber.item." + item.getName())) {
+            warnPlayer(player, UberItems.getPhrase("no-permissions-message"));
+            return false;
+        }
+
+        // test for player's rarity permissions
+        switch (item.getRarity()) {
+            case COMMON:
+                if (player.hasPermission("uber.rarity.common")) return true;
+                break;
+            case UNCOMMON:
+                if (player.hasPermission("uber.rarity.uncommon")) return true;
+                break;
+            case RARE:
+                if (player.hasPermission("uber.rarity.rare")) return true;
+                break;
+            case EPIC:
+                if (player.hasPermission("uber.rarity.epic")) return true;
+                break;
+            case LEGENDARY:
+                if (player.hasPermission("uber.rarity.legendary")) return true;
+                break;
+            case MYTHIC:
+                if (player.hasPermission("uber.rarity.mythic")) return true;
+                break;
+            case UNFINISHED:
+                if (player.hasPermission("uber.rarity.unfinished")) return true;
+                break;
+        }
+
+        warnPlayer(player, UberItems.getPhrase("no-permissions-message"));
+        return false;
     }
 
     // return the block the player is looking at, ignoring transparent blocks
@@ -317,7 +365,7 @@ public final class Utilities {
     public static UberMaterial getUberMaterial(ItemStack item) {
         int UUID = getIntFromItem(item, "MaterialUUID");
         if (UUID == 0) return null;
-        else return UberItems.materialIDs.get(UUID);
+        else return UberItems.getMaterialFromID(UUID);
     }
 
     // return UberItem with given name or ID

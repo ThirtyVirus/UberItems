@@ -61,13 +61,13 @@ public class hackerman extends UberItem {
     public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
     public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
     public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) {
-        if (UberItems.materials.get("enchanted_stone").compare(addition))
+        if (UberItems.getMaterial("enchanted_stone").compare(addition))
             Utilities.applyUpgrade(player, event, item, "Compacted", "Your Hackerman is now... heavier?");
 
         if (addition.getType() == Material.DIAMOND)
             Utilities.applyUpgrade(player, event, item, "Expensive", "Your Hackerman is now... more expensive???");
 
-        if (UberItems.materials.get("enchanted_cobblestone").compare(addition))
+        if (UberItems.getMaterial("enchanted_cobblestone").compare(addition))
             Utilities.unapplyUpgrade(player, event, item, "Compacted");
 
     }

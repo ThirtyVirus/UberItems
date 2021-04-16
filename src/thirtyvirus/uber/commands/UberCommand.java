@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.UberMaterial;
 import thirtyvirus.uber.helpers.Utilities;
 
 import java.util.Arrays;
@@ -48,6 +49,10 @@ public class UberCommand implements CommandExecutor{
                     if (sender.hasPermission("uber.admin")) give(sender, args);
                     else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
                     break;
+                case "givematerial":
+                    if (sender.hasPermission("uber.admin")) giveMaterial(sender, args);
+                    else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
+                    break;
                 case "reload":
                     if (sender.hasPermission("uber.admin")) reload(sender);
                     else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
@@ -82,6 +87,25 @@ public class UberCommand implements CommandExecutor{
         // give the item to the player
         player.getInventory().addItem(uber);
         player.sendMessage(UberItems.prefix + "Given " + uber.getItemMeta().getDisplayName());
+    }
+
+    // givematerial command
+    private void giveMaterial(CommandSender sender, String[] args) {
+        // verify that the command is executed by a player
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
+        Player player = (Player) sender;
+
+        // create the material from either ID or name
+        int stack = 1; if (args.length > 2) stack = Integer.parseInt(args[2]);
+        UberMaterial material = UberItems.getMaterial(args[1]);
+
+        // verify that the item is in fact an UberMaterial
+        if (material == null || args[1].equals("null")) { Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem")); return; }
+        ItemStack item = material.makeItem(stack);
+
+        // give the item to the player
+        player.getInventory().addItem(item);
+        player.sendMessage(UberItems.prefix + "Given " + item.getItemMeta().getDisplayName());
     }
 
     // identify Command

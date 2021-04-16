@@ -33,6 +33,10 @@ public class Bucket implements Listener {
 
             // retrieve potion from malk bucket
             UberItem uber = Utilities.getUber(event.getItem());
+
+            // enforce premium vs lite, item rarity perms, item specific perms
+            if (!Utilities.enforcePermissions(event.getPlayer(), uber)) return;
+
             ItemStack[] itemArray = Utilities.getCompactInventory(event.getItem());
             if (itemArray.length == 0) return; // ensure that the malk bucket has a spiked potion effect
             ItemStack potion = itemArray[0]; PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();

@@ -1,5 +1,5 @@
 main: thirtyvirus.uber.UberItems
-version: 1.5
+version: 2.0
 name: UberItems
 api-version: 1.13
 
@@ -13,3 +13,17 @@ permissions:
   uber.admin:
     description: Allows player to use the plugin's admin features
     default: op
+  uber.item.*:
+    description: Allows player to use a specific UberItem
+    default: true
+  uber.rarity.*:
+    description: Allows player to use items of a certain rarity
+    children:
+      uber.rarity.common: true
+      uber.rarity.uncommon: true
+      uber.rarity.rare: true
+      uber.rarity.epic: true
+      uber.rarity.legendary: true
+      uber.rarity.mythic: true
+      uber.rarity.unfinished: true
+    default: true

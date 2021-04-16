@@ -14,9 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
-import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.ActionSound;
-import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
 public class PlayerUseUberItem implements Listener {
@@ -46,11 +44,21 @@ public class PlayerUseUberItem implements Listener {
         ItemStack offhand = player.getInventory().getItemInOffHand();
         if (Utilities.isUber(mainhand)) {
             UberItem uber = Utilities.getUber(mainhand);
-            if (uber != null) uber.hitEntityAction(player, event, event.getEntity(), mainhand);
+            if (uber != null) {
+                // enforce premium vs lite, item rarity perms, item specific perms
+                if (!Utilities.enforcePermissions(player, uber)) return;
+
+                uber.hitEntityAction(player, event, event.getEntity(), mainhand);
+            }
         }
         if (Utilities.isUber(offhand)) {
             UberItem uber = Utilities.getUber(offhand);
-            if (uber != null) uber.hitEntityAction(player, event, event.getEntity(), offhand);
+            if (uber != null) {
+                // enforce premium vs lite, item rarity perms, item specific perms
+                if (!Utilities.enforcePermissions(player, uber)) return;
+
+                uber.hitEntityAction(player, event, event.getEntity(), offhand);
+            }
         }
     }
 
@@ -62,7 +70,12 @@ public class PlayerUseUberItem implements Listener {
         // test if item in main hand is an UberItem
         if (Utilities.isUber(item)) {
             UberItem uber = Utilities.getUber(item);
-            if (uber != null) uber.breakBlockAction(player, event, event.getBlock(), item);
+            if (uber != null) {
+                // enforce premium vs lite, item rarity perms, item specific perms
+                if (!Utilities.enforcePermissions(player, uber)) return;
+
+                uber.breakBlockAction(player, event, event.getBlock(), item);
+            }
         }
         else {
             // determine whether or not a player is trying to make an Uber Workbench
@@ -84,8 +97,8 @@ public class PlayerUseUberItem implements Listener {
         UberItem uber = Utilities.getUber(item);
         if (uber == null) return;
 
-        // enforce premium vs lite
-        if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) { Utilities.warnPlayer(player, UberItems.getPhrase("not-premium-message")); return; }
+        // enforce premium vs lite, item rarity perms, item specific perms
+        if (!Utilities.enforcePermissions(player, uber)) return;
 
         // air and block interaction
         if (event.getAction() == Action.LEFT_CLICK_AIR) {

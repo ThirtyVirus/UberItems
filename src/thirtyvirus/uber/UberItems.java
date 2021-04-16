@@ -7,6 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import thirtyvirus.uber.commands.UberCommand;
@@ -32,8 +33,8 @@ public class UberItems extends JavaPlugin {
     public static Map<Integer, String> itemIDs = new HashMap<>();
 
     // data for UberMaterials
-    public static Map<String, UberMaterial> materials = new HashMap<>();
-    public static Map<Integer, UberMaterial> materialIDs = new HashMap<>();
+    private static Map<String, UberMaterial> materials = new HashMap<>();
+    private static Map<Integer, UberMaterial> materialIDs = new HashMap<>();
 
     // chat messages
     private static Map<String, String> phrases = new HashMap<>();
@@ -43,6 +44,7 @@ public class UberItems extends JavaPlugin {
     public static String consolePrefix = "[UberItems] ";
 
     public static boolean defaultUberItems = true;
+    public static boolean defaultUberMaterials = true;
 
     public static int activeEffectsCheckID = 0;
     public static int activeEffectsDelay = 2; // in ticks
@@ -67,7 +69,9 @@ public class UberItems extends JavaPlugin {
     public static Map<Player, List<Block>> multisorts = new HashMap<>();
 
     // other variables
-    public static boolean premium = true;
+    public static final boolean premium = true;
+    private static boolean haveCountedDefaultItems = false;
+    private static int defaultItemCount = 0;
 
     // actions to be taken on plugin enable
     public void onEnable() {
@@ -82,15 +86,22 @@ public class UberItems extends JavaPlugin {
         registerCommands();
         registerEvents();
 
-        // register UberMaterials, UberItems
+        // register the Uber Workbench separately from the rest of the items, it's essential
         putItem("uber_workbench", new uber_workbench(0, UberRarity.UNCOMMON, "Uber WorkBench",
                 Material.CRAFTING_TABLE, false, false, false,
-                Arrays.asList(new UberAbility("A new chapter", AbilityType.RIGHT_CLICK, "Opens the UberItems Crafting Menu")), null));
+                Collections.singletonList(new UberAbility("A new chapter", AbilityType.RIGHT_CLICK, "Opens the UberItems Crafting Menu")), null));
 
+        // register the error UberMaterial separately from the rest of the items, it's essential
+        UberItems.putMaterial("null", new UberMaterial(Material.BARRIER,
+                "null", UberRarity.UNFINISHED, false, false, false, "ERROR: UberMaterial not found", null));
+
+        // register UberMaterials, UberItems. Then count the number of default items
+        if (defaultUberMaterials) RegisterItems.registerUberMaterials();
         if (defaultUberItems) {
-            RegisterItems.registerUberMaterials();
             RegisterItems.registerUberItems();
+            defaultItemCount = items.keySet().size();
         }
+        haveCountedDefaultItems = true;
 
         // schedule repeating task for processing UberItem active effects
         activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Utilities::uberActiveEffects, activeEffectsDelay, activeEffectsDelay);
@@ -131,6 +142,7 @@ public class UberItems extends JavaPlugin {
         // general settings
         prefix = ChatColor.translateAlternateColorCodes('&', config.getString("plugin-prefix"));
         defaultUberItems = config.getBoolean("default-uber-items");
+        defaultUberMaterials = config.getBoolean("default-uber-materials");
 
         // sorting settings
         sortingMode = config.getInt("sorting-mode");
@@ -190,8 +202,11 @@ public class UberItems extends JavaPlugin {
 
     // put an item into the 2 hashmaps
     public static void putItem(String name, UberItem item) {
-        items.put(name, item);
-        itemIDs.put(item.getID(), name);
+        if (items.keySet().size() < defaultItemCount + 5 || !haveCountedDefaultItems || premium) {
+            items.put(name, item);
+            itemIDs.put(item.getID(), name);
+        }
+        else Bukkit.getLogger().severe("You're trying to load more than 5 custom items! Purchase UberItems Premium to load unlimited custom items: https://www.spigotmc.org/resources/83851/");
     }
     // put a material into the 2 hashmaps
     public static void putMaterial(String name, UberMaterial material) {
@@ -207,6 +222,19 @@ public class UberItems extends JavaPlugin {
     }
 
     // getters
+    public static UberMaterial getMaterial(String key) {
+        UberMaterial material = materials.get(key);
+        if (material == null) return materials.get("null");
+        else return material;
+    }
+    public static UberMaterial getMaterialFromID(int id) {
+        UberMaterial material = materialIDs.get(id);
+        if (material == null) return materials.get("null");
+        else return material;
+    }
+    public static Collection<UberMaterial> getMaterials() { return materials.values(); }
+    public static Collection<String> getMaterialNames() { return materials.keySet(); }
+
     public static String getPhrase(String key) {
         return phrases.get(key);
     }

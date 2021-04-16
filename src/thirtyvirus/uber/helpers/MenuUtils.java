@@ -71,6 +71,7 @@ public class MenuUtils {
         int slot = 0;
         for (String name : UberItems.itemIDs.values()) {
             if (slot >= CRAFTING_GUIDE_ITEM_SLOTS.size()) break;
+            if (name.equals("uber_workbench")) continue;
 
             if (counter < page * ITEMS_PER_GUIDE_PAGE || counter >= ITEMS_PER_GUIDE_PAGE * (page + 1)) {
                 counter++; continue;
@@ -80,8 +81,9 @@ public class MenuUtils {
             i.setItem(CRAFTING_GUIDE_ITEM_SLOTS.get(slot), UberItem.fromString("" + item.getID() + "", 1));
             slot++;
         }
-        for (UberMaterial material : UberItems.materials.values()) {
+        for (UberMaterial material : UberItems.getMaterials()) {
             if (slot >= CRAFTING_GUIDE_ITEM_SLOTS.size()) break;
+            if (material.getName().equals("null")) continue;
 
             if (counter < page * ITEMS_PER_GUIDE_PAGE || counter >= ITEMS_PER_GUIDE_PAGE * (page + 1)) {
                 counter++; continue;
@@ -95,11 +97,12 @@ public class MenuUtils {
     }
 
     // creates a specific UberItem / UberMaterial's Guide Menu
-    public static Inventory createUnboundCraftingTutorialMenu(ItemStack example, UberCraftingRecipe recipe, int amount) {
+    public static Inventory createUnboundCraftingTutorialMenu(ItemStack example, UberCraftingRecipe recipe) {
         Inventory i1 = createCustomCraftingMenu();
         Inventory i2 = Bukkit.createInventory(null, 45, "Guide - " + example.getItemMeta().getDisplayName());
         i2.setContents(i1.getContents());
 
+        int amount = 1; if (recipe != null) amount = recipe.getCraftAmount();
         ItemStack example2 = example.clone();
         example2.setAmount(amount);
         i2.setItem(23, example2);
@@ -172,18 +175,18 @@ public class MenuUtils {
             if (!item.hasCraftingRecipe()) continue;
 
             if (item.getCraftingRecipe().isEqual(items)) {
-                i.setItem(23, UberItem.fromString("" + item.getID(), 1));
+                i.setItem(23, UberItem.fromString("" + item.getID(), item.getCraftingRecipe().getCraftAmount()));
                 return;
             }
             else i.setItem(23, MenuUtils.CRAFTING_SLOT_ITEM);
         }
 
         // check if any UberMaterial has a matching recipe to what's in the crafting grid
-        for (UberMaterial item : UberItems.materials.values()) {
+        for (UberMaterial item : UberItems.getMaterials()) {
             if (!item.hasCraftingRecipe()) continue;
 
             if (item.getCraftingRecipe().isEqual(items)) {
-                i.setItem(23, item.makeItem(item.getCraftAmount()));
+                i.setItem(23, item.makeItem(item.getCraftingRecipe().getCraftAmount()));
                 return;
             }
             else i.setItem(23, MenuUtils.CRAFTING_SLOT_ITEM);

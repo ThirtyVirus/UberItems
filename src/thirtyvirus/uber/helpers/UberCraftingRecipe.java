@@ -10,11 +10,13 @@ public class UberCraftingRecipe {
 
     private List<ItemStack> components;
     private boolean shapeless;
+    private int craftAmount;
 
     // make an UberCraftingRecipe from a list of strings, assumes 9 items
-    public UberCraftingRecipe(List<ItemStack> components, boolean shapeless) {
+    public UberCraftingRecipe(List<ItemStack> components, boolean shapeless, int craftAmount) {
         this.components = components;
         this.shapeless = shapeless;
+        this.craftAmount = craftAmount;
     }
 
     // compare a list of ItemStacks to this recipe, assumes 9 items
@@ -46,7 +48,7 @@ public class UberCraftingRecipe {
         int UUID = Utilities.getIntFromItem(i1, "MaterialUUID");
 
         // item is an Uber Material
-        if (UUID != 0) return (UberItems.materialIDs.get(UUID).compare(i2) && i1.getAmount() <= i2.getAmount());
+        if (UUID != 0) return (UberItems.getMaterialFromID(UUID).compare(i2) && i1.getAmount() <= i2.getAmount());
 
         // item is not an Uber Material
         // TODO compare more than material and amount? Do I even need to?
@@ -55,4 +57,5 @@ public class UberCraftingRecipe {
 
     // getters
     public ItemStack get(int index) { return components.get(index); }
+    public int getCraftAmount() { return craftAmount; }
 }
