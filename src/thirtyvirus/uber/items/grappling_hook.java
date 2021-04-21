@@ -20,8 +20,8 @@ import thirtyvirus.uber.helpers.UberRarity;
 
 public class grappling_hook extends UberItem {
 
-    public grappling_hook(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
-        super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+    public grappling_hook(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+        super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
     }
     public void onItemStackCreate(ItemStack item) { }
     public void getSpecificLorePrefix(List<String> lore, ItemStack item) {
@@ -31,17 +31,17 @@ public class grappling_hook extends UberItem {
     }
     public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-    public void leftClickAirAction(Player player, ItemStack item) { }
-    public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-    public void rightClickAirAction(Player player, ItemStack item) { }
-    public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { event.setCancelled(false); }
-    public void shiftLeftClickAirAction(Player player, ItemStack item) { }
-    public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-    public void shiftRightClickAirAction(Player player, ItemStack item) { }
-    public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-    public void middleClickAction(Player player, ItemStack item) { }
-    public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
-    public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-    public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
-    public void activeEffect(Player player, ItemStack item) { }
+    public boolean leftClickAirAction(Player player, ItemStack item) { return false; }
+    public boolean leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+    public boolean rightClickAirAction(Player player, ItemStack item) { return false; }
+    public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { event.setCancelled(false); return false; }
+    public boolean shiftLeftClickAirAction(Player player, ItemStack item) { return false; }
+    public boolean shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+    public boolean shiftRightClickAirAction(Player player, ItemStack item) { return false; }
+    public boolean shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+    public boolean middleClickAction(Player player, ItemStack item) { return false; }
+    public boolean hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { return false; }
+    public boolean breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { return false; }
+    public boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { return false; }
+    public boolean activeEffect(Player player, ItemStack item) { return false; }
 }

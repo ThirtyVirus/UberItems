@@ -20,7 +20,7 @@ public class PlayerInteract implements Listener {
             Player player = event.getPlayer();
             ItemStack item = player.getInventory().getItemInMainHand();
             UberItem uber = Utilities.getUber(item);
-            if (uber != null && uber.getID() == 18) {
+            if (uber != null && uber.getName().equals("grappling_hook")) {
 
                 // repair rod each time it is used
                 Utilities.repairItem(item);

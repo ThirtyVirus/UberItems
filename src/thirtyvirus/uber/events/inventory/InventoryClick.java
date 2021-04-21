@@ -1,5 +1,6 @@
 package thirtyvirus.uber.events.inventory;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -94,7 +95,7 @@ public class InventoryClick implements Listener {
         // next button
         else if (event.getCurrentItem().equals(MenuUtils.NEXT_BUTTON)) {
             int page = Integer.parseInt(event.getView().getTitle().split(" - ")[1]) - 1;
-            if (UberItems.itemIDs.values().size() + UberItems.getMaterials().size() > (page + 1) * MenuUtils.ITEMS_PER_GUIDE_PAGE)
+            if (UberItems.getItems().size() + UberItems.getMaterials().size() > (page + 1) * MenuUtils.ITEMS_PER_GUIDE_PAGE)
                 player.openInventory(MenuUtils.createCustomCraftingTutorialMenu(page + 1));
             Utilities.playSound(ActionSound.CLICK, player);
         }
@@ -105,8 +106,9 @@ public class InventoryClick implements Listener {
 
             // allow Creative Mode players to take UberItems from the menu directly
             if (player.getGameMode() == GameMode.CREATIVE && event.getClick() == ClickType.SHIFT_LEFT) {
-                ItemStack i = event.getCurrentItem().clone();
-                if (!item.isStackable()) Utilities.storeStringInItem(i,  java.util.UUID.randomUUID().toString(), "UUID");
+                ItemStack i = event.getCurrentItem().clone(); i.setAmount(1);
+                if (!item.isStackable()) Utilities.storeStringInItem(i, java.util.UUID.randomUUID().toString(), "UUID");
+                else i.setAmount(event.getCurrentItem().getType().getMaxStackSize());
                 player.getInventory().addItem(i);
                 return;
             }
@@ -119,10 +121,11 @@ public class InventoryClick implements Listener {
             UberMaterial item = Utilities.getUberMaterial(event.getCurrentItem());
             if (item == null) return;
 
-            // allow Creative Mode players to take UberItems from the menu directly
+            // allow Creative Mode players to take UberMaterials from the menu directly
             if (player.getGameMode() == GameMode.CREATIVE && event.getClick() == ClickType.SHIFT_LEFT) {
-                ItemStack i = event.getCurrentItem().clone(); i.setAmount(event.getCurrentItem().getType().getMaxStackSize());
-                if (!item.isStackable()) Utilities.storeStringInItem(i,  java.util.UUID.randomUUID().toString(), "UUID");
+                ItemStack i = event.getCurrentItem().clone(); i.setAmount(1);
+                if (!item.isStackable()) Utilities.storeStringInItem(i, java.util.UUID.randomUUID().toString(), "UUID");
+                else i.setAmount(event.getCurrentItem().getType().getMaxStackSize());
                 player.getInventory().addItem(i);
                 return;
             }

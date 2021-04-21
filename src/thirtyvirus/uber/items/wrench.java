@@ -34,26 +34,26 @@ public class wrench extends UberItem{
 			Material.JUNGLE_FENCE_GATE, Material.OAK_FENCE_GATE, Material.SPRUCE_FENCE_GATE, Material.FURNACE, Material.ENDER_CHEST, Material.ANVIL, Material.HAY_BLOCK, Material.CHEST, Material.TRAPPED_CHEST, Material.RAIL,
 			Material.ACTIVATOR_RAIL, Material.DETECTOR_RAIL, Material.POWERED_RAIL);
 
-	public wrench(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+	public wrench(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	public void leftClickAirAction(Player player, ItemStack item) { }
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void rightClickAirAction(Player player, ItemStack item) { }
+	public boolean leftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean rightClickAirAction(Player player, ItemStack item) { return false; }
 
 	// rotate blocks that are compatible
-	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
+	public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		if (supportedBlocks.contains(block.getType()) || block.getType().name().contains("SLAB") || block.getType().name().contains("STAIRS") || block.getType().name().contains("SHULKER_BOX")){
 			BlockBreakEvent e = new BlockBreakEvent(block, player);
 			Bukkit.getServer().getPluginManager().callEvent(e);
 			if (!e.isCancelled()) {
 				String data = block.getBlockData().toString();
 				
-				if (block.getType().name().contains("CHEST") && !data.contains("type=single")) return;
+				if (block.getType().name().contains("CHEST") && !data.contains("type=single")) return false;
 				
 				if (data.contains("axis=x")) { data = data.replace("axis=x", "axis=y"); }
 				else if (data.contains("axis=y")) { data = data.replace("axis=y", "axis=z"); }
@@ -104,16 +104,16 @@ public class wrench extends UberItem{
 			}
 		}
 
-		onItemUse(player, item); // confirm that the item's ability has been successfully used
+		return true;
 	}
 
-	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void shiftRightClickAirAction(Player player, ItemStack item) { }
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void middleClickAction(Player player, ItemStack item) { }
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
-	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
-	public void activeEffect(Player player, ItemStack item) { }
+	public boolean shiftLeftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean shiftRightClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean middleClickAction(Player player, ItemStack item) { return false; }
+	public boolean hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { return false; }
+	public boolean breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { return false; }
+	public boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { return false; }
+	public boolean activeEffect(Player player, ItemStack item) { return false; }
 }

@@ -23,8 +23,8 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class malk_bucket extends UberItem{
 
-	public malk_bucket(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+	public malk_bucket(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) {
 		Utilities.storeStringInItem(item, "none", "potion-name");
@@ -35,24 +35,24 @@ public class malk_bucket extends UberItem{
 
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	public void leftClickAirAction(Player player, ItemStack item) { }
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void rightClickAirAction(Player player, ItemStack item) { }
-	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void shiftRightClickAirAction(Player player, ItemStack item) { }
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public boolean leftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean rightClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean shiftLeftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean shiftRightClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
 
-	public void middleClickAction(Player player, ItemStack item) { }
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
-	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
+	public boolean middleClickAction(Player player, ItemStack item) { return false; }
+	public boolean hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { return false; }
+	public boolean breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { return false; }
 
 	// apply potion effect to malk bucket
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) {
+	public boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) {
 
 		// verify that the item is compatible with the malk bucket
-		if (!(addition.hasItemMeta() && addition.getItemMeta() instanceof PotionMeta)) return;
+		if (!(addition.hasItemMeta() && addition.getItemMeta() instanceof PotionMeta)) return false;
 
 		// store the potion in the malk bucket
 		ItemStack[] itemArray = new ItemStack[1]; itemArray[0] = addition; // store the potion as a 1 item inventory
@@ -70,7 +70,9 @@ public class malk_bucket extends UberItem{
 		// delete the item being clicked onto the Uber Item
 		event.getWhoClicked().setItemOnCursor(null);
 		event.setCancelled(true);
+
+		return true;
 	}
 
-	public void activeEffect(Player player, ItemStack item) { }
+	public boolean activeEffect(Player player, ItemStack item) { return false; }
 }

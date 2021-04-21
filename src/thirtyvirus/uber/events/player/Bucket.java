@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.Utilities;
 
 public class Bucket implements Listener {
@@ -25,7 +26,7 @@ public class Bucket implements Listener {
     private void consumeEvent(PlayerItemConsumeEvent event) {
 
         // the player is drinking from a malk bucket
-        if (Utilities.isUber(event.getItem(), 8)) {
+        if (UberItems.getItem("malk_bucket").compare(event.getItem())) {
             // remove all potion effects
             ArrayList<PotionEffect> effects = new ArrayList<>();
             for (PotionEffect e : event.getPlayer().getActivePotionEffects()) { effects.add(e); }

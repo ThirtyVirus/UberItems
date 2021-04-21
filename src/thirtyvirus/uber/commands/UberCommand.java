@@ -79,10 +79,10 @@ public class UberCommand implements CommandExecutor{
 
         // create the item from either ID or name
         int stack = 1; if (args.length > 2) stack = Integer.parseInt(args[2]);
-        ItemStack uber = UberItem.fromString(args[1], stack);
+        ItemStack uber = UberItems.getItem(args[1]).makeItem(stack);
 
         // verify that the item is in fact an UberItem
-        if (uber == null) { Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem")); return; }
+        if (uber == null || args[1].equals("null")) { Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem")); return; }
 
         // give the item to the player
         player.getInventory().addItem(uber);
@@ -121,16 +121,16 @@ public class UberCommand implements CommandExecutor{
             UberItem offHand = Utilities.getUber(player.getInventory().getItemInOffHand());
 
             if (mainHand != null && offHand != null) {
-                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + "Main Hand - " + mainHand.getID() + ": " + mainHand.getName());
-                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + "Off  Hand - " + offHand.getID() + ": " + offHand.getName());
+                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + "Main Hand - " + mainHand.getName());
+                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + "Off  Hand - " + offHand.getName());
                 return;
             }
             else if (mainHand != null) {
-                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + mainHand.getID() + ": " + mainHand.getName());
+                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + mainHand.getName());
                 return;
             }
             else if (offHand != null) {
-                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + offHand.getID() + ": " + offHand.getName());
+                player.sendMessage(UberItems.prefix + ChatColor.YELLOW + offHand.getName());
                 return;
             }
             else {
@@ -142,23 +142,20 @@ public class UberCommand implements CommandExecutor{
         // identify an UberItem by name
 
         // get the item from either numerical ID or name
-        String name = args[1]; UberItem item;
-        if (Utilities.isInteger(name)) item = UberItems.items.get(UberItems.itemIDs.get(Integer.parseInt(name)));
-        else item = UberItems.items.get(name);
+        UberItem item = UberItems.getItem(args[1]);
 
         // verify that the item is in fact an UberItem
         if (item == null) { Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem")); return; }
 
         // tell player what
-        player.sendMessage(UberItems.prefix + ChatColor.YELLOW + item.getID() + ": " + item.getName());
+        player.sendMessage(UberItems.prefix + ChatColor.YELLOW + item.getName());
     }
 
     // list Command
     private void list(CommandSender sender){
         sender.sendMessage(UberItems.prefix + "Listing UberItems:");
-        for (String id : UberItems.itemIDs.values()) {
-            UberItem item = UberItems.items.get(id);
-            sender.sendMessage(ChatColor.GOLD + "" + item.getID() + ": " + item.getRarity().getColor() + item.getName());
+        for (UberItem item : UberItems.getItems()) {
+            sender.sendMessage(ChatColor.GOLD + "" + item.getRarity().getColor() + item.getName());
         }
     }
 

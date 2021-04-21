@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.ActionSound;
 import thirtyvirus.uber.helpers.Utilities;
 
@@ -84,7 +85,7 @@ public class PlayerUseUberItem implements Listener {
                 if (player.getGameMode() != GameMode.CREATIVE)
                     player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
                 event.setDropItems(false);
-                player.getInventory().addItem(UberItem.fromString("0", 1));
+                player.getInventory().addItem(UberItems.getItem("uber_workbench").makeItem(1));
                 Utilities.playSound(ActionSound.POP, player);
             }
         }

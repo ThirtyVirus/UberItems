@@ -35,7 +35,7 @@ public class TabComplete implements TabCompleter {
 
             // give command
             else if (args.length == 2 && args[0].toLowerCase().equals("give") && player.hasPermission("uber.admin")) {
-                arguments.addAll(UberItems.items.keySet());
+                arguments.addAll(UberItems.getItemNames()); arguments.remove("null");
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }
 
@@ -47,7 +47,7 @@ public class TabComplete implements TabCompleter {
 
             // identify command
             else if (args.length == 2 && args[0].toLowerCase().equals("identify") && player.hasPermission("uber.admin")) {
-                arguments.addAll(UberItems.items.keySet());
+                arguments.addAll(UberItems.getItemNames());
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }
         }

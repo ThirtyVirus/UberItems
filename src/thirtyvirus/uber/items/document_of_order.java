@@ -24,8 +24,8 @@ public class document_of_order extends UberItem  {
 	// TODO make the sort respect area build permissions.
 	// TODO make smart sort smarter
 
-	public document_of_order(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+	public document_of_order(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) {
 		item.addUnsafeEnchantment(Enchantment.MENDING, 10);
@@ -33,11 +33,11 @@ public class document_of_order extends UberItem  {
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	public void leftClickAirAction(Player player, ItemStack item) { }
+	public boolean leftClickAirAction(Player player, ItemStack item) { return false; }
 
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
+	public boolean leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		// enforce multi sort enabled setting
-		if (!UberItems.multiSort) return;
+		if (!UberItems.multiSort) return false;
 
 		// multi inventory sort selection function (left click container)
 		if (SortingUtilities.INVENTORY_BLOCKS.contains(event.getClickedBlock().getType())) {
@@ -48,43 +48,44 @@ public class document_of_order extends UberItem  {
 			SortingUtilities.multiSort(event.getPlayer());
 		}
 
-		onItemUse(player, item); // confirm that the item's ability has been successfully used
+		return true;
 	}
 
-	public void rightClickAirAction(Player player, ItemStack item) { }
-	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
+	public boolean rightClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean shiftLeftClickAirAction(Player player, ItemStack item) { return false; }
 
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
+	public boolean shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		// multi inventory sort cancel function (sneak + left click non-container)
 		if (!SortingUtilities.INVENTORY_BLOCKS.contains(event.getClickedBlock().getType())) {
 			SortingUtilities.cancelMultisort(event.getPlayer());
+			return true;
 		}
+		return false;
 	}
-	public void shiftRightClickAirAction(Player player, ItemStack item) {
+	public boolean shiftRightClickAirAction(Player player, ItemStack item) {
 		// sort the player's inventory
 		SortingUtilities.sortPlayerInventory(player.getInventory());
 		Utilities.playSound(CLICK, player);
 
-		// confirm that the item's ability has been successfully used
-		onItemUse(player, item);
+		return true;
 	}
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
+	public boolean shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		// enforce external sorting setting
-		if (!UberItems.externalSort) return;
+		if (!UberItems.externalSort) return false;
 
 		// sort a single inventory
 		if (SortingUtilities.INVENTORY_BLOCKS.contains(event.getClickedBlock().getType())) {
 			SortingUtilities.sortBlock(event.getClickedBlock(), event.getPlayer());
 		}
 
-		onItemUse(player, item); // confirm that the item's ability has been successfully used
+		return true;
 	}
 
-	public void middleClickAction(Player player, ItemStack item) { }
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
-	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
+	public boolean middleClickAction(Player player, ItemStack item) { return false; }
+	public boolean hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { return false; }
+	public boolean breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { return false; }
+	public boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { return false; }
 
-	public void activeEffect(Player player, ItemStack item) { }
+	public boolean activeEffect(Player player, ItemStack item) { return false; }
 }

@@ -21,6 +21,7 @@ import thirtyvirus.uber.events.player.FoodLevelChange;
 import thirtyvirus.uber.events.player.PlayerInteract;
 import thirtyvirus.uber.events.player.PlayerUseUberItem;
 import thirtyvirus.uber.helpers.*;
+import thirtyvirus.uber.items.UberItemTemplate;
 import thirtyvirus.uber.items.uber_workbench;
 
 import java.io.File;
@@ -28,11 +29,9 @@ import java.util.*;
 
 public class UberItems extends JavaPlugin {
 
-    // data for UberItems
-    public static Map<String, UberItem> items = new HashMap<>();
-    public static Map<Integer, String> itemIDs = new HashMap<>();
-
-    // data for UberMaterials
+    // data for UberItems, UberMaterials
+    private static Map<String, UberItem> items = new HashMap<>();
+    private static Map<Integer, UberItem> itemIDs = new HashMap<>();
     private static Map<String, UberMaterial> materials = new HashMap<>();
     private static Map<Integer, UberMaterial> materialIDs = new HashMap<>();
 
@@ -87,13 +86,12 @@ public class UberItems extends JavaPlugin {
         registerEvents();
 
         // register the Uber Workbench separately from the rest of the items, it's essential
-        putItem("uber_workbench", new uber_workbench(0, UberRarity.UNCOMMON, "Uber WorkBench",
-                Material.CRAFTING_TABLE, false, false, false,
+        putItem("uber_workbench", new uber_workbench(Material.CRAFTING_TABLE, "Uber WorkBench", UberRarity.UNCOMMON, false, false, false,
                 Collections.singletonList(new UberAbility("A new chapter", AbilityType.RIGHT_CLICK, "Opens the UberItems Crafting Menu")), null));
 
-        // register the error UberMaterial separately from the rest of the items, it's essential
-        UberItems.putMaterial("null", new UberMaterial(Material.BARRIER,
-                "null", UberRarity.UNFINISHED, false, false, false, "ERROR: UberMaterial not found", null));
+        // register the error UberItem and UberMaterial separately from the rest of the items, it's essential
+        putItem("null", new UberItemTemplate(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, Collections.emptyList(), null));
+        putMaterial("null", new UberMaterial(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, "ERROR: UberMaterial not found", null));
 
         // register UberMaterials, UberItems. Then count the number of default items
         if (defaultUberMaterials) RegisterItems.registerUberMaterials();
@@ -200,19 +198,19 @@ public class UberItems extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Bucket(), this);
     }
 
-    // put an item into the 2 hashmaps
+    // place UberItems and UberMaterials into the proper HashMaps
     public static void putItem(String name, UberItem item) {
         if (items.keySet().size() < defaultItemCount + 5 || !haveCountedDefaultItems || premium) {
             items.put(name, item);
-            itemIDs.put(item.getID(), name);
+            itemIDs.put(item.getUUID(), item);
         }
         else Bukkit.getLogger().severe("You're trying to load more than 5 custom items! Purchase UberItems Premium to load unlimited custom items: https://www.spigotmc.org/resources/83851/");
     }
-    // put a material into the 2 hashmaps
     public static void putMaterial(String name, UberMaterial material) {
         materials.put(name, material);
         materialIDs.put(material.getUUID(), material);
     }
+
     // reload all plugin assets
     public static void reload() {
         getInstance().reloadConfig();
@@ -221,7 +219,20 @@ public class UberItems extends JavaPlugin {
         Bukkit.getLogger().info("configuration, values, and language settings reloaded");
     }
 
-    // getters
+    // getters for UberItems and UberMaterials
+    public static UberItem getItem(String key) {
+        UberItem item = items.get(key);
+        if (item == null) return items.get("null");
+        else return item;
+    }
+    public static UberItem getItemFromID(int id) {
+        UberItem item = itemIDs.get(id);
+        if (item == null) return items.get("null");
+        else return item;
+    }
+    public static Collection<UberItem> getItems() { return items.values(); }
+    public static Collection<String> getItemNames() { return items.keySet(); }
+
     public static UberMaterial getMaterial(String key) {
         UberMaterial material = materials.get(key);
         if (material == null) return materials.get("null");
@@ -235,6 +246,7 @@ public class UberItems extends JavaPlugin {
     public static Collection<UberMaterial> getMaterials() { return materials.values(); }
     public static Collection<String> getMaterialNames() { return materials.keySet(); }
 
+    // getters for language phrases, version, instance
     public static String getPhrase(String key) {
         return phrases.get(key);
     }

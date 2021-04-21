@@ -69,16 +69,17 @@ public class MenuUtils {
         // populate guide menu with UberItems and UberMaterials
         int counter = 0;
         int slot = 0;
-        for (String name : UberItems.itemIDs.values()) {
+        for (String name : UberItems.getItemNames()) {
             if (slot >= CRAFTING_GUIDE_ITEM_SLOTS.size()) break;
             if (name.equals("uber_workbench")) continue;
+            if (name.equals("null")) continue;
 
             if (counter < page * ITEMS_PER_GUIDE_PAGE || counter >= ITEMS_PER_GUIDE_PAGE * (page + 1)) {
                 counter++; continue;
             }
 
-            UberItem item = UberItems.items.get(name);
-            i.setItem(CRAFTING_GUIDE_ITEM_SLOTS.get(slot), UberItem.fromString("" + item.getID() + "", 1));
+            UberItem item = UberItems.getItem(name);
+            i.setItem(CRAFTING_GUIDE_ITEM_SLOTS.get(slot), item.makeItem(1));
             slot++;
         }
         for (UberMaterial material : UberItems.getMaterials()) {
@@ -171,11 +172,11 @@ public class MenuUtils {
                 i.getItem(28), i.getItem(29), i.getItem(30));
 
         // check if any UberItem has a matching recipe to what's in the crafting grid
-        for (UberItem item : UberItems.items.values()) {
+        for (UberItem item : UberItems.getItems()) {
             if (!item.hasCraftingRecipe()) continue;
 
             if (item.getCraftingRecipe().isEqual(items)) {
-                i.setItem(23, UberItem.fromString("" + item.getID(), item.getCraftingRecipe().getCraftAmount()));
+                i.setItem(23, item.makeItem(item.getCraftingRecipe().getCraftAmount()));
                 return;
             }
             else i.setItem(23, MenuUtils.CRAFTING_SLOT_ITEM);

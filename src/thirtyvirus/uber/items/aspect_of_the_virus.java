@@ -27,32 +27,33 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class aspect_of_the_virus extends UberItem {
 
-    public aspect_of_the_virus(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
-        super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+    public aspect_of_the_virus(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+        super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
     }
     public void onItemStackCreate(ItemStack item) { }
     public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
     public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-    public void leftClickAirAction(Player player, ItemStack item) {
+    public boolean leftClickAirAction(Player player, ItemStack item) {
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.2f, 2.5f);
+        return false;
     }
-    public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-        leftClickAirAction(player, item);
+    public boolean leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
+        return leftClickAirAction(player, item);
     }
 
-    public void rightClickAirAction(Player player, ItemStack item) { }
-    public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+    public boolean rightClickAirAction(Player player, ItemStack item) { return false; }
+    public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
 
-    public void shiftLeftClickAirAction(Player player, ItemStack item) { }
-    public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+    public boolean shiftLeftClickAirAction(Player player, ItemStack item) { return false; }
+    public boolean shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
 
-    public void shiftRightClickAirAction(Player player, ItemStack item) {
+    public boolean shiftRightClickAirAction(Player player, ItemStack item) {
         List<Entity> nearAll = player.getNearbyEntities(40,40,40);
         List<Entity> nearLiving = new ArrayList<Entity>();
         for (Entity a : nearAll) if (a instanceof LivingEntity && !(a instanceof Bat)) nearLiving.add(a);
 
-        if (nearLiving.size() == 0) return; // prevent crash
+        if (nearLiving.size() == 0) return false; // prevent crash
         Entity nearestEntity = nearLiving.get(0);
         for (Entity a : nearLiving) {
             if (player.getLocation().distance(a.getLocation()) < player.getLocation().distance(nearestEntity.getLocation())) {
@@ -62,15 +63,16 @@ public class aspect_of_the_virus extends UberItem {
 
         player.teleport(nearestEntity.getLocation().add(nearestEntity.getLocation().getDirection().multiply(-1)));
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1, 2);
+        return true;
     }
-    public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-        rightClickAirAction(player, item);
+    public boolean shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
+        return rightClickAirAction(player, item);
     }
 
-    public void middleClickAction(Player player, ItemStack item) { }
-    public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
+    public boolean middleClickAction(Player player, ItemStack item) { return false; }
+    public boolean hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) {
         leftClickAirAction(player, item);
-        if (!(target instanceof LivingEntity)) return;
+        if (!(target instanceof LivingEntity)) return false;
         LivingEntity li = (LivingEntity) target;
         li.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 120, 2));
         li.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 120, 2));
@@ -80,9 +82,9 @@ public class aspect_of_the_virus extends UberItem {
                 if (!target.isDead()) player.getWorld().playEffect(target.getLocation().add(0,1,0), Effect.SMOKE, 100);
             } }, counter);
         }
-
+        return true;
     }
-    public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-    public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
-    public void activeEffect(Player player, ItemStack item) { }
+    public boolean breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { return false; }
+    public boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { return false; }
+    public boolean activeEffect(Player player, ItemStack item) { return false; }
 }

@@ -347,20 +347,15 @@ public final class Utilities {
     // UBERITEM FUNCTIONS
     // _____________________________________________________________________________ \\
 
-    // test if given item is an UberItem
-    public static boolean isUber(ItemStack item) {
-        return getStringFromItem(item, "is-uber") != null;
-    }
-    public static boolean isUber(ItemStack item, int id) {
-        if (!isUber(item)) return false;
-        return (getIntFromItem(item, "uber-id") == id);
-    }
-    public static boolean isUberMaterial(ItemStack item) { return getIntFromItem(item, "MaterialUUID") != 0;}
+    // test if given item is an UberItem or UberMaterial
+    public static boolean isUber(ItemStack item) { return getIntFromItem(item, "UberUUID") != 0; }
+    public static boolean isUberMaterial(ItemStack item) { return getIntFromItem(item, "MaterialUUID") != 0; }
 
-    // get the type of UberItem (null if not an UberItem)
+    // get the type of UberItem or UberMaterial
     public static UberItem getUber(ItemStack item) {
-        if (!isUber(item)) return null;
-        return UberItems.items.get(getStringFromItem(item, "uber-name"));
+        int UUID = getIntFromItem(item, "UberUUID");
+        if (UUID == 0) return null;
+        else return UberItems.getItemFromID(UUID);
     }
     public static UberMaterial getUberMaterial(ItemStack item) {
         int UUID = getIntFromItem(item, "MaterialUUID");
@@ -368,19 +363,9 @@ public final class Utilities {
         else return UberItems.getMaterialFromID(UUID);
     }
 
-    // return UberItem with given name or ID
-    public static UberItem getUber(String name) {
-        for (String key : UberItems.items.keySet()) {
-            UberItem uberr = UberItems.items.get(key);
-            if (uberr.getName().equals(name)) return uberr;
-        }
-        return null;
-    }
-    public static UberItem getUber(int id) {
-        for (String key : UberItems.items.keySet()) {
-            UberItem uberr = UberItems.items.get(key);
-            if (uberr.getID() == id) return uberr;
-        }
+    // find the first uber item of given ID in inventory (null if nothing)
+    public static ItemStack searchFor(Inventory inv, UberItem uber) {
+        for (ItemStack item : inv) if (uber.compare(item)) return item;
         return null;
     }
 
@@ -413,15 +398,6 @@ public final class Utilities {
             }
 
         }
-    }
-
-    // find the first uber item of given ID in inventory (null if nothing)
-    public static ItemStack searchFor(Inventory inv, int id) {
-        for (ItemStack item : inv) {
-            if (isUber(item, id)) return item;
-        }
-
-        return null;
     }
 
     // delays code based on stored int in UberItem,

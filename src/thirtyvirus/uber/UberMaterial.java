@@ -28,15 +28,16 @@ public class UberMaterial {
         this.name = name;
         this.description = description;
         this.rarity = rarity;
+
         this.enchantGlint = enchantGlint;
         this.stackable = stackable;
         this.isVanillaCraftable = isVanillaCraftable;
-        this.craftingRecipe = craftingRecipe;
 
+        this.craftingRecipe = craftingRecipe;
         UUID = Utilities.stringToSeed(material.name() + name + rarity.toString());
     }
 
-    // test if two ingredients are the same
+    // test if two UberMaterials are the same
     public boolean compare(ItemStack other) {
         int otherUUID = Utilities.getIntFromItem(other, "MaterialUUID");
         return (otherUUID == UUID);
@@ -46,6 +47,7 @@ public class UberMaterial {
     public ItemStack makeItem(int amount) {
         ItemStack item = Utilities.nameItem(material, rarity.getColor() + name);
         Utilities.storeIntInItem(item, UUID, "MaterialUUID");
+
         Utilities.loreItem(item, getLore());
         item.setAmount(amount);
         if (enchantGlint) Utilities.addEnchantGlint(item);

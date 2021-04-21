@@ -26,8 +26,8 @@ public class builders_wand extends UberItem {
 	// TODO /wandoops command to undo wand action
 	// TODO make the wand obey area build permissions
 
-	public builders_wand(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+	public builders_wand(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) {
 		Utilities.addEnchantGlint(item);
@@ -35,25 +35,25 @@ public class builders_wand extends UberItem {
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	public void leftClickAirAction(Player player, ItemStack item) { }
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void rightClickAirAction(Player player, ItemStack item) { }
+	public boolean leftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean rightClickAirAction(Player player, ItemStack item) { return false; }
 
-	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
+	public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
 		fillConnectedFaces(player, block, event.getBlockFace(), item);
-		onItemUse(player, item); // confirm that the item's ability has been successfully used
+		return true;
 	}
 
-	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void shiftRightClickAirAction(Player player, ItemStack item) { }
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void middleClickAction(Player player, ItemStack item) { }
+	public boolean shiftLeftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean shiftRightClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean middleClickAction(Player player, ItemStack item) { return false; }
 
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
-	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
-	public void activeEffect(Player player, ItemStack item) { }
+	public boolean hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { return false; }
+	public boolean breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { return false; }
+	public boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { return false; }
+	public boolean activeEffect(Player player, ItemStack item) { return false; }
 	
 	// main logic for builder's wand
 	public void fillConnectedFaces(Player player, Block origin, BlockFace face, ItemStack item) {
@@ -130,7 +130,7 @@ public class builders_wand extends UberItem {
 	}
 	
 	// counts amount of blocks of type m in inventory inv
-	public int countBlocks(Inventory inv, Material m){
+	public int countBlocks(Inventory inv, Material m) {
 		int blockAmount = 0;
 		
 		for (ItemStack item : inv){

@@ -33,22 +33,22 @@ public class electromagnet extends UberItem{
 			EntityType.SHULKER, EntityType.SHULKER_BULLET, EntityType.SNOWBALL, EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR, EntityType.WITCH, EntityType.WITHER,
 			EntityType.WITHER_SKELETON, EntityType.WITHER_SKULL, EntityType.ZOMBIE_VILLAGER);
 
-	public electromagnet(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+	public electromagnet(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	public void leftClickAirAction(Player player, ItemStack item) { }
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void rightClickAirAction(Player player, ItemStack item) { }
-	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public boolean leftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean rightClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean shiftLeftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
 
 	// toggle the 2 abilities
-	public void shiftRightClickAirAction(Player player, ItemStack item) {
+	public boolean shiftRightClickAirAction(Player player, ItemStack item) {
 		// status = 0 means off, 1 means on
 		if (Utilities.getIntFromItem(item, "status") == 0) {
 			Utilities.addEnchantGlint(item);
@@ -64,18 +64,19 @@ public class electromagnet extends UberItem{
 		}
 
 		player.playSound(player.getLocation(), Sound.ENTITY_ENDER_EYE_DEATH, 1, 1);
+		return true;
 	}
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		shiftRightClickAirAction(player, item);
+	public boolean shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
+		return shiftRightClickAirAction(player, item);
 	}
 
-	public void middleClickAction(Player player, ItemStack item) { }
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
-	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
+	public boolean middleClickAction(Player player, ItemStack item) { return false; }
+	public boolean hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { return false; }
+	public boolean breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { return false; }
+	public boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { return false; }
 
 	// actively repel entities
-	public void activeEffect(Player player, ItemStack item) {
+	public boolean activeEffect(Player player, ItemStack item) {
 		if (Utilities.getIntFromItem(item, "status") == 1) {
 			// teleport drops in range to the player
 			for (Entity e : player.getNearbyEntities(16, 16, 16)) {
@@ -89,7 +90,9 @@ public class electromagnet extends UberItem{
 					repelEntity(player, e);
 				}
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	// shoots entity away

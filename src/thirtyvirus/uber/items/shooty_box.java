@@ -26,18 +26,18 @@ import thirtyvirus.uber.helpers.*;
 
 public class shooty_box extends UberItem {
 
-	public shooty_box(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+	public shooty_box(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) { }
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	public void leftClickAirAction(Player player, ItemStack item) { }
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
+	public boolean leftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
 
 	// shoot item from box
-	public void rightClickAirAction(Player player, ItemStack item) {
+	public boolean rightClickAirAction(Player player, ItemStack item) {
 		
 		// get all items inside shooty box
 		ItemStack[] rawItems = Utilities.getCompactInventory(item);
@@ -45,7 +45,7 @@ public class shooty_box extends UberItem {
 		for (ItemStack i : rawItems) if (i != null) items.add(i);
 		
 		// play "empty" sound when no items in dispenser
-		if (items.isEmpty()) { player.getWorld().playEffect(player.getLocation(), Effect.CLICK1, 1); return; }
+		if (items.isEmpty()) { player.getWorld().playEffect(player.getLocation(), Effect.CLICK1, 1); return false; }
 		
 		// pick random Item
 		Random ran = new Random();
@@ -62,17 +62,17 @@ public class shooty_box extends UberItem {
 		for (int counter = 0; counter < items.size(); counter++) finalItems[counter] = items.get(counter);
 		Utilities.saveCompactInventory(item, finalItems);
 
-		onItemUse(player, item); // confirm that the item's ability has been successfully used
+		return true;
 	}
-	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		rightClickAirAction(player, item);
+	public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
+		return rightClickAirAction(player, item);
 	}
 
-	public void shiftLeftClickAirAction(Player player, ItemStack item) { player.openInventory(MenuUtils.createShootyBoxAmmoGuide()); }
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { shiftLeftClickAirAction(player, item); }
+	public boolean shiftLeftClickAirAction(Player player, ItemStack item) { player.openInventory(MenuUtils.createShootyBoxAmmoGuide()); return false; }
+	public boolean shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return shiftLeftClickAirAction(player, item); }
 
 	// open the box's inventory
-	public void shiftRightClickAirAction(Player player, ItemStack item) {
+	public boolean shiftRightClickAirAction(Player player, ItemStack item) {
 		Inventory inventory = Bukkit.createInventory(player, InventoryType.DISPENSER, "Shooty Box");
 		
 		ItemStack[] items = Utilities.getCompactInventory(item);
@@ -80,16 +80,17 @@ public class shooty_box extends UberItem {
 		player.openInventory(inventory);
 		
 		player.playSound(player.getLocation(), Sound.BLOCK_IRON_TRAPDOOR_OPEN, 1, 1);
+		return false;
 	}
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
-		shiftRightClickAirAction(player, item);
+	public boolean shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) {
+		return shiftRightClickAirAction(player, item);
 	}
 
-	public void middleClickAction(Player player, ItemStack item) { }
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
-	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { }
-	public void activeEffect(Player player, ItemStack item) { }
+	public boolean middleClickAction(Player player, ItemStack item) { return false; }
+	public boolean hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { return false; }
+	public boolean breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { return false; }
+	public boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { return false; }
+	public boolean activeEffect(Player player, ItemStack item) { return false; }
 
 	// perform dispenser action
 	private void shootItem(Player player, ItemStack item) {

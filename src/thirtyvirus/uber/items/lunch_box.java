@@ -22,8 +22,8 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class lunch_box extends UberItem {
 
-	public lunch_box(int id, UberRarity rarity, String name, Material material, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
-		super(id, rarity, name, material, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+	public lunch_box(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+		super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
 	}
 	public void onItemStackCreate(ItemStack item) { }
 	public void getSpecificLorePrefix(List<String> lore, ItemStack item) {
@@ -32,23 +32,23 @@ public class lunch_box extends UberItem {
 	}
 	public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
-	public void leftClickAirAction(Player player, ItemStack item) { }
-	public void leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void rightClickAirAction(Player player, ItemStack item) { }
-	public void rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void shiftLeftClickAirAction(Player player, ItemStack item) { }
-	public void shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void shiftRightClickAirAction(Player player, ItemStack item) { }
-	public void shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { }
-	public void middleClickAction(Player player, ItemStack item) { }
-	public void hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { }
-	public void breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { }
+	public boolean leftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean rightClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean shiftLeftClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean shiftRightClickAirAction(Player player, ItemStack item) { return false; }
+	public boolean shiftRightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return false; }
+	public boolean middleClickAction(Player player, ItemStack item) { return false; }
+	public boolean hitEntityAction(Player player, EntityDamageByEntityEvent event, Entity target, ItemStack item) { return false; }
+	public boolean breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { return false; }
 
 	// click food items onto the lunch box in your inventory to insert food
-	public void clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) {
+	public boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) {
 
 		// verify that the item is compatible with the lunchbox
-		if (!(addition.getType().isEdible() || addition.getType() == Material.MELON)) return;
+		if (!(addition.getType().isEdible() || addition.getType() == Material.MELON)) return false;
 
 		// get the current saturation from the lunch box
 		int saturation = Utilities.getIntFromItem(item, "saturation");
@@ -67,6 +67,8 @@ public class lunch_box extends UberItem {
 		// delete the item being clicked onto the Uber Item
 		event.getWhoClicked().setItemOnCursor(null);
 		event.setCancelled(true);
+
+		return false;
 	}
 
 	// get the food and saturation value of a food item
@@ -116,5 +118,5 @@ public class lunch_box extends UberItem {
 		}
 	}
 
-	public void activeEffect(Player player, ItemStack item) { }
+	public boolean activeEffect(Player player, ItemStack item) { return false; }
 }
