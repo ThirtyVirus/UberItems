@@ -102,7 +102,7 @@ public class InventoryClick implements Listener {
         // clicking on an UberItem functionality
         else if (Utilities.isUber(event.getCurrentItem())) {
             UberItem item = Utilities.getUber(event.getCurrentItem());
-            if (item == null) return;
+            if (item == null || UberItems.getItem("null").compare(event.getCurrentItem())) return;
 
             // allow Creative Mode players to take UberItems from the menu directly
             if (player.getGameMode() == GameMode.CREATIVE && event.getClick() == ClickType.SHIFT_LEFT) {

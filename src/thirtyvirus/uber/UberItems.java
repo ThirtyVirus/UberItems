@@ -7,7 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import thirtyvirus.uber.commands.UberCommand;
@@ -18,7 +17,6 @@ import thirtyvirus.uber.events.inventory.InventoryClose;
 import thirtyvirus.uber.events.inventory.RenameItem;
 import thirtyvirus.uber.events.player.Bucket;
 import thirtyvirus.uber.events.player.FoodLevelChange;
-import thirtyvirus.uber.events.player.PlayerInteract;
 import thirtyvirus.uber.events.player.PlayerUseUberItem;
 import thirtyvirus.uber.helpers.*;
 import thirtyvirus.uber.items.UberItemTemplate;
@@ -192,15 +190,13 @@ public class UberItems extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryClose(), this);
         getServer().getPluginManager().registerEvents(new RenameItem(), this);
         getServer().getPluginManager().registerEvents(new BlockPlace(), this);
-
-        getServer().getPluginManager().registerEvents(new PlayerInteract(), this);
         getServer().getPluginManager().registerEvents(new FoodLevelChange(), this);
         getServer().getPluginManager().registerEvents(new Bucket(), this);
     }
 
     // place UberItems and UberMaterials into the proper HashMaps
     public static void putItem(String name, UberItem item) {
-        if (items.keySet().size() < defaultItemCount + 5 || !haveCountedDefaultItems || premium) {
+        if (items.keySet().size() < defaultItemCount + 10 || !haveCountedDefaultItems || premium) {
             items.put(name, item);
             itemIDs.put(item.getUUID(), item);
         }

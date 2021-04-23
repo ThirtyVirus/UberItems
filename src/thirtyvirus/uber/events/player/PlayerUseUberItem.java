@@ -49,7 +49,7 @@ public class PlayerUseUberItem implements Listener {
                 // enforce premium vs lite, item rarity perms, item specific perms
                 if (!Utilities.enforcePermissions(player, uber)) return;
 
-                uber.hitEntityAction(player, event, event.getEntity(), mainhand);
+                if (uber.hitEntityAction(player, event, event.getEntity(), mainhand)) uber.onItemUse(player, mainhand);
             }
         }
         if (Utilities.isUber(offhand)) {
@@ -58,7 +58,7 @@ public class PlayerUseUberItem implements Listener {
                 // enforce premium vs lite, item rarity perms, item specific perms
                 if (!Utilities.enforcePermissions(player, uber)) return;
 
-                uber.hitEntityAction(player, event, event.getEntity(), offhand);
+                if (uber.hitEntityAction(player, event, event.getEntity(), offhand)) uber.onItemUse(player, offhand);
             }
         }
     }
@@ -75,7 +75,7 @@ public class PlayerUseUberItem implements Listener {
                 // enforce premium vs lite, item rarity perms, item specific perms
                 if (!Utilities.enforcePermissions(player, uber)) return;
 
-                uber.breakBlockAction(player, event, event.getBlock(), item);
+                if (uber.breakBlockAction(player, event, event.getBlock(), item)) uber.onItemUse(player, item);
             }
         }
         else {
@@ -103,20 +103,20 @@ public class PlayerUseUberItem implements Listener {
 
         // air and block interaction
         if (event.getAction() == Action.LEFT_CLICK_AIR) {
-            if (!player.isSneaking()) { uber.leftClickAirAction(player, item); }
-            else { uber.shiftLeftClickAirAction(player, item); }
+            if (!player.isSneaking()) { if (uber.leftClickAirAction(player, item)) uber.onItemUse(player, item); }
+            else { if (uber.shiftLeftClickAirAction(player, item)) uber.onItemUse(player, item); }
         }
         else if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            if (!player.isSneaking()) { uber.leftClickBlockAction(player, event, event.getClickedBlock(), item); }
-            else { uber.shiftLeftClickBlockAction(player, event, event.getClickedBlock(), item); }
+            if (!player.isSneaking()) { if (uber.leftClickBlockAction(player, event, event.getClickedBlock(), item)) uber.onItemUse(player, item); }
+            else { if (uber.shiftLeftClickBlockAction(player, event, event.getClickedBlock(), item)) uber.onItemUse(player, item); }
         }
         else if (event.getAction() == Action.RIGHT_CLICK_AIR) {
-            if (!player.isSneaking()) { uber.rightClickAirAction(player, item); }
-            else { uber.shiftRightClickAirAction(player, item); }
+            if (!player.isSneaking()) { if (uber.rightClickAirAction(player, item)) uber.onItemUse(player, item); }
+            else { if (uber.shiftRightClickAirAction(player, item)) uber.onItemUse(player, item); }
         }
         else if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (!player.isSneaking()) { uber.rightClickBlockAction(player, event, event.getClickedBlock(), item); }
-            else { uber.shiftRightClickBlockAction(player, event, event.getClickedBlock(), item); }
+            if (!player.isSneaking()) { if (uber.rightClickBlockAction(player, event, event.getClickedBlock(), item)) uber.onItemUse(player, item); }
+            else { if (uber.shiftRightClickBlockAction(player, event, event.getClickedBlock(), item)) uber.onItemUse(player, item); }
         }
     }
 
