@@ -1,14 +1,11 @@
 package thirtyvirus.uber.items;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -68,7 +65,7 @@ public class shooty_box extends UberItem {
 		return rightClickAirAction(player, item);
 	}
 
-	public boolean shiftLeftClickAirAction(Player player, ItemStack item) { player.openInventory(MenuUtils.createShootyBoxAmmoGuide()); return false; }
+	public boolean shiftLeftClickAirAction(Player player, ItemStack item) { player.openInventory(createShootyBoxAmmoGuide()); return false; }
 	public boolean shiftLeftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return shiftLeftClickAirAction(player, item); }
 
 	// open the box's inventory
@@ -91,6 +88,49 @@ public class shooty_box extends UberItem {
 	public boolean breakBlockAction(Player player, BlockBreakEvent event, Block block, ItemStack item) { return false; }
 	public boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition) { return false; }
 	public boolean activeEffect(Player player, ItemStack item) { return false; }
+
+	// create the UberItems ShootyBox ammo guide (Shift + Left Click while holding one)
+	private Inventory createShootyBoxAmmoGuide() {
+		// prep inventory elements
+		Inventory i = Bukkit.createInventory(null, 54, "UberItems ShootyBox Ammo Guide");
+		for (int index : MenuUtils.CRAFTING_GUIDE_MENU_EXCEPTIONS) i.setItem(index, MenuUtils.EMPTY_SLOT_ITEM);
+		i.setItem(48, MenuUtils.EMPTY_SLOT_ITEM);
+		i.setItem(49, MenuUtils.BACK_BUTTON);
+		i.setItem(50, MenuUtils.EMPTY_SLOT_ITEM);
+
+		List<ItemStack> guideItems = Arrays.asList(
+				mgi(Material.ARROW, "Shoots the arrow at high speeds, without the need to pull a bowstring back!"),
+				mgi(Material.FLINT, "Shoots a precise projectile long distances, can break blocks! 5x flint yield when used on gravel."),
+				mgi(Material.SAND, "Throw sand in front of you, damaging enemies."),
+				mgi(Material.GRAVEL, "Throw gravel in front of you, hurts enemies pretty badly."),
+				mgi(Material.GLASS, "Launches shards of sharp glass at your enemies, yikes that's gotta hurt."),
+				mgi(Material.GUNPOWDER, "Doesn't actually shoot much other than a lot of hot air, could be useful to knock enemies back."),
+				mgi(Material.FIREWORK_ROCKET, "Shoots nothing, but JEEZ that recoil is insane."),
+				mgi(Material.FIRE_CHARGE, "Shoots a small fireball, light blocks and enemies on fire!"),
+				mgi(Material.TNT, "Throws a Primed TNT. Watch out, the blast is dangerous and there is some crazy recoil."),
+				mgi(Material.ENDER_PEARL, "Imagine if a major league baseball player could throw a pearl... ya."),
+				mgi(Material.EGG, "Throws an egg at high speed. What did you think was gonna happen?"),
+				mgi(Material.SPLASH_POTION, "Throw potions a half mile away."),
+				mgi(Material.WATER_BUCKET, "chucks water a mile away, because why not."),
+				mgi(Material.LAVA_BUCKET, "a griefer's best friend."),
+				mgi(Material.CREEPER_SPAWN_EGG, "Wait, this thing can shoot MOBS???"),
+				mgi(Material.DIRT, "So ya, you can shoot blocks of any type. Neat!")
+		);
+
+		for (int counter = 0; counter < MenuUtils.CRAFTING_GUIDE_ITEM_SLOTS.size(); counter++) {
+			if (counter >= guideItems.size()) break;
+			i.setItem(MenuUtils.CRAFTING_GUIDE_ITEM_SLOTS.get(counter), guideItems.get(counter));
+		}
+
+		return i;
+	}
+
+	// make guide item (MGI)
+	private ItemStack mgi(Material material, String description) {
+		ItemStack item = new ItemStack(material);
+		Utilities.loreItem(item, Utilities.stringToLore(description, 25, ChatColor.GRAY));
+		return item;
+	}
 
 	// perform dispenser action
 	private void shootItem(Player player, ItemStack item) {

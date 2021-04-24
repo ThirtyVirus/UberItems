@@ -1,5 +1,6 @@
 package thirtyvirus.uber;
 
+import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -7,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import thirtyvirus.uber.commands.UberCommand;
@@ -23,6 +25,9 @@ import thirtyvirus.uber.items.UberItemTemplate;
 import thirtyvirus.uber.items.uber_workbench;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.*;
 
 public class UberItems extends JavaPlugin {
@@ -39,36 +44,32 @@ public class UberItems extends JavaPlugin {
     // global plugin settings
     public static String prefix = "&8&l[&5&lUberItems&8&l] &8&l";
     public static String consolePrefix = "[UberItems] ";
-
     public static boolean defaultUberItems = true;
     public static boolean defaultUberMaterials = true;
-
     public static int activeEffectsCheckID = 0;
     public static int activeEffectsDelay = 2; // in ticks
-
-    // getter for main class
-    private static UberItems instance;
 
     // sorting settings
     public static int sortingMode = 1;
     public static boolean reverseSort = false;
     public static boolean externalSort = true;
     public static boolean multiSort = true;
-    private static int multiSortTimeout = 60;
+    public static int multiSortTimeout = 60;
     public static boolean automaticSort = false;
     public static boolean ignoreBuildPerms = false;
-
     public static boolean useWhiteList = true;
     public static boolean useBlackList = false;
+
+    // sorting essentials
     public static List<String> whiteList = new ArrayList<>();
     public static List<String> blackList = new ArrayList<>();
-
     public static Map<Player, List<Block>> multisorts = new HashMap<>();
 
     // other variables
     public static final boolean premium = true;
     private static boolean haveCountedDefaultItems = false;
     private static int defaultItemCount = 0;
+    private static UberItems instance;
 
     // actions to be taken on plugin enable
     public void onEnable() {
@@ -100,7 +101,7 @@ public class UberItems extends JavaPlugin {
         haveCountedDefaultItems = true;
 
         // schedule repeating task for processing UberItem active effects
-        activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, Utilities::uberActiveEffects, activeEffectsDelay, activeEffectsDelay);
+        activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, UberItems::uberActiveEffects, activeEffectsDelay, activeEffectsDelay);
 
         // schedule checking of recent added containers (Document of Order)
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> SortingUtilities.checkCancelMultisort(multisorts, multiSortTimeout), 20 * multiSortTimeout, 20 * multiSortTimeout);
@@ -131,7 +132,7 @@ public class UberItems extends JavaPlugin {
     private void loadConfiguration() {
         File configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()){
-            Utilities.loadResource(this, "config.yml");
+            loadResource(this, "config.yml");
         }
         FileConfiguration config = this.getConfig();
 
@@ -167,7 +168,7 @@ public class UberItems extends JavaPlugin {
         // console and IO
         File langFile = new File(getDataFolder(), "language.yml");
         FileConfiguration langFileConfig = new YamlConfiguration();
-        if (!langFile.exists()){ Utilities.loadResource(this, "language.yml"); }
+        if (!langFile.exists()) { loadResource(this, "language.yml"); }
 
         try { langFileConfig.load(langFile); }
         catch (Exception e3) { e3.printStackTrace(); }
@@ -192,6 +193,57 @@ public class UberItems extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockPlace(), this);
         getServer().getPluginManager().registerEvents(new FoodLevelChange(), this);
         getServer().getPluginManager().registerEvents(new Bucket(), this);
+    }
+
+    // process active effets for uber items that are in use
+    // TODO: Do active effects for uber items not in hand?
+    private static void uberActiveEffects() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+
+            // main hand
+            if (Utilities.isUber(player.getInventory().getItemInMainHand())) {
+                UberItem uber = Utilities.getUber(player.getInventory().getItemInMainHand());
+                if (uber == null) continue;
+
+                // enforce premium vs lite
+                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
+
+                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInMainHand());
+            }
+
+            // off hand
+            if (Utilities.isUber(player.getInventory().getItemInOffHand())) {
+                UberItem uber = Utilities.getUber(player.getInventory().getItemInOffHand());
+                if (uber == null) continue;
+
+                // enforce premium vs lite
+                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
+
+                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
+
+            }
+
+        }
+    }
+
+    // load file from JAR with comments
+    private static File loadResource(Plugin plugin, String resource) {
+        File folder = plugin.getDataFolder();
+        if (!folder.exists())
+            folder.mkdir();
+        File resourceFile = new File(folder, resource);
+        try {
+            if (!resourceFile.exists()) {
+                resourceFile.createNewFile();
+                try (InputStream in = plugin.getResource(resource);
+                     OutputStream out = new FileOutputStream(resourceFile)) {
+                    ByteStreams.copy(in, out);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resourceFile;
     }
 
     // place UberItems and UberMaterials into the proper HashMaps

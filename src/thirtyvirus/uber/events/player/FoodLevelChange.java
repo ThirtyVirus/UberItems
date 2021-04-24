@@ -25,7 +25,7 @@ public class FoodLevelChange implements Listener {
         if (uber == null) return;
 
         // enforce premium vs lite, item rarity perms, item specific perms
-        if (!Utilities.enforcePermissions(player, uber)) return;
+        if (Utilities.enforcePermissions(player, uber)) return;
 
         // get food and saturation levels
         final int max = 20; // maximum food and saturation

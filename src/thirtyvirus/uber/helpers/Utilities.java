@@ -1,6 +1,5 @@
 package thirtyvirus.uber.helpers;
 
-import com.google.common.io.ByteStreams;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.command.CommandSender;
@@ -13,15 +12,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.plugin.Plugin;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
 
-import java.io.*;
 import java.util.*;
-
-import static thirtyvirus.uber.helpers.UberRarity.COMMON;
 
 public final class Utilities {
 
@@ -38,108 +33,129 @@ public final class Utilities {
     // GENERAL PLUGIN FUNCTIONS
     // _____________________________________________________________________________ \\
 
-    // load file from JAR with comments
-    public static File loadResource(Plugin plugin, String resource) {
-        File folder = plugin.getDataFolder();
-        if (!folder.exists())
-            folder.mkdir();
-        File resourceFile = new File(folder, resource);
-        try {
-            if (!resourceFile.exists()) {
-                resourceFile.createNewFile();
-                try (InputStream in = plugin.getResource(resource);
-                     OutputStream out = new FileOutputStream(resourceFile)) {
-                    ByteStreams.copy(in, out);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return resourceFile;
-    }
-
-    // warns player of something in plugin and plays error noise
+    /**
+     * Warn a player or console with a list of messages, plays an error sound and uses red text
+     *
+     * @param sender the player or console being warned
+     * @param messages the messages
+     */
     public static void warnPlayer(CommandSender sender, List<String> messages) {
         if (sender instanceof Player) { Player player = (Player) sender; playSound(ActionSound.ERROR, player); }
         for (String message : messages) sender.sendMessage(UberItems.prefix + ChatColor.RESET + ChatColor.RED + message);
     }
+
+    /**
+     * Warn a player or console with a single message, plays an error sound and uses red text
+     *
+     * @param sender the player or console being warned
+     * @param message the message
+     */
     public static void warnPlayer(CommandSender sender, String message) {
         warnPlayer(sender, Collections.singletonList(message));
     }
 
-    // informs player of something in plugin
+    /**
+     * Inform a player or console with a list of messages
+     *
+     * @param sender the player or console being informed
+     * @param messages the list of messages
+     */
     public static void informPlayer(CommandSender sender, List<String> messages) {
         for (String message : messages) sender.sendMessage(UberItems.prefix + ChatColor.RESET + ChatColor.GRAY + message);
     }
+
+    /**
+     * Inform a player or console with a single message
+     * @param sender the player or console being informed
+     * @param message the message
+     */
     public static void informPlayer(CommandSender sender, String message) {
         informPlayer(sender, Collections.singletonList(message));
     }
 
-    // true = has proper permissions
-    // false = does NOT have proper permissions
-    // TODO add perms for specific items
+    /**
+     * Return whether or not the give player has the proper permissions to use a given UberItem
+     * Can be used to restrict access to code depending on whether or the player has proper permissions
+     * USAGE: if (enforcePermissions) return;
+     *
+     * @param player the player being tested for permissions
+     * @param item the UberItem
+     * @return whether or not to enforce permissions (true = restrict code, false = allow the code to run)
+     */
     public static boolean enforcePermissions(Player player, UberItem item) {
 
         // test for premium and over Rare rarity
         if (!UberItems.premium && item.getRarity().isRarerThan(UberRarity.RARE)) {
             warnPlayer(player, UberItems.getPhrase("not-premium-message"));
-            return false;
+            return true;
         }
 
         // test for player's item specific permissions
         if (!player.hasPermission("uber.item." + item.getName())) {
             warnPlayer(player, UberItems.getPhrase("no-permissions-message"));
-            return false;
+            return true;
         }
 
         // test for player's rarity permissions
         switch (item.getRarity()) {
             case COMMON:
-                if (player.hasPermission("uber.rarity.common")) return true;
+                if (player.hasPermission("uber.rarity.common")) return false;
                 break;
             case UNCOMMON:
-                if (player.hasPermission("uber.rarity.uncommon")) return true;
+                if (player.hasPermission("uber.rarity.uncommon")) return false;
                 break;
             case RARE:
-                if (player.hasPermission("uber.rarity.rare")) return true;
+                if (player.hasPermission("uber.rarity.rare")) return false;
                 break;
             case EPIC:
-                if (player.hasPermission("uber.rarity.epic")) return true;
+                if (player.hasPermission("uber.rarity.epic")) return false;
                 break;
             case LEGENDARY:
-                if (player.hasPermission("uber.rarity.legendary")) return true;
+                if (player.hasPermission("uber.rarity.legendary")) return false;
                 break;
             case MYTHIC:
-                if (player.hasPermission("uber.rarity.mythic")) return true;
+                if (player.hasPermission("uber.rarity.mythic")) return false;
                 break;
             case UNFINISHED:
-                if (player.hasPermission("uber.rarity.unfinished")) return true;
+                if (player.hasPermission("uber.rarity.unfinished")) return false;
                 break;
         }
 
         warnPlayer(player, UberItems.getPhrase("no-permissions-message"));
-        return false;
+        return true;
     }
 
-    // return the block the player is looking at, ignoring transparent blocks
+    /**
+     * @param player the player whose line of sight is being tested
+     * @return the block the player is looking at, ignoring transparent blocks
+     */
     public static Block getBlockLookingAt(Player player) {
         return player.getTargetBlock(TRANSPARENT, 120);
     }
 
-    // convert a location to formatted string (world,x,y,z)
+    /**
+     * @param location the location to be translated
+     * @return a formatted string (world,x,y,z)
+     */
     public static String toLocString(Location location) {
         if (location == null || location.getWorld() == null) return "";
         return location.getWorld().getName() + "," + (int) location.getX() + "," + (int) location.getY() + "," + (int) location.getZ();
     }
 
-    // convert a formatted location string to a Location
+    /**
+     * @param locString the locString to be translated
+     * @return a location based on the string (world,x,y,z)
+     */
     public static Location fromLocString(String locString) {
         if (locString.equals("")) return null;
         String[] data = locString.split(",");
         return new Location(Bukkit.getWorld(data[0]), Integer.parseInt(data[1]), Integer.parseInt(data[2]), Integer.parseInt(data[3]));
     }
 
-    // play sound at player
+    /**
+     * @param sound the sound to be played
+     * @param player the player the sound is to be played around
+     */
     public static void playSound(ActionSound sound, Player player) {
 
         switch (sound) {
@@ -168,12 +184,20 @@ public final class Utilities {
 
     }
 
-    // shorthand for using the bukkit scheduler to run a runnable after i ticks
+    /**
+     * shorthand for using the Bukkit scheduler to run a runnable after i ticks
+     *
+     * @param run the runnable to be executed later
+     * @param i the number of ticks delay
+     */
     public static void scheduleTask(Runnable run, int i) {
         Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), run, i);
     }
 
-    // test if given number string is integer
+    /**
+     * @param input  the source String
+     * @return if given number string is integer
+     */
     public static boolean isInteger(String input) {
         try {
             Integer.parseInt(input);
@@ -183,7 +207,12 @@ public final class Utilities {
         }
     }
 
-    // make a string into a key that can be used with the Random class
+    /**
+     * Generate a unique integer from a string, can be used to seed random number generators or as a UUID
+     *
+     * @param s the source string
+     * @return a unique integer made using the string
+     */
     public static int stringToSeed(String s) {
         if (s == null) {
             return 0;
@@ -195,8 +224,15 @@ public final class Utilities {
         return hash;
     }
 
-    // seperate a single string into mulitple lines that can be used as Item Lore
-    // "/newline" can be used to force a new line
+    /**
+     * Wrap the text from a string onto multiple lines, can be used to easily write item lore.
+     * "/newline" can be used to force a new line
+     *
+     * @param string the source string
+     * @param characterLimit the maximum number of characters per line
+     * @param prefixColor the color that the text is to be
+     * @return the wrapped text, in multiple lines
+     */
     public static List<String> stringToLore(String string, int characterLimit, ChatColor prefixColor) {
         String[] words = string.split(" ");
         List<String> lines = new ArrayList<>();
@@ -225,7 +261,11 @@ public final class Utilities {
     // ITEM FUNCTIONS
     // _____________________________________________________________________________ \\
 
-    // renames item
+    /**
+     * @param item the ItemStack to be renamed
+     * @param name the new name
+     * @return the renamed ItemStack
+     */
     public static ItemStack nameItem(ItemStack item, String name) {
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(name);
@@ -233,12 +273,24 @@ public final class Utilities {
         return item;
     }
 
-    // creates item that is renamed given material and name
+    /**
+     * creates item that is renamed given material and name
+     *
+     * @param item the material of the new ItemStack
+     * @param name the name of the new ItemStack
+     * @return the renamed new ItemStack
+     */
     public static ItemStack nameItem(Material item, String name) {
         return nameItem(new ItemStack(item), name);
     }
 
-    // set the lore of an item
+    /**
+     * Set the lore of an item
+     *
+     * @param item the ItemStack to be effected
+     * @param lore a list of strings that represent the new lore
+     * @return the updated ItemStack
+     */
     public static ItemStack loreItem(ItemStack item, List<String> lore) {
         ItemMeta meta = item.getItemMeta();
 
@@ -247,7 +299,11 @@ public final class Utilities {
         return item;
     }
 
-    // add enchantment glint to item
+    /**
+     * Add an enchantment glint to a given ItemStack, with no enchantment text in the lore
+     *
+     * @param item the ItemStack to be "enchanted"
+     */
     public static void addEnchantGlint(ItemStack item) {
         item.addUnsafeEnchantment(Enchantment.DURABILITY, 1);
         ItemMeta meta = item.getItemMeta();
@@ -255,7 +311,11 @@ public final class Utilities {
         item.setItemMeta(meta);
     }
 
-    // repair a (repairable) item
+    /**
+     * Set the given ItemStack's durability to maximum
+     *
+     * @param item the ItemStack to be repaired
+     */
     public static void repairItem(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         if (meta instanceof Damageable) {
@@ -264,7 +324,11 @@ public final class Utilities {
         }
     }
 
-    // store a string value in the meta of an item, completely invisible to player
+    /**
+     * @param host the ItemStack to contain the String
+     * @param string the String to be stored
+     * @param key the key for the String
+     */
     public static void storeStringInItem(ItemStack host, String string, String key) {
         NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
 
@@ -277,7 +341,13 @@ public final class Utilities {
         host.setItemMeta(itemMeta);
     }
 
-    // retrieve a string value from the meta of an item, completely invisible to player
+    /**
+     * get a string value from the meta of an item, completely invisible to player
+     *
+     * @param host the ItemStack containing the String
+     * @param key the key for the String
+     * @return the String stored under the key
+     */
     public static String getStringFromItem(ItemStack host, String key) {
         NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
 
@@ -294,7 +364,13 @@ public final class Utilities {
         return null;
     }
 
-    // store an int value in the meta of an item, completely invisible to player
+    /**
+     * store an int value in the meta of an item, completely invisible to player
+     *
+     * @param host the ItemStack to contain the integer
+     * @param i the Integer to be stored in the ItemStack
+     * @param key the key for the integer
+     */
     public static void storeIntInItem(ItemStack host, Integer i, String key) {
         NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
 
@@ -307,7 +383,13 @@ public final class Utilities {
         host.setItemMeta(itemMeta);
     }
 
-    // retrieve an int value from the meta of an item, completely invisible to player
+    /**
+     * retrieve an int value from the meta of an item, completely invisible to player
+     *
+     * @param host the ItemStack containing the integer
+     * @param key the key for the integer
+     * @return the integer stored under the key
+     */
     public static Integer getIntFromItem(ItemStack host, String key) {
         NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
 
@@ -324,7 +406,12 @@ public final class Utilities {
         return 0;
     }
 
-    // store a list of items in the meta of an item, completely invisible to the player
+    /**
+     * store a list of items in the meta of an item, completely invisible to the player
+     *
+     * @param host the ItemStack to contain the compact inventory
+     * @param items an array of ItemStack
+     */
     public static void saveCompactInventory(ItemStack host, ItemStack[] items) {
         NamespacedKey key = new NamespacedKey(UberItems.getInstance(), "compact-inventory");
         ItemMeta itemMeta = host.getItemMeta();
@@ -332,7 +419,12 @@ public final class Utilities {
         host.setItemMeta(itemMeta);
     }
 
-    // retrieve a list of items from the meta of an item, completely invisible to the player
+    /**
+     * retrieve a list of items from the meta of an item, completely invisible to the player
+     *
+     * @param host the ItemStack containing the compact inventory
+     * @return an array of ItemStack
+     */
     public static ItemStack[] getCompactInventory(ItemStack host) {
         NamespacedKey key = new NamespacedKey(UberItems.getInstance(), "compact-inventory");
         ItemMeta itemMeta = host.getItemMeta();
@@ -347,60 +439,62 @@ public final class Utilities {
     // UBERITEM FUNCTIONS
     // _____________________________________________________________________________ \\
 
-    // test if given item is an UberItem or UberMaterial
+    /**
+     * @param item the ItemStack being tested
+     * @return whether or not the item is an UberItem
+     */
     public static boolean isUber(ItemStack item) { return getIntFromItem(item, "UberUUID") != 0; }
+
+    /**
+     * @param item the ItemStack being tested
+     * @return whether or not the item is an UberMaterial
+     */
     public static boolean isUberMaterial(ItemStack item) { return getIntFromItem(item, "MaterialUUID") != 0; }
 
-    // get the type of UberItem or UberMaterial
+    /**
+     * @param item the ItemStack being tested
+     * @return the UberItem that represents the item (null if no match found)
+     */
     public static UberItem getUber(ItemStack item) {
         int UUID = getIntFromItem(item, "UberUUID");
         if (UUID == 0) return null;
         else return UberItems.getItemFromID(UUID);
     }
+
+    /**
+     * @param item the ItemStack being tested
+     * @return the UberMaterial that represents the item (null if no match found)
+     */
     public static UberMaterial getUberMaterial(ItemStack item) {
         int UUID = getIntFromItem(item, "MaterialUUID");
         if (UUID == 0) return null;
         else return UberItems.getMaterialFromID(UUID);
     }
 
-    // find the first uber item of given ID in inventory (null if nothing)
+    /**
+     * Search through an inventory to find the first instance of an item belonging to uber
+     *
+     * @param inv the inventory being searched through
+     * @param uber the requested UberItem type
+     * @return the first found instance of uber in the inventory (or null if none found)
+     */
     public static ItemStack searchFor(Inventory inv, UberItem uber) {
         for (ItemStack item : inv) if (uber.compare(item)) return item;
         return null;
     }
 
-    // process active effets for uber items that are in use
-    //TODO: Do active effects for uber items not in hand?
-    public static void uberActiveEffects() {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-
-            // main hand
-            if (isUber(player.getInventory().getItemInMainHand())) {
-                UberItem uber = getUber(player.getInventory().getItemInMainHand());
-                if (uber == null) continue;
-
-                // enforce premium vs lite
-                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
-
-                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInMainHand());
-            }
-
-            // off hand
-            if (isUber(player.getInventory().getItemInOffHand())) {
-                UberItem uber = getUber(player.getInventory().getItemInOffHand());
-                if (uber == null) continue;
-
-                // enforce premium vs lite
-                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
-
-                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
-
-            }
-
-        }
-    }
-
-    // delays code based on stored int in UberItem,
+    /**
+     * Return whether or not 'seconds' seconds have passed since the previous time 'player' used 'key' action with 'item'.
+     * Can be used to restrict access to code depending on whether or not the cooldown is over.
+     * USAGE: if (enforceCooldown) return;
+     *
+     * @param player the player holding the item
+     * @param key a string specifying which action is being tested (can be any string that you want)
+     * @param seconds the minimum time since the action to allow another action use
+     * @param item the UberItem being tested
+     * @param throwError whether or not to warn the player of the failure to execute the action, and the time remaining
+     * @return whether or not to enforce the cooldown (true = restrict code, false = allow the code to run)
+     */
     public static boolean enforceCooldown(Player player, String key, double seconds, ItemStack item, boolean throwError) {
         double time = (double)System.currentTimeMillis() / 1000;
 
@@ -410,28 +504,35 @@ public final class Utilities {
         // add "time last used" key if not already there
         if (lastTime == 0) {
             storeIntInItem(item, (int)time, key);
-            return true;
+            return false;
         }
 
         // was the item  last used longer than "seconds" seconds ago?
         else {
             if (time - seconds > lastTime) {
                 storeIntInItem(item, (int)time, key);
-                return true; // yes, allow the action (plus update the last time used)
+                return false; // yes, allow the action (plus update the last time used)
             }
             else {
                 int timeLeft = (int)time - lastTime;
                 timeLeft = (int)seconds - timeLeft;
                 if (throwError) warnPlayer(player, "This ability is on cooldown for " + timeLeft + "s.");
-                return false; // no, disallow the action
+                return true; // no, disallow the action
             }
         }
     }
 
-    // UPGRADE RULES
-    // Upgrade name must be [a-z0-9A-Z/._-]
-
-    // checks if the requested upgrade is already on the item, if not adds upgrade, cancels event and consumes item
+    /**
+     * Apply an upgrade to an UberItem, which is traditionally done through the clickedInInventoryAction method.
+     * Checks if the requested upgrade is already on the item, if not adds it, cancels the event, and consumes the upgrade item.
+     * NOTE: Upgrade name must be [a-z0-9A-Z/._-]
+     *
+     * @param player the player holding the item
+     * @param event an InventoryClickEvent, adding an upgrade to an item is meant to be done by dropping an item on the UberItem
+     * @param item the UberItem in ItemStack form
+     * @param upgradeName the name of the upgrade
+     * @param upgradeDescription the description of the upgrade
+     */
     public static void applyUpgrade(Player player, InventoryClickEvent event, ItemStack item, String upgradeName, String upgradeDescription) {
         // verify that the upgrade isn't already on the item
         if (hasUpgrade(item, upgradeName)) return;
@@ -449,7 +550,16 @@ public final class Utilities {
         event.setCancelled(true);
     }
 
-    // checks if the requested upgrade is already on the item, if so remove upgrade, cancels event and consumes item
+    /**
+     * Remove an upgrade from an UberItem, which is traditionally done through the clickedInInventoryAction method
+     * Checks if the requested upgrade is already on the item, if so remove the upgrade, cancel the event, and consumes the upgrade item
+     * NOTE: Upgrade name must be [a-z0-9A-Z/._-]
+     *
+     * @param player the player holding the item
+     * @param event an InventoryClickEvent, removing an upgrade from an item is meant to be done by dropping an item on the UberItem
+     * @param item the UberItem in ItemStack form
+     * @param upgradeName the name of the upgrade
+     */
     public static void unapplyUpgrade(Player player, InventoryClickEvent event, ItemStack item, String upgradeName) {
         // verify that the upgrade is on the item
         if (!hasUpgrade(item, upgradeName)) return;
@@ -467,8 +577,8 @@ public final class Utilities {
         event.setCancelled(true);
     }
 
-    // apply upgrade to UberItem, and update lore
-    public static void addUpgrade(ItemStack item, String upgradeName, String upgradeDescription) {
+    // apply or remove upgrade to UberItem, and update lore
+    private static void addUpgrade(ItemStack item, String upgradeName, String upgradeDescription) {
         UberItem uber = getUber(item); if (uber == null) return;
 
         // generate an updated upgrade list
@@ -484,8 +594,7 @@ public final class Utilities {
         // update the item lore to mirror the change
         uber.updateLore(item);
     }
-    // remove upgrade from UberItem, and update lore
-    public static void removeUpgrade(ItemStack item, String upgradeName) {
+    private static void removeUpgrade(ItemStack item, String upgradeName) {
         UberItem uber = getUber(item); if (uber == null) return;
 
         // generate an updated upgrade list
@@ -501,17 +610,31 @@ public final class Utilities {
         // update the item lore to mirror the change
         uber.updateLore(item);
     }
-    // test whether or not an item has an upgrade
+
+    /**
+     * @param item the UberItem in ItemStack form
+     * @param upgradeName the name of the upgrade
+     * @return whether or not the UberItem has the upgrade
+     */
     public static boolean hasUpgrade(ItemStack item, String upgradeName) {
         String upgrade = getStringFromItem(item, "UberUpgrade-" + upgradeName);
         if (upgrade == null) return false;
         return !upgrade.equals("");
     }
-    // get the description of an Uber Upgrade
+
+    /**
+     * @param item the UberItem in ItemStack form
+     * @param upgradeName the name of the upgrade
+     * @return the description of the upgrade (or " " if there is no such upgrade)
+     */
     public static String getUpgradeDescription(ItemStack item, String upgradeName) {
         return getStringFromItem(item, "UberUpgrade-" + upgradeName);
     }
-    // list all of the current upgrades on this item
+
+    /**
+     * @param item the UberItem in ItemStack form
+     * @return an array of String, elements consisting of the upgrades on this particular item
+     */
     public static String[] getUpgrades(ItemStack item) {
         String rawList = getStringFromItem(item, "UberUpgrades");
         if (rawList != null) return rawList.split(",");

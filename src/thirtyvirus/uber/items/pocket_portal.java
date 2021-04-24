@@ -39,7 +39,7 @@ public class pocket_portal extends UberItem {
 	public boolean rightClickAirAction(Player player, ItemStack item) {
 
 		// enforce the 2 minute cooldown of the teleport ability
-		if (!Utilities.enforceCooldown(player, "teleport", 120, item, true)) return false;
+		if (Utilities.enforceCooldown(player, "teleport", 120, item, true)) return false;
 
 		// execute the teleport
 		player.playSound(player.getLocation(), Sound.BLOCK_BEACON_AMBIENT, 5, 1);

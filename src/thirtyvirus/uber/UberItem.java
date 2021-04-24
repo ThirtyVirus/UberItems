@@ -33,7 +33,9 @@ public abstract class UberItem {
 
     private UberCraftingRecipe craftingRecipe;
 
-    // new UberItem
+    /**
+     * Define a new UberItem
+     */
     public UberItem(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
         this.material = material;
         this.name = name;
@@ -48,13 +50,19 @@ public abstract class UberItem {
         UUID = Utilities.stringToSeed(material.name() + name + rarity.toString());
     }
 
-    // test if two UberItems are the same
+    /**
+     * @param other the item to test
+     * @return whether or not the given ItemStack is this UberItem
+     */
     public boolean compare(ItemStack other) {
         int otherUUID = Utilities.getIntFromItem(other, "UberUUID");
         return (otherUUID == UUID);
     }
 
-    // make an instance of this UberItem in ItemStack form
+    /**
+     * @param amount the amount of the item to make
+     * @return an instance of this UberItem in ItemStack form
+     */
     public ItemStack makeItem(int amount) {
         ItemStack item = Utilities.nameItem(material, rarity.getColor() + name);
         Utilities.storeIntInItem(item, UUID, "UberUUID");
@@ -114,25 +122,35 @@ public abstract class UberItem {
 
         return lore;
     }
-    // convenience functions (facilitates understanding of the code by giving an official name for these actions)
+
+    /**
+     * Update the lore of an UberItem
+     *
+     * @param item the item to be updated
+     */
     public void updateLore(ItemStack item) {
         // verify that the UberItem isn't null
         if (item == null) return;
         Utilities.loreItem(item, getLore(item));
     }
 
-    public void changeMaterial(ItemStack item, Material material) {
-        // verify that the UberItem isn't null
-        if (item == null) return;
-
-        item.setType(material);
-    }
+    /**
+     * Perform the actions to be taken when an item is successfully used
+     *
+     * @param player the player holding the item
+     * @param item the item being used
+     */
     public void onItemUse(Player player, ItemStack item) {
         // process one time use items
         if (oneTimeUse && player.getGameMode() != GameMode.CREATIVE) destroy(item, 1);
     }
 
-    // destroy UberItem (mostly used for single - use items)
+    /**
+     * Destroy UberItem (mostly used for single - use items)
+     *
+     * @param item the item to destroy
+     * @param quantity the amount of the item to remove
+     */
     public static void destroy(ItemStack item, int quantity) {
         if (item.getAmount() <= quantity) item.setAmount(0);
         else item.setAmount(item.getAmount() - quantity);
@@ -161,6 +179,7 @@ public abstract class UberItem {
 
     public abstract boolean activeEffect(Player player, ItemStack item);
 
+    // getters
     public Material getMaterial() { return material; }
     public String getName() { return name; }
     public UberRarity getRarity() { return rarity; }

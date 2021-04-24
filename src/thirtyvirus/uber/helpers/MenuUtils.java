@@ -118,48 +118,6 @@ public class MenuUtils {
 
     }
 
-    // create the UberItems ShootyBox ammo guide (Shift + Left Click while holding one)
-    public static Inventory createShootyBoxAmmoGuide() {
-        // prep inventory elements
-        Inventory i = Bukkit.createInventory(null, 54, "UberItems ShootyBox Ammo Guide");
-        for (int index : CRAFTING_GUIDE_MENU_EXCEPTIONS) i.setItem(index, EMPTY_SLOT_ITEM);
-        i.setItem(48, EMPTY_SLOT_ITEM);
-        i.setItem(49, BACK_BUTTON);
-        i.setItem(50, EMPTY_SLOT_ITEM);
-
-        List<ItemStack> guideItems = Arrays.asList(
-                mgi(Material.ARROW, "Shoots the arrow at high speeds, without the need to pull a bowstring back!"),
-                mgi(Material.FLINT, "Shoots a precise projectile long distances, can break blocks! 5x flint yield when used on gravel."),
-                mgi(Material.SAND, "Throw sand in front of you, damaging enemies."),
-                mgi(Material.GRAVEL, "Throw gravel in front of you, hurts enemies pretty badly."),
-                mgi(Material.GLASS, "Launches shards of sharp glass at your enemies, yikes that's gotta hurt."),
-                mgi(Material.GUNPOWDER, "Doesn't actually shoot much other than a lot of hot air, could be useful to knock enemies back."),
-                mgi(Material.FIREWORK_ROCKET, "Shoots nothing, but JEEZ that recoil is insane."),
-                mgi(Material.FIRE_CHARGE, "Shoots a small fireball, light blocks and enemies on fire!"),
-                mgi(Material.TNT, "Throws a Primed TNT. Watch out, the blast is dangerous and there is some crazy recoil."),
-                mgi(Material.ENDER_PEARL, "Imagine if a major league baseball player could throw a pearl... ya."),
-                mgi(Material.EGG, "Throws an egg at high speed. What did you think was gonna happen?"),
-                mgi(Material.SPLASH_POTION, "Throw potions a half mile away."),
-                mgi(Material.WATER_BUCKET, "chucks water a mile away, because why not."),
-                mgi(Material.LAVA_BUCKET, "a griefer's best friend."),
-                mgi(Material.CREEPER_SPAWN_EGG, "Wait, this thing can shoot MOBS???"),
-                mgi(Material.DIRT, "So ya, you can shoot blocks of any type. Neat!")
-        );
-
-        for (int counter = 0; counter < CRAFTING_GUIDE_ITEM_SLOTS.size(); counter++) {
-            if (counter >= guideItems.size()) break;
-            i.setItem(CRAFTING_GUIDE_ITEM_SLOTS.get(counter), guideItems.get(counter));
-        }
-
-        return i;
-    }
-    // make guide item (MGI)
-    private static ItemStack mgi(Material material, String description) {
-        ItemStack item = new ItemStack(material);
-        Utilities.loreItem(item, Utilities.stringToLore(description, 25, ChatColor.GRAY));
-        return item;
-    }
-
     // MENU UTILITY FUNCTIONS
 
     // make the craftable UberItem appear in the crafted slot if the appropriate materials are there

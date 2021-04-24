@@ -81,7 +81,7 @@ public class hackerman extends UberItem {
                 if (Utilities.hasUpgrade(item, "Compacted") && Utilities.hasUpgrade(item, "Expensive")) b.setType(Material.GOLD_BLOCK);
                 else if (Utilities.hasUpgrade(item, "Compacted")) b.setType(Material.IRON_BLOCK);
                 else b.setType(Material.STONE);
-                Utilities.scheduleTask(new Runnable() { public void run() { b.setType(old); } }, 60);
+                Utilities.scheduleTask(() -> b.setType(old), 60);
             }
             return true;
         }

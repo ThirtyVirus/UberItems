@@ -47,7 +47,7 @@ public class PlayerUseUberItem implements Listener {
             UberItem uber = Utilities.getUber(mainhand);
             if (uber != null) {
                 // enforce premium vs lite, item rarity perms, item specific perms
-                if (!Utilities.enforcePermissions(player, uber)) return;
+                if (Utilities.enforcePermissions(player, uber)) return;
 
                 if (uber.hitEntityAction(player, event, event.getEntity(), mainhand)) uber.onItemUse(player, mainhand);
             }
@@ -56,7 +56,7 @@ public class PlayerUseUberItem implements Listener {
             UberItem uber = Utilities.getUber(offhand);
             if (uber != null) {
                 // enforce premium vs lite, item rarity perms, item specific perms
-                if (!Utilities.enforcePermissions(player, uber)) return;
+                if (Utilities.enforcePermissions(player, uber)) return;
 
                 if (uber.hitEntityAction(player, event, event.getEntity(), offhand)) uber.onItemUse(player, offhand);
             }
@@ -73,7 +73,7 @@ public class PlayerUseUberItem implements Listener {
             UberItem uber = Utilities.getUber(item);
             if (uber != null) {
                 // enforce premium vs lite, item rarity perms, item specific perms
-                if (!Utilities.enforcePermissions(player, uber)) return;
+                if (Utilities.enforcePermissions(player, uber)) return;
 
                 if (uber.breakBlockAction(player, event, event.getBlock(), item)) uber.onItemUse(player, item);
             }
@@ -99,7 +99,7 @@ public class PlayerUseUberItem implements Listener {
         if (uber == null) return;
 
         // enforce premium vs lite, item rarity perms, item specific perms
-        if (!Utilities.enforcePermissions(player, uber)) return;
+        if (Utilities.enforcePermissions(player, uber)) return;
 
         // air and block interaction
         if (event.getAction() == Action.LEFT_CLICK_AIR) {

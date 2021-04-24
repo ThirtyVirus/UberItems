@@ -38,7 +38,7 @@ public class boom_stick extends UberItem{
 	public boolean rightClickAirAction(Player player, ItemStack item) {
 
 		// enforce the 5 second cooldown of the boom stick's BOOM ability
-		if (!Utilities.enforceCooldown(player, "boom", 5, item, true)) return false;
+		if (Utilities.enforceCooldown(player, "boom", 5, item, true)) return false;
 
 		for(Entity e : player.getNearbyEntities(15,15,15)) {
 			if (e instanceof LivingEntity && e != player) {

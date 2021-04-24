@@ -25,7 +25,7 @@ public enum UberRarity {
 
         return current > param;
     }
-    public int getIndex() {
+    private int getIndex() {
         int index = 0;
         for(UberRarity rarity : values()) {
             if(this.equals(rarity)) return index;

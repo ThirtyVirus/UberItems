@@ -17,9 +17,9 @@ import thirtyvirus.uber.helpers.Utilities;
 public class Bucket implements Listener {
 
     @EventHandler
-    public void onBucketFill(PlayerBucketFillEvent event) { }
+    private void onBucketFill(PlayerBucketFillEvent event) { }
     @EventHandler
-    public void onBucketEmpty(PlayerBucketEmptyEvent event) { }
+    private void onBucketEmpty(PlayerBucketEmptyEvent event) { }
 
     // process malk bucket
     @EventHandler
@@ -36,7 +36,7 @@ public class Bucket implements Listener {
             UberItem uber = Utilities.getUber(event.getItem());
 
             // enforce premium vs lite, item rarity perms, item specific perms
-            if (!Utilities.enforcePermissions(event.getPlayer(), uber)) return;
+            if (Utilities.enforcePermissions(event.getPlayer(), uber)) return;
 
             ItemStack[] itemArray = Utilities.getCompactInventory(event.getItem());
             if (itemArray.length == 0) return; // ensure that the malk bucket has a spiked potion effect

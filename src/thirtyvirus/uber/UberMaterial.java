@@ -22,7 +22,9 @@ public class UberMaterial {
 
     private UberCraftingRecipe craftingRecipe;
 
-    // define a new UberMaterial type
+    /**
+     * define a new UberMaterial type
+     */
     public UberMaterial(Material material, String name, UberRarity rarity, boolean enchantGlint, boolean stackable, boolean isVanillaCraftable, String description, UberCraftingRecipe craftingRecipe) {
         this.material = material;
         this.name = name;
@@ -37,13 +39,19 @@ public class UberMaterial {
         UUID = Utilities.stringToSeed(material.name() + name + rarity.toString());
     }
 
-    // test if two UberMaterials are the same
+    /**
+     * @param other the ItemStack being compared
+     * @return if two UberMaterials belong to the same type (ignores meta)
+     */
     public boolean compare(ItemStack other) {
         int otherUUID = Utilities.getIntFromItem(other, "MaterialUUID");
         return (otherUUID == UUID);
     }
 
-    // make an instance of this UberMaterial in ItemStack form
+    /**
+     * @param amount the maount of this item to make
+     * @return an instance of this UberMaterial in ItemStack form
+     */
     public ItemStack makeItem(int amount) {
         ItemStack item = Utilities.nameItem(material, rarity.getColor() + name);
         Utilities.storeIntInItem(item, UUID, "MaterialUUID");
