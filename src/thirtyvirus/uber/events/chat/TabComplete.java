@@ -28,7 +28,7 @@ public class TabComplete implements TabCompleter {
             // no arguments
             if (args.length == 1) {
                 if (player.hasPermission("uber.user")) { arguments.addAll(Arrays.asList("help", "info", "identify", "list")); }
-                if (player.hasPermission("uber.admin")) { arguments.addAll(Arrays.asList("give", "giveMaterial", "reload")); }
+                if (player.hasPermission("uber.admin")) { arguments.addAll(Arrays.asList("give", "giveMaterial", "updateLore", "reload")); }
 
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[0].toLowerCase())) iter.remove(); }
             }

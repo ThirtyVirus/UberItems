@@ -53,6 +53,10 @@ public class UberCommand implements CommandExecutor{
                     if (sender.hasPermission("uber.admin")) giveMaterial(sender, args);
                     else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
                     break;
+                case "updatelore":
+                    if (sender.hasPermission("uber.admin")) updateLore(sender);
+                    else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
+                    break;
                 case "reload":
                     if (sender.hasPermission("uber.admin")) reload(sender);
                     else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
@@ -71,13 +75,28 @@ public class UberCommand implements CommandExecutor{
         return true;
     }
 
+    // updateLore command
+    private void updateLore(CommandSender sender) {
+        // verify that the command is executed by a player
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
+        Player player = (Player) sender;
+
+        // verify that the item is in fact an UberItem
+        UberItem uber = Utilities.getUber(player.getInventory().getItemInMainHand());
+        if (uber == null) { Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem")); return; }
+
+        // update the lore
+        uber.updateLore(player.getInventory().getItemInMainHand());
+        Utilities.informPlayer(player, UberItems.getPhrase("updated-lore-message"));
+    }
+
     // give command
     private void give(CommandSender sender, String[] args) {
         // verify that the command is executed by a player
         if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
         Player player = (Player) sender;
 
-        // create the item from either ID or name
+        // create the item from name
         int stack = 1; if (args.length > 2) stack = Integer.parseInt(args[2]);
         ItemStack uber = UberItems.getItem(args[1]).makeItem(stack);
 

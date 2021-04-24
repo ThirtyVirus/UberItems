@@ -6,34 +6,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e89be58a-ef4f-430f-8537-cfe9ba3bde74" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberMaterial.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberMaterial.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/Bucket.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/Bucket.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/FoodLevelChange.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/FoodLevelChange.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/PlayerUseUberItem.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/events/player/PlayerUseUberItem.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/RegisterItems.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/RegisterItems.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/Utilities$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/Utilities$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/Utilities.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/Utilities.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/boom_stick.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/boom_stick.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/hackerman$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/hackerman.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/hackerman.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/pocket_portal.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/pocket_portal.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/UberMaterial.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/UberMaterial.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/Bucket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/Bucket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/FoodLevelChange.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/FoodLevelChange.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/PlayerUseUberItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/player/PlayerUseUberItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/MenuUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/MenuUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/RegisterItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/RegisterItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/UberRarity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/UberRarity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/Utilities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/boom_stick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/boom_stick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/hackerman.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/hackerman.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/pocket_portal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/pocket_portal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/shooty_box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/shooty_box.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/language.yml" beforeDir="false" afterPath="$PROJECT_DIR$/language.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/commands/UberCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/commands/UberCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/chat/TabComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/chat/TabComplete.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,30 +165,30 @@
     </state>
     <state x="1010" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1614393755877" />
     <state x="3570" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@2560.0.2560.1400" timestamp="1619190180898" />
-    <state x="1038" y="447" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1619295439414">
+    <state x="1038" y="447" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1619295939726">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1038" y="447" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619295439414" />
+    <state x="1038" y="447" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619295939726" />
     <state x="1060" y="454" key="FileChooserDialogImpl" timestamp="1619209083806">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1060" y="454" key="FileChooserDialogImpl/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619209083806" />
-    <state width="2517" height="181" key="GridCell.Tab.0.bottom" timestamp="1619295562473">
+    <state width="2517" height="181" key="GridCell.Tab.0.bottom" timestamp="1619296067671">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="181" key="GridCell.Tab.0.bottom/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619295562473" />
-    <state width="2517" height="181" key="GridCell.Tab.0.center" timestamp="1619295562473">
+    <state width="2517" height="181" key="GridCell.Tab.0.bottom/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619296067671" />
+    <state width="2517" height="181" key="GridCell.Tab.0.center" timestamp="1619296067671">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="181" key="GridCell.Tab.0.center/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619295562473" />
-    <state width="2517" height="181" key="GridCell.Tab.0.left" timestamp="1619295562472">
+    <state width="2517" height="181" key="GridCell.Tab.0.center/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619296067671" />
+    <state width="2517" height="181" key="GridCell.Tab.0.left" timestamp="1619296067671">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="181" key="GridCell.Tab.0.left/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619295562472" />
-    <state width="2517" height="181" key="GridCell.Tab.0.right" timestamp="1619295562473">
+    <state width="2517" height="181" key="GridCell.Tab.0.left/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619296067671" />
+    <state width="2517" height="181" key="GridCell.Tab.0.right" timestamp="1619296067671">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="2517" height="181" key="GridCell.Tab.0.right/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619295562473" />
+    <state width="2517" height="181" key="GridCell.Tab.0.right/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619296067671" />
     <state x="760" y="274" width="1134" height="852" key="SettingsEditor" timestamp="1619189694344">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
