@@ -29,18 +29,29 @@ public class InventoryClick implements Listener {
         }
     }
 
+    // update the crafting result on InventoryDragEvents
+    @EventHandler
+    private void inventoryDragEvent(InventoryDragEvent event) {
+        // verify that the Player is in the UberItems crafting menu
+        if (!event.getView().getTitle().equals("UberItems - Craft Item") || event.getView().getTopInventory().getLocation() != null) return;
+
+        // make crafting grid *more* responsive
+        Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> MenuUtils.checkCraft(event.getInventory()), 1);
+    }
+
     // process click events in the UberItems Crafting Menu
     @EventHandler
     private void interactInCraftingMenu(InventoryClickEvent event) {
         // verify that the Player is in the UberItems crafting menu
-        if (!event.getView().getTitle().equals("UberItems - Craft Item")) return;
+        if (!event.getView().getTitle().equals("UberItems - Craft Item") || event.getView().getTopInventory().getLocation() != null) return;
+
         Player player = (Player) event.getWhoClicked();
 
         // cancel any clicks on GUI buttons
         if (MenuUtils.customItems.contains(event.getCurrentItem())) event.setCancelled(true);
 
         // make crafting grid *more* responsive
-        MenuUtils.checkCraft(event.getInventory());
+        Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> MenuUtils.checkCraft(event.getInventory()), 1);
 
         // verify that an item was clicked
         if (event.getCurrentItem() == null) return;
@@ -64,7 +75,7 @@ public class InventoryClick implements Listener {
     @EventHandler
     private void interactInCraftingGuideMenu(InventoryClickEvent event) {
         // verify that the Player is in a UberItems crafting guide menu
-        if (!event.getView().getTitle().contains("Guide - ")) return;
+        if (!event.getView().getTitle().contains("Guide - ") || event.getView().getTopInventory().getLocation() != null) return;
         Player player = (Player) event.getWhoClicked();
 
         // cancel all clicks in this menu
@@ -106,6 +117,10 @@ public class InventoryClick implements Listener {
 
             // allow Creative Mode players to take UberItems from the menu directly
             if (player.getGameMode() == GameMode.CREATIVE && event.getClick() == ClickType.SHIFT_LEFT) {
+
+                // enforce premium vs lite, item rarity perms, item specific perms
+                if (Utilities.enforcePermissions(player, item)) return;
+
                 ItemStack i = event.getCurrentItem().clone(); i.setAmount(1);
                 if (!item.isStackable()) Utilities.storeStringInItem(i, java.util.UUID.randomUUID().toString(), "UUID");
                 else i.setAmount(event.getCurrentItem().getType().getMaxStackSize());
@@ -140,7 +155,7 @@ public class InventoryClick implements Listener {
     @EventHandler
     private void shootyBoxAmmoGuide(InventoryClickEvent event) {
         // verify that the Player is in a UberItems crafting guide menu
-        if (!event.getView().getTitle().contains("Ammo Guide")) return;
+        if (!event.getView().getTitle().contains("Ammo Guide") || event.getView().getTopInventory().getLocation() != null) return;
 
         // cancel all clicks in this menu
         event.setCancelled(true);

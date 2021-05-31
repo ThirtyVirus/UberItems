@@ -55,11 +55,7 @@ public class electromagnet extends UberItem{
 			Utilities.storeIntInItem(item, 1, "status");
 		}
 		else {
-			ItemMeta meta = item.getItemMeta();
-			for (Enchantment e : meta.getEnchants().keySet()) {
-				meta.removeEnchant(e);
-			}
-			item.setItemMeta(meta);
+			Utilities.removeEnchantments(item);
 			Utilities.storeIntInItem(item, 0, "status");
 		}
 

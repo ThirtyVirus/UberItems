@@ -312,6 +312,19 @@ public final class Utilities {
     }
 
     /**
+     * Remove all enchantments from an item
+     *
+     * @param item the ItemStack to be un-enchanted
+     */
+    public static void removeEnchantments(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        for (Enchantment e : meta.getEnchants().keySet()) {
+            meta.removeEnchant(e);
+        }
+        item.setItemMeta(meta);
+    }
+
+    /**
      * Set the given ItemStack's durability to maximum
      *
      * @param item the ItemStack to be repaired

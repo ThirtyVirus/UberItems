@@ -123,6 +123,9 @@ public class MenuUtils {
     // make the craftable UberItem appear in the crafted slot if the appropriate materials are there
     public static void checkCraft(Inventory i) {
 
+        // prevent renamed chest dupe
+        if (i.getLocation() != null) return;
+
         // put all crafting grid items into a list
         List<ItemStack> items = Arrays.asList(
                 i.getItem(10), i.getItem(11), i.getItem(12),
@@ -157,9 +160,19 @@ public class MenuUtils {
     // TODO fix buggy edge cases in crafting
     public static void checkIfPullValid(InventoryClickEvent event) {
         if (event.getCurrentItem() == CRAFTING_SLOT_ITEM) event.setCancelled(true);
-        else if (event.getClick() == ClickType.DOUBLE_CLICK) event.setCancelled(true);
-        else if (!validCraftActions.contains(event.getAction())) event.setCancelled(true);
-        else pullItem(event, event.getInventory(), event.getCurrentItem());
+        //else if (event.getClick() == ClickType.DOUBLE_CLICK) event.setCancelled(true);
+        //else if (!validCraftActions.contains(event.getAction())) event.setCancelled(true);
+        else {
+
+            // enforce premium vs lite, item rarity perms, item specific perms
+            if (Utilities.isUber(event.getCurrentItem())) {
+                if (Utilities.enforcePermissions((Player)event.getWhoClicked(), Utilities.getUber(event.getCurrentItem()))) {
+                    event.setCancelled(true); return;
+                }
+            }
+
+            pullItem(event, event.getInventory(), event.getCurrentItem());
+        }
     }
 
     // pull crafted item from the slot
@@ -201,27 +214,32 @@ public class MenuUtils {
             return;
         }
 
-        // attempt to stack items together
-        //if (event.getAction() == InventoryAction.PLACE_ALL) {
-        //    ItemStack inHand = event.getWhoClicked().getItemOnCursor();
-        //    if (Utilities.getUberMaterial(inHand) == Utilities.getUberMaterial(event.getCurrentItem())
-        //            && inHand.getAmount() + event.getCurrentItem().getAmount() <= inHand.getMaxStackSize()) {
-        //        inHand.setAmount(inHand.getAmount() + event.getCurrentItem().getAmount());
-        //        event.setCancelled(true);
-        //        ((Player) event.getWhoClicked()).updateInventory();
-        //    }
-        //    else {
-        //        event.setCancelled(true);
-        //        return;
-        //    }
-        //    event.setCancelled(true);
-        //}
-
         // the player has the go-ahead to pull the item, delete the components
         for (int counter = 0; counter < items.size(); counter++) {
             if (items.get(counter) == null) continue;
             items.get(counter).setAmount(items.get(counter).getAmount() - mat.getCraftingRecipe().get(counter).getAmount());
         }
+
+        // handle giving the items to the player
+        UberMaterial uber = Utilities.getUberMaterial(item);
+        // hand is empty
+        if (event.getCursor() == null)  {
+            Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> event.getWhoClicked().setItemOnCursor(item.clone()), 1);
+        }
+        // player is holding another instance of the same item
+        else if (uber.compare(event.getCursor())) {
+
+            if ((event.getCursor().getAmount() == 1 && !uber.isStackable()) || event.getCursor().getAmount() == uber.getMaterial().getMaxStackSize()) event.setCancelled(true);
+
+            else if (event.getCursor().getAmount() + item.getAmount() <= uber.getMaterial().getMaxStackSize()) {
+                int newAmount = item.getAmount() + event.getCursor().getAmount();
+                Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> { event.getWhoClicked().setItemOnCursor(item.clone()); event.getWhoClicked().getItemOnCursor().setAmount(newAmount);}, 1);
+            }
+            else event.setCancelled(true);
+        }
+
+        // player is holding another item
+        else event.setCancelled(true);
 
     }
 

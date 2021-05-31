@@ -28,7 +28,7 @@ public class InventoryClose implements Listener {
         }
 
         // add items back to a player's inventory if closing the UberItem crafting menu
-        if (event.getView().getTitle().contains("UberItems - Craft Item")) {
+        if (event.getView().getTitle().contains("UberItems - Craft Item") && event.getView().getTopInventory().getLocation() == null) {
             Inventory i = event.getInventory();
             List<ItemStack> items = Arrays.asList(
                     i.getItem(10), i.getItem(11), i.getItem(12),
