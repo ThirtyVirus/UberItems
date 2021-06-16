@@ -68,7 +68,7 @@ public class InventoryClick implements Listener {
         }
 
         // process pulling an item out of the crafting slot
-        if (event.getRawSlot() == 23) MenuUtils.checkIfPullValid(event);
+        if (event.getRawSlot() == 23) MenuUtils.pullItem(event);
     }
 
     // process click events in the UberItems Crafting Guide Menu

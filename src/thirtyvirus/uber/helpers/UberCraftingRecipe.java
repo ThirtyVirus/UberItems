@@ -1,5 +1,6 @@
 package thirtyvirus.uber.helpers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.UberItems;
@@ -52,6 +53,7 @@ public class UberCraftingRecipe {
 
         // item is not an Uber Material
         // TODO compare more than material and amount? Do I even need to?
+        else if (i1.getType() == Material.AIR && i2.getType() == Material.AIR) return true;
         else return (i1.getType() == i2.getType() && i1.getAmount() <= i2.getAmount());
     }
 
