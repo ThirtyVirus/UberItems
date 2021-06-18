@@ -165,13 +165,6 @@ public class MenuUtils {
         // cancel vanilla event, because it allows me to process the itemstack properly
         event.setCancelled(true);
 
-        // enforce premium vs lite, item rarity perms, item specific perms
-        if (Utilities.isUber(event.getCurrentItem())) {
-            if (Utilities.enforcePermissions((Player)event.getWhoClicked(), Utilities.getUber(event.getCurrentItem()))) {
-                event.setCancelled(true); return;
-            }
-        }
-
         // enforce clicking on an actual item in the crafting grid
         if (event.getCurrentItem() == CRAFTING_SLOT_ITEM) {
             event.setCancelled(true); return;
@@ -193,6 +186,12 @@ public class MenuUtils {
 
     private static void pullUberItem(InventoryClickEvent event, List<ItemStack> items, ItemStack product, ItemStack cursor) {
         UberItem uber = Utilities.getUber(product);
+
+        // enforce premium vs lite, item rarity perms, item specific perms
+        if (Utilities.enforcePermissions((Player)event.getWhoClicked(), Utilities.getUber(event.getCurrentItem()))) {
+            event.setCancelled(true); return;
+        }
+
         // prevent null, double check if the item should be crafted
         if (uber == null || !uber.getCraftingRecipe().isEqual(items)) return;
 
@@ -205,32 +204,22 @@ public class MenuUtils {
 
         // handle giving the items to the player
 
-        // process shift clicking seperately
+        // process shift clicking separately
         if (event.getClick() == ClickType.SHIFT_LEFT) {
 
-            int stack = 0;
-            while (stack < uber.getMaterial().getMaxStackSize()) {
-                // cancel loop if can no longer craft items
-                if (!uber.getCraftingRecipe().isEqual(items)) break;
-
-                // remove components
-                for (int counter = 0; counter < items.size(); counter++) {
-                    if (items.get(counter) == null) continue;
-                    items.get(counter).setAmount(items.get(counter).getAmount() - uber.getCraftingRecipe().get(counter).getAmount());
-                }
-                stack += product.getAmount();
-            }
-            final int s = stack;
+            // loop the crafting process until out of materials
+            int stack = 0; while (stack < uber.getMaterial().getMaxStackSize()) {
+                if (!uber.getCraftingRecipe().isEqual(items)) break; // cancel loop if can no longer craft items
+                // remove components, add 1 to number of successful crafts
+                uber.getCraftingRecipe().consumeMaterials(items); stack += product.getAmount();
+            } final int s = stack;
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> { event.getWhoClicked().getInventory().addItem(uber.makeItem(s)); }, 1);
             return;
         }
 
         // the player has the go-ahead to pull the item, delete the components
-        for (int counter = 0; counter < items.size(); counter++) {
-            if (items.get(counter) == null) continue;
-            items.get(counter).setAmount(items.get(counter).getAmount() - uber.getCraftingRecipe().get(counter).getAmount());
-        }
+        uber.getCraftingRecipe().consumeMaterials(items);
 
         // cursor is empty
         if (cursor.getType() == Material.AIR) {
@@ -259,32 +248,22 @@ public class MenuUtils {
 
         // handle giving the items to the player
 
-        // process shift clicking seperately
+        // process shift clicking separately
         if (event.getClick() == ClickType.SHIFT_LEFT) {
 
-            int stack = 0;
-            while (stack < uber.getMaterial().getMaxStackSize()) {
-                // cancel loop if can no longer craft items
-                if (!uber.getCraftingRecipe().isEqual(items)) break;
-
-                // remove components
-                for (int counter = 0; counter < items.size(); counter++) {
-                    if (items.get(counter) == null) continue;
-                    items.get(counter).setAmount(items.get(counter).getAmount() - uber.getCraftingRecipe().get(counter).getAmount());
-                }
-                stack += product.getAmount();
-            }
-            final int s = stack;
+            // loop the crafting process until out of materials
+            int stack = 0; while (stack < uber.getMaterial().getMaxStackSize()) {
+                if (!uber.getCraftingRecipe().isEqual(items)) break; // cancel loop if can no longer craft items
+                // remove components, add 1 to number of successful crafts
+                uber.getCraftingRecipe().consumeMaterials(items); stack += product.getAmount();
+            } final int s = stack;
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> { event.getWhoClicked().getInventory().addItem(uber.makeItem(s)); }, 1);
             return;
         }
 
         // the player has the go-ahead to pull the item, delete the components
-        for (int counter = 0; counter < items.size(); counter++) {
-            if (items.get(counter) == null) continue;
-            items.get(counter).setAmount(items.get(counter).getAmount() - uber.getCraftingRecipe().get(counter).getAmount());
-        }
+        uber.getCraftingRecipe().consumeMaterials(items);
 
         // cursor is empty
         if (cursor.getType() == Material.AIR) {

@@ -244,7 +244,7 @@ public class RegisterItems {
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        UberItems.putItem("aspect_of_the_virus", new aspect_of_the_virus(Material.NETHERITE_SWORD, "Aspect of the Virus", UberRarity.MYTHIC,
+        UberItems.putItem("aspect_of_the_virus", new aspect_of_the_virus(Material.DIAMOND_SWORD, "Aspect of the Virus", UberRarity.MYTHIC,
                 false, false, false,
                 Collections.singletonList(new UberAbility("Shadow Death", AbilityType.RIGHT_CLICK, "While crouched, teleport behind the closest mob")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -255,7 +255,7 @@ public class RegisterItems {
                         UberItems.getMaterial("enchanted_diamond").makeItem(4),
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR),
-                        new ItemStack(Material.NETHERITE_SWORD),
+                        new ItemStack(Material.DIAMOND_SWORD),
                         new ItemStack(Material.AIR)), false, 1)));
 
         UberItems.putItem("hackerman", new hackerman(Material.TOTEM_OF_UNDYING, "Hackerman", UberRarity.RARE,
@@ -286,7 +286,7 @@ public class RegisterItems {
                     new ItemStack(Material.COBBLESTONE, 32),
                     new ItemStack(Material.AIR),
                     new ItemStack(Material.COBBLESTONE, 32),
-                    new ItemStack(Material.AIR)), false, 1)));
+                    new ItemStack(Material.AIR)), true, 1)));
 
         UberItems.putMaterial("enchanted_diamond", new UberMaterial(Material.DIAMOND,
                 "Enchanted Diamond", UberRarity.UNCOMMON, true, true, false, "",
@@ -299,7 +299,7 @@ public class RegisterItems {
                         new ItemStack(Material.DIAMOND, 32),
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.DIAMOND, 32),
-                        new ItemStack(Material.AIR)), false, 1)));
+                        new ItemStack(Material.AIR)), true, 1)));
 
         UberItems.putMaterial("enchanted_stone", new UberMaterial(Material.STONE,
                 "Enchanted Stone", UberRarity.RARE, true, true, false, "",
@@ -312,7 +312,7 @@ public class RegisterItems {
                         UberItems.getMaterial("enchanted_cobblestone").makeItem(32),
                         new ItemStack(Material.AIR),
                         UberItems.getMaterial("enchanted_cobblestone").makeItem(32),
-                        new ItemStack(Material.AIR)), false, 1)));
+                        new ItemStack(Material.AIR)), true, 1)));
 
         UberItems.putMaterial("enchanted_ender_pearl", new UberMaterial(Material.ENDER_PEARL,
                 "Enchanted Ender Pearl", UberRarity.UNCOMMON, true, true, false, "",
@@ -325,7 +325,7 @@ public class RegisterItems {
                         new ItemStack(Material.ENDER_PEARL, 16),
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.ENDER_PEARL, 16),
-                        new ItemStack(Material.AIR)), false, 1)));
+                        new ItemStack(Material.AIR)), true, 1)));
 
         UberItems.putMaterial("enchanted_string", new UberMaterial(Material.STRING,
                 "Enchanted String", UberRarity.UNCOMMON, true, true, false, "",
@@ -338,7 +338,7 @@ public class RegisterItems {
                         new ItemStack(Material.STRING, 16),
                         new ItemStack(Material.STRING, 16),
                         new ItemStack(Material.STRING, 16),
-                        new ItemStack(Material.STRING, 16)), false, 1)));
+                        new ItemStack(Material.STRING, 16)), true, 1)));
 
         UberItems.putMaterial("spark_dust", new UberMaterial(Material.GUNPOWDER,
                 "Spark Dust", UberRarity.COMMON, false, true, true,
@@ -352,7 +352,7 @@ public class RegisterItems {
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR),
-                        new ItemStack(Material.AIR)), false, 10)));
+                        new ItemStack(Material.AIR)), true, 10)));
 
         UberItems.putMaterial("flammable_substance", new UberMaterial(Material.FIRE_CHARGE,
                 "Flammable Substance", UberRarity.UNCOMMON, false, true, true,
@@ -366,7 +366,7 @@ public class RegisterItems {
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR),
-                        new ItemStack(Material.AIR)), false, 1)));
+                        new ItemStack(Material.AIR)), true, 1)));
 
         UberItems.putMaterial("paper_fletching", new UberMaterial(Material.FEATHER,
         "Paper Fletching", UberRarity.COMMON, false, true, true,

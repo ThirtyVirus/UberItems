@@ -6,11 +6,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e89be58a-ef4f-430f-8537-cfe9ba3bde74" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/spigot_1_16_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/spigot_1_14_3.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Uber_Items.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Uber_Items.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/MenuUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/MenuUtils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/inventory/InventoryClick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/inventory/InventoryClick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/RegisterItems.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/RegisterItems.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/UberCraftingRecipe.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/UberCraftingRecipe.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/electromagnet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/electromagnet.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/lunch_box$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/lunch_box$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/lunch_box.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/lunch_box.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/shooty_box$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/shooty_box$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/shooty_box.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/shooty_box.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/MenuUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/MenuUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/RegisterItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/RegisterItems.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/UberCraftingRecipe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/UberCraftingRecipe.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/electromagnet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/electromagnet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/lunch_box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/lunch_box.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/shooty_box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/shooty_box.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,18 +55,20 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/OneDrive/Documents/Programming/Spigot/plugins/UberItems_Hypixel_SkyBlock" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/thirtyvirus" />
+    <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.4032258" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\ThirtyVirus\Documents\My Programming\Spigot\plugins\Uber_Items\src\thirtyvirus\uber\items" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\bcalabrese\IdeaProjects\Uber_Items" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Thirt\IdeaProjects\Uber_Items\src\thirtyvirus\" />
+      <recent name="C:\Users\Thirt\IdeaProjects\Uber_Items\src\" />
+      <recent name="C:\Users\ThirtyVirus\Documents\My Programming\Spigot\plugins\Uber_Items\src\thirtyvirus\uber\items" />
     </key>
   </component>
   <component name="RunManager">
@@ -164,16 +178,15 @@
     <state x="3570" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1619190180898">
       <screen x="2560" y="0" width="2560" height="1400" />
     </state>
-    <state x="1010" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1614393755877" />
     <state x="3570" y="446" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@2560.0.2560.1400" timestamp="1619190180898" />
     <state x="1038" y="447" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1619295939726">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1038" y="447" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619295939726" />
-    <state x="1060" y="454" key="FileChooserDialogImpl" timestamp="1619209083806">
+    <state x="1060" y="454" key="FileChooserDialogImpl" timestamp="1623981346464">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="1060" y="454" key="FileChooserDialogImpl/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619209083806" />
+    <state x="1060" y="454" key="FileChooserDialogImpl/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1623981346464" />
     <state width="2517" height="181" key="GridCell.Tab.0.bottom" timestamp="1619296067671">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -190,14 +203,10 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state width="2517" height="181" key="GridCell.Tab.0.right/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619296067671" />
-    <state x="760" y="274" width="1134" height="852" key="SettingsEditor" timestamp="1619189694344">
+    <state x="760" y="274" width="1134" height="852" key="SettingsEditor" timestamp="1623980481222">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state x="760" y="274" width="1134" height="852" key="SettingsEditor/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1619189694344" />
-    <state x="937" y="314" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1614734814990">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="937" y="314" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1614734814990" />
+    <state x="760" y="274" width="1134" height="852" key="SettingsEditor/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1623980481222" />
     <state x="2627" y="140" width="2237" height="1140" key="dock-window-1" timestamp="1619015197134">
       <screen x="2560" y="0" width="2560" height="1400" />
     </state>
@@ -210,13 +219,5 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1461" y="275" width="607" height="804" key="find.popup/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1618021054707" />
-    <state x="662" y="320" key="new project wizard" timestamp="1611656555975">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="662" y="320" key="new project wizard/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1611656555975" />
-    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup" timestamp="1613435565792">
-      <screen x="0" y="0" width="2560" height="1400" />
-    </state>
-    <state x="943" y="315" width="672" height="678" key="search.everywhere.popup/0.0.2560.1400/2560.0.2560.1400/-2560.0.2560.1400@0.0.2560.1400" timestamp="1613435565792" />
   </component>
 </project>

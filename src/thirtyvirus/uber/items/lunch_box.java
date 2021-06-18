@@ -105,7 +105,6 @@ public class lunch_box extends UberItem {
 			case ENCHANTED_GOLDEN_APPLE:
 			case GOLDEN_APPLE: if (saturation) return 10; else return 4;
 			case GOLDEN_CARROT: if (saturation) return 15; else return 6;
-			case HONEY_BOTTLE: if (saturation) return 2; else return 6;
 			case PUFFERFISH: if (saturation) return 0; else return 1;
 			case PUMPKIN_PIE: if (saturation) return 5; else return 8;
 			case RABBIT_STEW: if (saturation) return 12; else return 10;

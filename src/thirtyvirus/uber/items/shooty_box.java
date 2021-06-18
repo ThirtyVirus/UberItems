@@ -206,7 +206,7 @@ public class shooty_box extends UberItem {
 				break;
 			case GLASS:
 				spritzAttack(player, 15, 8);
-				player.getWorld().playEffect(player.getLocation(), Effect.INSTANT_POTION_BREAK, 1);
+				player.getWorld().playEffect(player.getLocation(), Effect.POTION_BREAK, 1);
 				recoil = 0.6F;
 				break;
 			case GUNPOWDER:
@@ -274,19 +274,19 @@ public class shooty_box extends UberItem {
 			case ZOMBIE_HORSE_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.ZOMBIE_HORSE, 3.0F, Effect.BLAZE_SHOOT); break;
 			case ZOMBIE_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.ZOMBIE, 3.0F, Effect.BLAZE_SHOOT); break;
 			case ZOMBIE_VILLAGER_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.ZOMBIE_VILLAGER, 3.0F, Effect.BLAZE_SHOOT); break;
-			case STRIDER_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.STRIDER, 3.0F, Effect.BLAZE_SHOOT); break;
-			case BEE_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.BEE, 3.0F, Effect.BLAZE_SHOOT); break;
+			//case STRIDER_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.STRIDER, 3.0F, Effect.BLAZE_SHOOT); break;
+			//case BEE_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.BEE, 3.0F, Effect.BLAZE_SHOOT); break;
 			case CAT_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.CAT, 3.0F, Effect.BLAZE_SHOOT); break;
 			case FOX_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.FOX, 3.0F, Effect.BLAZE_SHOOT); break;
-			case HOGLIN_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.HOGLIN, 3.0F, Effect.BLAZE_SHOOT); break;
+			//case HOGLIN_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.HOGLIN, 3.0F, Effect.BLAZE_SHOOT); break;
 			case PANDA_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.PANDA, 3.0F, Effect.BLAZE_SHOOT); break;
-			case PIGLIN_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.PIGLIN, 3.0F, Effect.BLAZE_SHOOT); break;
+			//case PIGLIN_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.PIGLIN, 3.0F, Effect.BLAZE_SHOOT); break;
 			case PILLAGER_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.PILLAGER, 3.0F, Effect.BLAZE_SHOOT); break;
 			case RAVAGER_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.RAVAGER, 3.0F, Effect.BLAZE_SHOOT); break;
 			case TRADER_LLAMA_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.TRADER_LLAMA, 3.0F, Effect.BLAZE_SHOOT); break;
 			case WANDERING_TRADER_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.WANDERING_TRADER, 3.0F, Effect.BLAZE_SHOOT); break;
-			case ZOGLIN_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.ZOGLIN, 3.0F, Effect.BLAZE_SHOOT); break;
-			case ZOMBIFIED_PIGLIN_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.ZOMBIFIED_PIGLIN, 3.0F, Effect.BLAZE_SHOOT); break;
+			//case ZOGLIN_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.ZOGLIN, 3.0F, Effect.BLAZE_SHOOT); break;
+			//case ZOMBIFIED_PIGLIN_SPAWN_EGG: launchMobFromSpawnEgg(player, EntityType.ZOMBIFIED_PIGLIN, 3.0F, Effect.BLAZE_SHOOT); break;
 
 			default:
 				// shoot blocks as falling sand
