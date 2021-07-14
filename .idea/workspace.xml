@@ -6,23 +6,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e89be58a-ef4f-430f-8537-cfe9ba3bde74" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/spigot_1_16_5.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/spigot_1_14_3.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Uber_Items.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Uber_Items.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/MenuUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/MenuUtils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/RegisterItems.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/RegisterItems.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/UberCraftingRecipe.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/UberCraftingRecipe.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/electromagnet.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/electromagnet.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/lunch_box$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/lunch_box$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/lunch_box.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/lunch_box.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/shooty_box$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/shooty_box$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/shooty_box.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/items/shooty_box.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/MenuUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/MenuUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/RegisterItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/RegisterItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/UberCraftingRecipe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/UberCraftingRecipe.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/electromagnet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/electromagnet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/lunch_box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/lunch_box.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/items/shooty_box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/shooty_box.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/Utilities.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/Utilities.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItems.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/inventory/RenameItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/inventory/RenameItem.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

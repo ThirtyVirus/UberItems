@@ -43,9 +43,13 @@ public class RenameItem implements Listener {
 
         for (int counter = 0; counter < 9; counter++) {
 
+            // prevent crash with the small manual grid
+            if (counter >= item.length) return;
+
             if (Utilities.isUber(item[counter])) {
                 event.setCancelled(true);
                 Utilities.playSound(ActionSound.ERROR, player);
+                return;
             }
 
             if (Utilities.isUberMaterial(item[counter])) {
@@ -53,6 +57,7 @@ public class RenameItem implements Listener {
                 if (um == null || !um.isVanillaCraftable()) {
                     event.setCancelled(true);
                     Utilities.playSound(ActionSound.ERROR, player);
+                    return;
                 }
             }
 
