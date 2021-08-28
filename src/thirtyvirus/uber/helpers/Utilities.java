@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -256,6 +257,29 @@ public final class Utilities {
         if (currentLine.length() > 0) lines.add("" + prefixColor + currentLine);
 
         return lines;
+    }
+
+    public static void tagEntity(Entity host, String string, String key) {
+        NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
+
+        // make sure that the item isn't null, meta isn't null
+        if (host == null) return;
+        //if (!host.hasItemMeta()) return;
+        host.getPersistentDataContainer().set(k, new StoredString(), string);
+    }
+    public static String getEntityTag(Entity host, String key) {
+        NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
+
+        // make sure that the item isn't null, meta isn't null
+        if (host == null) return null;
+        //if (!host.hasItemMeta()) return null;
+
+        String string = host.getPersistentDataContainer().get(k, new StoredString());
+        if (string == null) string = "";
+        return string;
+
+        // if no entry, return null
+        //return null;
     }
 
     // ITEM FUNCTIONS

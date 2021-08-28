@@ -66,7 +66,7 @@ public class UberItems extends JavaPlugin {
     public static Map<Player, List<Block>> multisorts = new HashMap<>();
 
     // other variables
-    public static final boolean premium = false;
+    public static final boolean premium = true;
     private static boolean haveCountedDefaultItems = false;
     private static int defaultItemCount = 0;
     private static UberItems instance;
@@ -296,7 +296,11 @@ public class UberItems extends JavaPlugin {
 
     // getters for language phrases, version, instance
     public static String getPhrase(String key) {
-        return phrases.get(key);
+        if (phrases.containsKey(key)) return phrases.get(key);
+        else {
+            Bukkit.getLogger().warning("no UberItems language phrase found for '" + key + "', is your language.yml up to date?");
+            return "ERROR";
+        }
     }
     public String getVersion() {
         return getDescription().getVersion();
