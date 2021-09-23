@@ -259,6 +259,13 @@ public final class Utilities {
         return lines;
     }
 
+    /**
+     * 'Tag' an entity with a string value, can be checked later
+     *
+     * @param host the entity to be tagged
+     * @param string the string to be tagged to the entity
+     * @param key the key to be used to look up the tag
+     */
     public static void tagEntity(Entity host, String string, String key) {
         NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
 
@@ -266,6 +273,14 @@ public final class Utilities {
         if (host == null) return;
         host.getPersistentDataContainer().set(k, new StoredString(), string);
     }
+
+    /**
+     * retrieve a tag from an entity if there is one
+     *
+     * @param host the entity to tested for the tag
+     * @param key the key to be used to look up the tag
+     * @return the value of the tag value associated with 'key', or null
+     */
     public static String getEntityTag(Entity host, String key) {
         NamespacedKey k = new NamespacedKey(UberItems.getInstance(), key);
 
@@ -609,7 +624,13 @@ public final class Utilities {
         event.setCancelled(true);
     }
 
-    // apply or remove upgrade to UberItem, and update lore
+    /**
+     * apply upgrade to UberItem, and update lore. Can be used to lock item functionality behind an upgrade
+     *
+     * @param item the MC itemstack to be updated
+     * @param upgradeName the name of the upgrade
+     * @param upgradeDescription the description of the upgrade
+     */
     private static void addUpgrade(ItemStack item, String upgradeName, String upgradeDescription) {
         UberItem uber = getUber(item); if (uber == null) return;
 
@@ -626,6 +647,13 @@ public final class Utilities {
         // update the item lore to mirror the change
         uber.updateLore(item);
     }
+
+    /**
+     * remove upgrade from UberItem, and update lore.
+     *
+     * @param item the MC itemstack to be updated
+     * @param upgradeName the name of the upgrade
+     */
     private static void removeUpgrade(ItemStack item, String upgradeName) {
         UberItem uber = getUber(item); if (uber == null) return;
 
