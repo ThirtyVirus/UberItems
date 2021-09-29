@@ -69,7 +69,7 @@ public class RegisterItems {
 
         UberItems.putItem("cheat_code", new cheat_code(Material.STONE, "Cheat Code", UberRarity.EPIC,
                  false, false, false,
-                Arrays.asList(new UberAbility("asd", AbilityType.LEFT_CLICK, "Toggle creative mode"), new UberAbility("Game End", AbilityType.RIGHT_CLICK, "Instantly win the game")),
+                Arrays.asList(new UberAbility("Konami Code", AbilityType.LEFT_CLICK, "Toggle creative mode"), new UberAbility("P2W", AbilityType.RIGHT_CLICK, "Heal and feed yourself instantly")),
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.DIAMOND_BLOCK, 64),
                         new ItemStack(Material.DIAMOND_BLOCK, 64),

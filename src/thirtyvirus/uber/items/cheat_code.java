@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -30,6 +31,7 @@ public class cheat_code extends UberItem {
     public void getSpecificLoreSuffix(List<String> lore, ItemStack item) { }
 
     public boolean leftClickAirAction(Player player, ItemStack item) {
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1, 1);
         if (player.getGameMode() == GameMode.CREATIVE) player.setGameMode(GameMode.SURVIVAL);
         else player.setGameMode(GameMode.CREATIVE);
         return true;
@@ -37,12 +39,10 @@ public class cheat_code extends UberItem {
     public boolean leftClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return leftClickAirAction(player, item); }
 
     public boolean rightClickAirAction(Player player, ItemStack item) {
-
-        Utilities.warnPlayer(player, "This item was broken because ending the game requires NMS and I ain't gonna make this plugin version dependant. RIP");
-
-        //PacketPlayOutGameStateChange packet = new PacketPlayOutGameStateChange(new PacketPlayOutGameStateChange.a(4), 1);
-        //((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-        //onItemUse(player, item); // confirm that the item's ability has been successfully used
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 1, 1);
+        player.setSaturation(20);
+        player.setFoodLevel(20);
+        player.setHealth(20);
         return true;
     }
     public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return rightClickAirAction(player, item); }

@@ -66,7 +66,7 @@ public class UberItems extends JavaPlugin {
     public static Map<Player, List<Block>> multisorts = new HashMap<>();
 
     // other variables
-    public static final boolean premium = false;
+    public static final boolean premium = true;
     private static boolean haveCountedDefaultItems = false;
     private static int defaultItemCount = 0;
     private static UberItems instance;

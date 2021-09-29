@@ -68,12 +68,12 @@ public class boom_stick extends UberItem{
 		mob.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 120, 1));
 
 		// perform the teleport ability
-		Utilities.scheduleTask(new Runnable() { public void run() {
+		Utilities.scheduleTask(() -> {
 
 			player.playSound(mob.getLocation(), Sound.ENTITY_ENDER_EYE_DEATH, 5, 1);
 			mob.getWorld().playEffect(mob.getLocation().add(0,1,0), Effect.SMOKE, 0);
 			mob.remove();
-		} }, 40);
+		}, 40);
 
 		return true;
 	}
