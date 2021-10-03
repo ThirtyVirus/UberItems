@@ -16,6 +16,13 @@ plugin-prefix: "&c&l[&5&lUberItems&c&l] &8&l"
 default-uber-items: true
 default-uber-materials: true
 
+# do not load these items from the main plugin and addons (comma separated, case sensitive)
+# NOTE: use the technical name with underscores (found with tab completion with '/uber give' command)
+item-blacklist:
+# do not load these materials from the main plugin and addons (comma separated, case sensitive)
+# NOTE: also uses the technical name for the material, using underscores
+material-blacklist:
+
 # Sorting Mode
 # 1 - Alphabetical
 # 2 - Smart (Alphabetical + item categories)
@@ -44,10 +51,10 @@ ignore-area-build-permissions: false
 # This functionality limits the plugin's features to only work
 # in inventories whose name contains (or does not contain)
 # certain words or phrases
-use-whitelist: true
-use-blacklist: true
+use-inventory-whitelist: true
+use-inventory-blacklist: true
 
 # whitelist = only use inventories with names containing these words / phrases (comma separated, case sensitive)
-whitelist: Chest,Large Chest,Ender Chest,Shulker Box
+inventory-whitelist: Chest,Large Chest,Ender Chest,Shulker Box
 # blacklist = only use inventories with names not containing these words / phrases (comma separated, case sensitive)
-blacklist: Settings,In Hand,Other Plugin Menu Name
+inventory-blacklist: Settings,In Hand,Other Plugin Menu Name

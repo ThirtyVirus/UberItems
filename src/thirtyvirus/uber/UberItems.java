@@ -48,6 +48,8 @@ public class UberItems extends JavaPlugin {
     public static boolean defaultUberMaterials = true;
     public static int activeEffectsCheckID = 0;
     public static int activeEffectsDelay = 2; // in ticks
+    public static List<String> itemBlacklist = new ArrayList<>();
+    public static List<String> materialBlacklist = new ArrayList<>();
 
     // sorting settings
     public static int sortingMode = 1;
@@ -83,22 +85,7 @@ public class UberItems extends JavaPlugin {
         // register commands, events
         registerCommands();
         registerEvents();
-
-        // register the Uber Workbench separately from the rest of the items, it's essential
-        putItem("uber_workbench", new uber_workbench(Material.CRAFTING_TABLE, "Uber WorkBench", UberRarity.UNCOMMON, false, false, false,
-                Collections.singletonList(new UberAbility("A new chapter", AbilityType.RIGHT_CLICK, "Opens the UberItems Crafting Menu")), null));
-
-        // register the error UberItem and UberMaterial separately from the rest of the items, it's essential
-        putItem("null", new UberItemTemplate(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, Collections.emptyList(), null));
-        putMaterial("null", new UberMaterial(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, "ERROR: UberMaterial not found", null));
-
-        // register UberMaterials, UberItems. Then count the number of default items
-        if (defaultUberMaterials) RegisterItems.registerUberMaterials();
-        if (defaultUberItems) {
-            RegisterItems.registerUberItems();
-            defaultItemCount = items.keySet().size();
-        }
-        haveCountedDefaultItems = true;
+        registerItemsAndMaterials();
 
         // schedule repeating task for processing UberItem active effects
         activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, UberItems::uberActiveEffects, activeEffectsDelay, activeEffectsDelay);
@@ -137,9 +124,16 @@ public class UberItems extends JavaPlugin {
         FileConfiguration config = this.getConfig();
 
         // general settings
-        prefix = ChatColor.translateAlternateColorCodes('&', config.getString("plugin-prefix"));
+        String p = config.getString("plugin-prefix");
+        if (p != null) prefix = ChatColor.translateAlternateColorCodes('&', p);
         defaultUberItems = config.getBoolean("default-uber-items");
         defaultUberMaterials = config.getBoolean("default-uber-materials");
+
+        String ibl = config.getString("item-blacklist"); itemBlacklist.clear();
+        if (ibl !=null) itemBlacklist.addAll(Arrays.asList(ibl.split(",")));
+
+        String mbl = config.getString("material-blacklist"); materialBlacklist.clear();
+        if (mbl !=null) materialBlacklist.addAll(Arrays.asList(mbl.split(",")));
 
         // sorting settings
         sortingMode = config.getInt("sorting-mode");
@@ -150,14 +144,14 @@ public class UberItems extends JavaPlugin {
         automaticSort = config.getBoolean("automatic-sort");
         ignoreBuildPerms = config.getBoolean("ignore-area-build-permissions");
 
-        useWhiteList = config.getBoolean("use-whitelist");
-        useBlackList = config.getBoolean("use-blacklist");
+        useWhiteList = config.getBoolean("use-inventory-whitelist");
+        useBlackList = config.getBoolean("use-inventory-blacklist");
 
-        whiteList.clear();
-        whiteList.addAll(Arrays.asList(config.getString("whitelist").split(",")));
+        String w = config.getString("inventory-whitelist"); whiteList.clear();
+        if (w !=null) whiteList.addAll(Arrays.asList(w.split(",")));
 
-        blackList.clear();
-        blackList.addAll(Arrays.asList(config.getString("blacklist").split(",")));
+        String b = config.getString("inventory-blacklist"); blackList.clear();
+        if (b !=null) blackList.addAll(Arrays.asList(b.split(",")));
 
         // post confirmation in chat
         Bukkit.getLogger().info(consolePrefix + "Settings reloaded from config");
@@ -193,6 +187,28 @@ public class UberItems extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BlockPlace(), this);
         getServer().getPluginManager().registerEvents(new FoodLevelChange(), this);
         getServer().getPluginManager().registerEvents(new Bucket(), this);
+    }
+
+    private static void registerItemsAndMaterials() {
+        haveCountedDefaultItems = false;
+        items.clear();
+        materials.clear();
+
+        // register the Uber Workbench separately from the rest of the items, it's essential
+        putItem("uber_workbench", new uber_workbench(Material.CRAFTING_TABLE, "Uber WorkBench", UberRarity.UNCOMMON, false, false, false,
+                Collections.singletonList(new UberAbility("A new chapter", AbilityType.RIGHT_CLICK, "Opens the UberItems Crafting Menu")), null));
+
+        // register the error UberItem and UberMaterial separately from the rest of the items, it's essential
+        putItem("null", new UberItemTemplate(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, Collections.emptyList(), null));
+        putMaterial("null", new UberMaterial(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, "ERROR: UberMaterial not found", null));
+
+        // register UberMaterials, UberItems. Then count the number of default items
+        if (defaultUberMaterials) RegisterItems.registerUberMaterials();
+        if (defaultUberItems) {
+            RegisterItems.registerUberItems();
+            defaultItemCount = items.keySet().size();
+        }
+        haveCountedDefaultItems = true;
     }
 
     // process active effets for uber items that are in use
@@ -248,6 +264,8 @@ public class UberItems extends JavaPlugin {
 
     // place UberItems and UberMaterials into the proper HashMaps
     public static void putItem(String name, UberItem item) {
+        if (itemBlacklist.contains(name)) return;
+
         if (items.keySet().size() < defaultItemCount + 10 || !haveCountedDefaultItems || premium) {
             items.put(name, item);
             itemIDs.put(item.getUUID(), item);
@@ -255,6 +273,7 @@ public class UberItems extends JavaPlugin {
         else Bukkit.getLogger().severe("You're trying to load more than 5 custom items! Purchase UberItems Premium to load unlimited custom items: https://www.spigotmc.org/resources/83851/");
     }
     public static void putMaterial(String name, UberMaterial material) {
+        if (materialBlacklist.contains(name)) return;
         materials.put(name, material);
         materialIDs.put(material.getUUID(), material);
     }
@@ -264,7 +283,12 @@ public class UberItems extends JavaPlugin {
         getInstance().reloadConfig();
         getInstance().loadConfiguration();
         getInstance().loadLangFile();
-        Bukkit.getLogger().info("configuration, values, and language settings reloaded");
+
+        items.clear();
+        materials.clear();
+        registerItemsAndMaterials();
+
+        Bukkit.getLogger().info("configuration, items, and language settings reloaded");
     }
 
     // getters for UberItems and UberMaterials
