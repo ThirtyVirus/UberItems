@@ -23,6 +23,13 @@ item-blacklist:
 # NOTE: also uses the technical name for the material, using underscores
 material-blacklist:
 
+# only load these items from the main plugin and addons (comma separated, case sensitive)
+# NOTE: use the technical name with underscores (found with tab completion with '/uber give' command)
+item-whitelist:
+# only load these materials from the main plugin and addons (comma separated, case sensitive)
+# NOTE: also uses the technical name for the material, using underscores
+material-whitelist:
+
 # Sorting Mode
 # 1 - Alphabetical
 # 2 - Smart (Alphabetical + item categories)

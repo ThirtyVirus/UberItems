@@ -48,8 +48,11 @@ public class UberItems extends JavaPlugin {
     public static boolean defaultUberMaterials = true;
     public static int activeEffectsCheckID = 0;
     public static int activeEffectsDelay = 2; // in ticks
+
     public static List<String> itemBlacklist = new ArrayList<>();
+    public static List<String> itemWhitelist = new ArrayList<>();
     public static List<String> materialBlacklist = new ArrayList<>();
+    public static List<String> materialWhitelist = new ArrayList<>();
 
     // sorting settings
     public static int sortingMode = 1;
@@ -130,10 +133,16 @@ public class UberItems extends JavaPlugin {
         defaultUberMaterials = config.getBoolean("default-uber-materials");
 
         String ibl = config.getString("item-blacklist"); itemBlacklist.clear();
-        if (ibl !=null) itemBlacklist.addAll(Arrays.asList(ibl.split(",")));
+        if (ibl != null) itemBlacklist.addAll(Arrays.asList(ibl.trim().split(",")));
 
         String mbl = config.getString("material-blacklist"); materialBlacklist.clear();
-        if (mbl !=null) materialBlacklist.addAll(Arrays.asList(mbl.split(",")));
+        if (mbl != null) materialBlacklist.addAll(Arrays.asList(mbl.trim().split(",")));
+
+        String iwl = config.getString("item-whitelist"); itemWhitelist.clear();
+        if (iwl != null) itemWhitelist.addAll(Arrays.asList(iwl.trim().split(",")));
+
+        String mwl = config.getString("material-whitelist"); materialWhitelist.clear();
+        if (mwl != null) materialWhitelist.addAll(Arrays.asList(mwl.trim().split(",")));
 
         // sorting settings
         sortingMode = config.getInt("sorting-mode");
@@ -265,6 +274,7 @@ public class UberItems extends JavaPlugin {
     // place UberItems and UberMaterials into the proper HashMaps
     public static void putItem(String name, UberItem item) {
         if (itemBlacklist.contains(name)) return;
+        if (itemWhitelist.size() > 0 && !itemWhitelist.contains(name)) return;
 
         if (items.keySet().size() < defaultItemCount + 10 || !haveCountedDefaultItems || premium) {
             items.put(name, item);
@@ -274,6 +284,8 @@ public class UberItems extends JavaPlugin {
     }
     public static void putMaterial(String name, UberMaterial material) {
         if (materialBlacklist.contains(name)) return;
+        if (materialWhitelist.size() > 0 && !materialWhitelist.contains(name)) return;
+
         materials.put(name, material);
         materialIDs.put(material.getUUID(), material);
     }

@@ -117,6 +117,12 @@ public final class Utilities {
             case MYTHIC:
                 if (player.hasPermission("uber.rarity.mythic")) return false;
                 break;
+            case SPECIAL:
+                if (player.hasPermission("uber.rarity.special")) return false;
+                break;
+            case VERY_SPECIAL:
+                if (player.hasPermission("uber.rarity.very_special")) return false;
+                break;
             case UNFINISHED:
                 if (player.hasPermission("uber.rarity.unfinished")) return false;
                 break;
