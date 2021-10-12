@@ -21,7 +21,7 @@ import java.util.List;
 
 public abstract class UberItem {
 
-    private Material material;
+    private ItemStack item;
     private String name;
     private UberRarity rarity;
     private boolean stackable;
@@ -37,7 +37,7 @@ public abstract class UberItem {
      * Define a new UberItem
      */
     public UberItem(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
-        this.material = material;
+        this.item = new ItemStack(material);
         this.name = name;
         this.rarity = rarity;
 
@@ -48,6 +48,19 @@ public abstract class UberItem {
 
         this.craftingRecipe = craftingRecipe;
         UUID = Utilities.stringToSeed(material.name() + name + rarity.toString());
+    }
+    public UberItem(ItemStack item, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
+        this.item = item;
+        this.name = name;
+        this.rarity = rarity;
+
+        this.stackable = stackable;
+        this.oneTimeUse = oneTimeUse;
+        this.hasActive = hasActiveEffect;
+        this.abilities = abilities;
+
+        this.craftingRecipe = craftingRecipe;
+        UUID = Utilities.stringToSeed(item.getType().name() + name + rarity.toString());
     }
 
     /**
@@ -64,16 +77,18 @@ public abstract class UberItem {
      * @return an instance of this UberItem in ItemStack form
      */
     public ItemStack makeItem(int amount) {
-        ItemStack item = Utilities.nameItem(material, rarity.getColor() + name);
-        Utilities.storeIntInItem(item, UUID, "UberUUID");
+        ItemStack newItem = item.clone();
 
-        onItemStackCreate(item);
-        Utilities.loreItem(item, getLore(item));
+        Utilities.nameItem(newItem, rarity.getColor() + name);
+        Utilities.storeIntInItem(newItem, UUID, "UberUUID");
 
-        item.setAmount(amount);
-        if (!stackable) Utilities.storeStringInItem(item,  java.util.UUID.randomUUID().toString(), "UUID");
+        onItemStackCreate(newItem);
+        Utilities.loreItem(newItem, getLore(newItem));
 
-        return item;
+        newItem.setAmount(amount);
+        if (!stackable) Utilities.storeStringInItem(newItem,  java.util.UUID.randomUUID().toString(), "UUID");
+
+        return newItem;
     }
 
     // properly format the lore for Uber Items
@@ -180,7 +195,8 @@ public abstract class UberItem {
     public abstract boolean activeEffect(Player player, ItemStack item);
 
     // getters
-    public Material getMaterial() { return material; }
+    public ItemStack getRawItem() { return item; }
+    public Material getMaterial() { return item.getType(); }
     public String getName() { return name; }
     public UberRarity getRarity() { return rarity; }
     public boolean isStackable() { return stackable; }

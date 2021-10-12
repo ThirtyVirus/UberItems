@@ -140,15 +140,23 @@ public class UberCraftingRecipe {
 
     // check if two ItemStacks are "the same", i2 can have a higher quantity than i1
     // distinguish between normal item and uber material / uber item
+    // TODO make crafting check for certain metadata?
     private boolean isSame(ItemStack i1, ItemStack i2) {
-        int UUID = Utilities.getIntFromItem(i1, "MaterialUUID");
 
-        // item is an Uber Material
-        if (UUID != 0) return (UberItems.getMaterialFromID(UUID).compare(i2) && i1.getAmount() <= i2.getAmount());
-
-        // item is not an Uber Material
-        // TODO compare more than material and amount? Do I even need to?
+        // item 1 is an UberItem
+        if (Utilities.isUber(i1)) {
+            int UUID = Utilities.getIntFromItem(i1, "UberUUID");
+            return (UberItems.getItemFromID(UUID).compare(i2) && i1.getAmount() <= i2.getAmount());
+        }
+        // item 1 is an UberMaterial
+        else if (Utilities.isUberMaterial(i1)) {
+            int UUID = Utilities.getIntFromItem(i1, "MaterialUUID");
+            return (UberItems.getMaterialFromID(UUID).compare(i2) && i1.getAmount() <= i2.getAmount());
+        }
+        // item 1 is air
         else if (i1.getType() == Material.AIR && i2.getType() == Material.AIR) return true;
+
+        // item 1 is a non-plugin item
         else return (i1.getType() == i2.getType() && i1.getAmount() <= i2.getAmount());
     }
 
