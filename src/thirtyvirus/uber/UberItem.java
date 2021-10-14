@@ -10,7 +10,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
@@ -78,6 +80,11 @@ public abstract class UberItem {
      */
     public ItemStack makeItem(int amount) {
         ItemStack newItem = item.clone();
+
+        // remove vanilla attributes
+        ItemMeta itemMeta = newItem.getItemMeta();
+        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        newItem.setItemMeta(itemMeta);
 
         Utilities.nameItem(newItem, rarity.getColor() + name);
         Utilities.storeIntInItem(newItem, UUID, "UberUUID");

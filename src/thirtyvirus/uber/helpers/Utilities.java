@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -16,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.Vector;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
@@ -141,7 +144,78 @@ public final class Utilities {
      * @return the block the player is looking at, ignoring transparent blocks
      */
     public static Block getBlockLookingAt(Player player) {
-        return player.getTargetBlock(TRANSPARENT, 120);
+        return getBlockLookingAt(player, 120);
+    }
+    public static Block getBlockLookingAt(Player player, int range) {
+        return player.getTargetBlock(TRANSPARENT, range);
+    }
+
+    /**
+     * as long as the entity is alive, aim it towards the closest living entity
+     *
+     * @param entity the entity which is to be launched
+     * @param exception an entity who is to be ignored
+     */
+    public static void directEntity(Entity entity, Entity exception, int widthX, int heightY, int lengthZ) {
+
+        if (!entity.isDead()) {
+            Entity other = getClosestLivingEntity(entity.getLocation(), exception, widthX, heightY, lengthZ);
+            if (other != null) {
+                Location loc = other.getLocation().subtract(entity.getLocation()).add(0,1,0);
+                entity.setVelocity(loc.toVector().normalize());
+            }
+            Utilities.scheduleTask(()->directEntity(entity, exception, widthX, heightY, lengthZ), 1);
+        }
+    }
+
+    /**
+     * get the closest living entity to a location
+     *
+     * @param location the location to start the search
+     * @param exception an entity who is to be ignored
+     */
+    public static LivingEntity getClosestLivingEntity(Location location, Entity exception, int widthX, int heightY, int lengthZ) {
+        double closest = 100;
+        LivingEntity closestEntity = null;
+        if (location.getWorld() == null) return null;
+
+        for (Entity e : location.getWorld().getNearbyEntities(location, widthX, heightY, lengthZ)) {
+            if (e instanceof LivingEntity) {
+                // skip exception (usually the player that shot the homing arrow)
+                if (e instanceof Player && e.equals(exception)) continue;
+
+                double testClose = location.distance(e.getLocation());
+
+                if (testClose < closest && Utilities.isPathObstructed(location.add(0,-1,0), e.getLocation()) != -1) {
+                    closestEntity = (LivingEntity) e;
+                    closest = testClose;
+                }
+            }
+        }
+
+        return closestEntity;
+    }
+
+    /**
+     * safely teleport player to a specific location, if path or end location obstructed teleport to the next best spot
+     *
+     * @param entity the entity who is to be teleported
+     * @param start the starting location of the teleport (eye loc for players typically)
+     * @param end the end location
+     */
+    public static void safeTeleport(Entity entity, Location start, Location end) {
+        if (start.getWorld() == null || end.getWorld() == null || !start.getWorld().equals(end.getWorld())) return;
+
+        int obstruction = Utilities.isPathObstructed(start, end);
+
+        if (obstruction == -1) entity.teleport(end);
+        else {
+            Location safeEnd = start.clone().add(entity.getLocation().add(0, entity.getHeight() - 1, 0).getDirection().multiply(obstruction));
+            if (start.getWorld().getBlockAt(safeEnd).getType().isSolid()) {
+                entity.teleport(safeEnd.add(0,1,0));
+            }
+            else entity.teleport(safeEnd);
+        }
     }
 
     /**
@@ -527,6 +601,27 @@ public final class Utilities {
 
         head.setItemMeta(headMeta);
         return head;
+    }
+
+    /**
+     * @param start starting location
+     * @param end ending location
+     * @return -1 is no obstruction in the path, the number of blocks that are un-obstructed if there is one
+     */
+    public static int isPathObstructed(Location start, Location end) {
+        if (start.getWorld() == null || end.getWorld() == null || !start.getWorld().equals(end.getWorld())) return 0;
+        Vector vector = end.toVector().subtract(start.toVector());
+        double distance = Math.floor(vector.length());
+        vector.multiply(1 / vector.length()); // convert v to a unit vector
+        for (int progress = 0; progress <= distance; progress++) {
+            vector = end.toVector().subtract(start.toVector());
+            vector.multiply(1 / vector.length());
+            Block block = start.getWorld().getBlockAt((start.toVector().add(vector.multiply(progress))).toLocation(start.getWorld()));
+            if (block.getType().isSolid()) {
+                return progress;
+            }
+        }
+        return -1;
     }
 
     // UBERITEM FUNCTIONS

@@ -273,6 +273,7 @@ public class UberItems extends JavaPlugin {
 
     // place UberItems and UberMaterials into the proper HashMaps
     public static void putItem(String name, UberItem item) {
+
         if (itemBlacklist.contains(name)) return;
         if (itemWhitelist.size() > 0 && !itemWhitelist.contains(name)) return;
 

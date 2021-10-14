@@ -2,7 +2,9 @@ package thirtyvirus.uber;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
@@ -67,6 +69,11 @@ public class UberMaterial {
      */
     public ItemStack makeItem(int amount) {
         ItemStack newItem = item.clone();
+
+        // remove vanilla attributes
+        ItemMeta itemMeta = newItem.getItemMeta();
+        itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        newItem.setItemMeta(itemMeta);
 
         Utilities.nameItem(newItem, rarity.getColor() + name);
         Utilities.storeIntInItem(newItem, UUID, "MaterialUUID");
