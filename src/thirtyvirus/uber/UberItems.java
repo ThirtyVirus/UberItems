@@ -248,6 +248,50 @@ public class UberItems extends JavaPlugin {
 
             }
 
+            // helmet slot
+            if (Utilities.isUber(player.getInventory().getHelmet())) {
+                UberItem uber = Utilities.getUber(player.getInventory().getHelmet());
+                if (uber == null) continue;
+
+                // enforce premium vs lite
+                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
+
+                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
+            }
+
+            // chestplate slot
+            if (Utilities.isUber(player.getInventory().getChestplate())) {
+                UberItem uber = Utilities.getUber(player.getInventory().getChestplate());
+                if (uber == null) continue;
+
+                // enforce premium vs lite
+                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
+
+                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
+            }
+
+            // leggings slot
+            if (Utilities.isUber(player.getInventory().getLeggings())) {
+                UberItem uber = Utilities.getUber(player.getInventory().getLeggings());
+                if (uber == null) continue;
+
+                // enforce premium vs lite
+                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
+
+                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
+            }
+
+            // boots slot
+            if (Utilities.isUber(player.getInventory().getBoots())) {
+                UberItem uber = Utilities.getUber(player.getInventory().getBoots());
+                if (uber == null) continue;
+
+                // enforce premium vs lite
+                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
+
+                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
+            }
+
         }
     }
 

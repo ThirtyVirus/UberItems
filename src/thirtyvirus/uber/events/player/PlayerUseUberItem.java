@@ -1,5 +1,6 @@
 package thirtyvirus.uber.events.player;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -11,6 +12,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
@@ -24,10 +26,10 @@ public class PlayerUseUberItem implements Listener {
     private void onPlayerUse(PlayerInteractEvent event) {
 
         // test if items in main and off hand are UberItems
-        if (Utilities.isUber(event.getPlayer().getInventory().getItemInMainHand())) {
+        if (event.getHand() == EquipmentSlot.HAND && Utilities.isUber(event.getPlayer().getInventory().getItemInMainHand())) {
             useUberItem(event, event.getPlayer().getInventory().getItemInMainHand());
         }
-        if (Utilities.isUber(event.getPlayer().getInventory().getItemInOffHand())) {
+        if (event.getHand() == EquipmentSlot.OFF_HAND && Utilities.isUber(event.getPlayer().getInventory().getItemInOffHand())) {
             useUberItem(event, event.getPlayer().getInventory().getItemInOffHand());
         }
     }
