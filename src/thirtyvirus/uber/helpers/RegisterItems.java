@@ -52,7 +52,7 @@ public class RegisterItems {
                         new ItemStack(Material.DIAMOND_BLOCK, 64),
                         new ItemStack(Material.DIAMOND_BLOCK, 64),
                         new ItemStack(Material.DIAMOND_BLOCK, 64),
-                        new ItemStack(Material.DIAMOND_BLOCK, 64),
+                        UberItems.getMaterial("creative_core").makeItem(1),
                         new ItemStack(Material.DIAMOND_BLOCK, 64),
                         new ItemStack(Material.DIAMOND_BLOCK, 64),
                         new ItemStack(Material.DIAMOND_BLOCK, 64),
@@ -252,6 +252,9 @@ public class RegisterItems {
 
     // register UberMaterials
     public static void registerUberMaterials() {
+        UberItems.putMaterial("creative_core", new UberMaterial(Utilities.getSkull("http://textures.minecraft.net/texture/faff2eb498e5c6a04484f0c9f785b448479ab213df95ec91176a308a12add70"),
+                "Creative Core", UberRarity.VERY_SPECIAL, false, false, false, "", null));
+
         UberItems.putMaterial("enchanted_cobblestone", new UberMaterial(Material.COBBLESTONE,
                 "Enchanted Cobblestone", UberRarity.UNCOMMON, true, true, false, "",
                 new UberCraftingRecipe(Arrays.asList(

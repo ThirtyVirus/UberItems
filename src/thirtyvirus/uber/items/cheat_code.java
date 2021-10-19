@@ -42,7 +42,7 @@ public class cheat_code extends UberItem {
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 1, 1);
         player.setSaturation(20);
         player.setFoodLevel(20);
-        player.setHealth(20);
+        Utilities.safeHeal(player, 1000);
         return true;
     }
     public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return rightClickAirAction(player, item); }

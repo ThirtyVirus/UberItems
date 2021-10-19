@@ -3,6 +3,7 @@ package thirtyvirus.uber.helpers;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
@@ -622,6 +623,21 @@ public final class Utilities {
             }
         }
         return -1;
+    }
+
+    /**
+     * Heal an entity and avoid errors
+     *
+     * @param entity the entity to be healed
+     * @param amount the amount to heal the entity
+     */
+    public static void safeHeal(LivingEntity entity, int amount) {
+        double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+
+        if (entity.getHealth() + amount >= maxHealth) {
+            entity.setHealth(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+        }
+        else entity.setHealth(entity.getHealth() + amount);
     }
 
     // UBERITEM FUNCTIONS

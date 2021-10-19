@@ -42,7 +42,7 @@ public class UberItems extends JavaPlugin {
             "fireball", "wrench", "malk_bucket", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel",
             "smart_pack", "boom_stick", "world_eater", "lightning_rod", "aspect_of_the_virus", "hackerman");
 
-    public static final List<String> default_materials = Arrays.asList("enchanted_cobblestone", "enchanted_diaond",
+    public static final List<String> default_materials = Arrays.asList("creative_core", "enchanted_cobblestone", "enchanted_diaond",
             "enchanted_stone", "enchanted_ender_pearl", "enchanted_string", "spark_dust", "flammable_substance",
             "paper_fletching", "fools_gold");
 
