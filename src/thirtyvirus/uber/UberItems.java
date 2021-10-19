@@ -38,6 +38,14 @@ public class UberItems extends JavaPlugin {
     private static Map<String, UberMaterial> materials = new HashMap<>();
     private static Map<Integer, UberMaterial> materialIDs = new HashMap<>();
 
+    public static final List<String> default_items = Arrays.asList("lunch_box", "document_of_order", "cheat_code", "escape_rope",
+            "fireball", "wrench", "malk_bucket", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel",
+            "smart_pack", "boom_stick", "world_eater", "lightning_rod", "aspect_of_the_virus", "hackerman");
+
+    public static final List<String> default_materials = Arrays.asList("enchanted_cobblestone", "enchanted_diaond",
+            "enchanted_stone", "enchanted_ender_pearl", "enchanted_string", "spark_dust", "flammable_substance",
+            "paper_fletching", "fools_gold");
+
     // chat messages
     private static Map<String, String> phrases = new HashMap<>();
 
@@ -200,8 +208,22 @@ public class UberItems extends JavaPlugin {
 
     private static void registerItemsAndMaterials() {
         haveCountedDefaultItems = false;
-        items.clear();
-        materials.clear();
+
+        // make sure that items and materials are updated ONLY for the base plugin
+        List<String> str = new ArrayList<>(items.keySet());
+        for (String item : str) {
+            if (default_items.contains(item)) {
+                itemIDs.remove(items.get(item).getUUID());
+                items.remove(item);
+            }
+        }
+        str = new ArrayList<>(materials.keySet());
+        for (String material : str) {
+            if (default_materials.contains(material)) {
+                materialIDs.remove(materials.get(material).getUUID());
+                materials.remove(material);
+            }
+        }
 
         // register the Uber Workbench separately from the rest of the items, it's essential
         putItem("uber_workbench", new uber_workbench(Material.CRAFTING_TABLE, "Uber WorkBench", UberRarity.UNCOMMON, false, false, false,
@@ -341,8 +363,6 @@ public class UberItems extends JavaPlugin {
         getInstance().loadConfiguration();
         getInstance().loadLangFile();
 
-        items.clear();
-        materials.clear();
         registerItemsAndMaterials();
 
         Bukkit.getLogger().info("configuration, items, and language settings reloaded");

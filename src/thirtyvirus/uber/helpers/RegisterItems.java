@@ -12,29 +12,6 @@ import java.util.Collections;
 
 public class RegisterItems {
 
-    // NEW UBER ITEM CHECKLIST
-
-    // - make a new class file, named with all lowercase lettering and underscores for spaces
-    // - copy the UberItemTemplate class contents into the new class, extend UberItem
-    // - make a putItem entry, follow the format of previous items and make sure to give a unique id
-    // - write the unique item ability code in the appropriate method
-
-    // - add the following line of code just after executing the item's ability:
-    //      onItemUse(player, item); // confirm that the item's ability has been successfully used
-
-    // - if the ability needs a cooldown, prefix it's code with a variation of the following line of code:
-    //      if (!Utilities.enforceCooldown(getMain(), player, "name", 1, item, true)) return;
-
-    // - if the item needs work done on create (like adding enchantments, adding other data) refer to onItemStackCreate
-    // - if the item needs a prefix or suffix in its description,
-    //   refer to the getSpecificLorePrefix and getSpecificLoreSuffix functions, then add the following:
-    //      lore.add(ChatColor.RESET + "text goes here");
-
-    // - if you need to store & retrieve ints and strings from items, you can use the following functions:
-    //      Utilities.storeIntInItem(getMain(), item, 1, "number tag");
-    //      if (Utilities.getIntFromItem(getMain(), item, "number tag") == 1) // { blah blah blah }
-    //      (the same case for strings, just storeStringInItem and getStringFromItem)
-
     // register UberItems
     public static void registerUberItems() {
         // UberItems.putItem("NAME", new UberItemTemplate(0, UberRarity.UNFINISHED, "NAME", Material.STONE, false, false, false, Arrays.asList(new UberAbility("Ability name!", AbilityType.RIGHT_CLICK, "Ability description")), null));
