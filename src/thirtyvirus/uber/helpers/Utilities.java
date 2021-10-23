@@ -17,8 +17,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
@@ -38,6 +38,8 @@ public final class Utilities {
 
     // store the most recent attempts at sorting by each player on the server
     private static Map<Player, Long> mostRecentSelect = new HashMap<>();
+
+    public static List<Block> temporaryBlocks = new ArrayList<>();
 
     // GENERAL PLUGIN FUNCTIONS
     // _____________________________________________________________________________ \\
@@ -377,6 +379,100 @@ public final class Utilities {
         return string;
     }
 
+    /**
+     * @param start starting location
+     * @param end ending location
+     * @return -1 is no obstruction in the path, the number of blocks that are un-obstructed if there is one
+     */
+    public static int isPathObstructed(Location start, Location end) {
+        if (start.getWorld() == null || end.getWorld() == null || !start.getWorld().equals(end.getWorld())) return 0;
+        Vector vector = end.toVector().subtract(start.toVector());
+        double distance = Math.floor(vector.length());
+        vector.multiply(1 / vector.length()); // convert v to a unit vector
+        for (int progress = 0; progress <= distance; progress++) {
+            vector = end.toVector().subtract(start.toVector());
+            vector.multiply(1 / vector.length());
+            Block block = start.getWorld().getBlockAt((start.toVector().add(vector.multiply(progress))).toLocation(start.getWorld()));
+            if (block.getType().isSolid()) {
+                return progress;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Heal an entity and avoid errors
+     *
+     * @param entity the entity to be healed
+     * @param amount the amount to heal the entity
+     */
+    public static void safeHeal(LivingEntity entity, int amount) {
+        double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+
+        if (entity.getHealth() + amount >= maxHealth) {
+            entity.setHealth(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+        }
+        else entity.setHealth(entity.getHealth() + amount);
+    }
+
+    /**
+     * Change a block type into a specified material so long as it is within range of the player
+     *
+     * @param player the player to test the radius from
+     * @param block to block to be effected
+     * @param oldState the state of the block before changing material
+     * @param material the material the temporarily change the block to
+     * @param tickDelay the delay between checks to change the material type
+     * @param radius the radius from the player to test for to keep the block effected
+     */
+    public static void maintainBlockReplacement(Player player, Block block, BlockState oldState, Material material, int tickDelay, int radius) {
+        maintainBlockReplacement(player, block, oldState, material, tickDelay, radius, radius, radius);
+    }
+    public static void maintainBlockReplacement(Player player, Block block, BlockState oldState, Material material, int tickDelay, int widthX, int heightY, int lengthZ) {
+        List<Block> blocks = getBlocksInCube(player.getLocation(), widthX, heightY, lengthZ);
+        if (blocks.contains(block)) {
+            block.setType(material);
+            if (!temporaryBlocks.contains(block)) temporaryBlocks.add(block);
+            Utilities.scheduleTask(()->maintainBlockReplacement(player, block, oldState, material, tickDelay, widthX, heightY, lengthZ), 5);
+        }
+        else {
+            block.setType(oldState.getType());
+            block.setBlockData(oldState.getBlockData());
+            temporaryBlocks.remove(block);
+        }
+    }
+
+    /**
+     * get all blocks in a radius
+     *
+     * @param location the center of the cube
+     * @param radius the direction to check in all axis
+     * @return a list of the blocks contained in the radius
+     */
+    public static List<Block> getBlocksInRadius(Location location, int radius) {
+        return getBlocksInCube(location, radius, radius, radius);
+    }
+    /**
+     * get all blocks in a cube
+     *
+     * @param location the center of the cube
+     * @param widthX the size of the cube in the x axis
+     * @param heightY the size of the cube in the y axis
+     * @param lengthZ the size of the cube in the z axis
+     * @return a list of the blocks contained in the cube
+     */
+    public static List<Block> getBlocksInCube(Location location, int widthX, int heightY, int lengthZ) {
+        List<Block> blocks = new ArrayList<>();
+        for(int x = location.getBlockX() - widthX; x <= location.getBlockX() + widthX; x++) {
+            for(int y = location.getBlockY() - heightY; y <= location.getBlockY() + heightY; y++) {
+                for(int z = location.getBlockZ() - lengthZ; z <= location.getBlockZ() + lengthZ; z++) {
+                    blocks.add(location.getWorld().getBlockAt(x, y, z));
+                }
+            }
+        }
+        return blocks;
+    }
+
     // ITEM FUNCTIONS
     // _____________________________________________________________________________ \\
 
@@ -605,39 +701,18 @@ public final class Utilities {
     }
 
     /**
-     * @param start starting location
-     * @param end ending location
-     * @return -1 is no obstruction in the path, the number of blocks that are un-obstructed if there is one
-     */
-    public static int isPathObstructed(Location start, Location end) {
-        if (start.getWorld() == null || end.getWorld() == null || !start.getWorld().equals(end.getWorld())) return 0;
-        Vector vector = end.toVector().subtract(start.toVector());
-        double distance = Math.floor(vector.length());
-        vector.multiply(1 / vector.length()); // convert v to a unit vector
-        for (int progress = 0; progress <= distance; progress++) {
-            vector = end.toVector().subtract(start.toVector());
-            vector.multiply(1 / vector.length());
-            Block block = start.getWorld().getBlockAt((start.toVector().add(vector.multiply(progress))).toLocation(start.getWorld()));
-            if (block.getType().isSolid()) {
-                return progress;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * Heal an entity and avoid errors
+     * Dye a leather armor piece
      *
-     * @param entity the entity to be healed
-     * @param amount the amount to heal the entity
+     * @param item the armor to be dyed
+     * @param color the color to dye the armor piece
+     * @return the armor piece but dyed
      */
-    public static void safeHeal(LivingEntity entity, int amount) {
-        double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-
-        if (entity.getHealth() + amount >= maxHealth) {
-            entity.setHealth(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-        }
-        else entity.setHealth(entity.getHealth() + amount);
+    public static ItemStack dyeArmor(ItemStack item, Color color) {
+        if (!(item.getItemMeta() instanceof LeatherArmorMeta)) return item;
+        LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+        meta.setColor(color);
+        item.setItemMeta(meta);
+        return item;
     }
 
     // UBERITEM FUNCTIONS
@@ -685,6 +760,28 @@ public final class Utilities {
     public static ItemStack searchFor(Inventory inv, UberItem uber) {
         for (ItemStack item : inv) if (uber.compare(item)) return item;
         return null;
+    }
+
+    /**
+     * @param player the player whose armor is to be checked
+     * @param fullSetBonus the full set bonus to be checked for
+     * @return whether or not the player is wearing the full set
+     */
+    public static boolean hasFullSetBonus(Player player, String fullSetBonus) {
+
+        // verify that the player has a full set
+        if (player.getInventory().getHelmet() == null) return false;
+        if (player.getInventory().getChestplate() == null) return false;
+        if (player.getInventory().getLeggings() == null) return false;
+        if (player.getInventory().getBoots() == null) return false;
+
+        // verify that every armor slot is tagged with the ability
+        if (Utilities.getIntFromItem(player.getInventory().getHelmet(), fullSetBonus) == 0) return false;
+        if (Utilities.getIntFromItem(player.getInventory().getChestplate(), fullSetBonus) == 0) return false;
+        if (Utilities.getIntFromItem(player.getInventory().getLeggings(), fullSetBonus) == 0) return false;
+        if (Utilities.getIntFromItem(player.getInventory().getBoots(), fullSetBonus) == 0) return false;
+
+        return true;
     }
 
     /**

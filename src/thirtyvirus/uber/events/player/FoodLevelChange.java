@@ -1,5 +1,6 @@
 package thirtyvirus.uber.events.player;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +20,7 @@ public class FoodLevelChange implements Listener {
         Player player = (Player) event.getEntity();
 
         // check if the player has a lunch box
-        ItemStack lunchBox = Utilities.searchFor(player.getInventory(), UberItems.getItem("lunchbox"));
+        ItemStack lunchBox = Utilities.searchFor(player.getInventory(), UberItems.getItem("lunch_box"));
         if (lunchBox == null) return;
         UberItem uber = Utilities.getUber(lunchBox);
         if (uber == null) return;

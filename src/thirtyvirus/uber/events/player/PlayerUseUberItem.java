@@ -1,7 +1,9 @@
 package thirtyvirus.uber.events.player;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,12 +16,29 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import org.bukkit.inventory.MainHand;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.ActionSound;
 import thirtyvirus.uber.helpers.Utilities;
 
 public class PlayerUseUberItem implements Listener {
+
+    // handle equipping an UberItem helmet
+    @EventHandler
+    private void onRightClickHelmet(PlayerInteractEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND || (event.getAction() != Action.RIGHT_CLICK_AIR ) && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+
+        ItemStack item = event.getItem(); ItemStack helmet = event.getPlayer().getInventory().getHelmet();
+        if (Utilities.getIntFromItem(item, "uberhelmet") == 1 && (helmet == null || helmet.getType() == Material.AIR)) {
+
+            event.getPlayer().getInventory().setHelmet(item);
+            Utilities.scheduleTask(()->event.getPlayer().getInventory().remove(event.getPlayer().getInventory().getItemInMainHand()), 1);
+
+            event.getPlayer().playSound(event.getPlayer().getLocation(), Sound.ITEM_ARMOR_EQUIP_LEATHER, 1, 1);
+            event.setCancelled(true);
+        }
+    }
 
     @EventHandler(priority=EventPriority.HIGH)
     private void onPlayerUse(PlayerInteractEvent event) {

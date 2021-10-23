@@ -2,6 +2,7 @@ package thirtyvirus.uber.events.inventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -163,6 +164,43 @@ public class InventoryClick implements Listener {
         // close inventory button functionality
         if (Objects.equals(event.getCurrentItem(), MenuUtils.BACK_BUTTON))
             event.getWhoClicked().closeInventory();
+    }
+
+    // allow UberItems that are helmets to be worn as such
+    @EventHandler
+    private void onClickhelmet(InventoryClickEvent event) {
+        if (event.getInventory().getType() != InventoryType.CRAFTING) return;
+
+        // clicking UberItem onto head slot
+        if (event.getSlot() == 39 && Utilities.isUber(event.getCursor())) {
+            if (Utilities.getIntFromItem(event.getCursor(), "uberhelmet") == 0) return;
+
+            // no item is there
+            if (event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.PLACE_ONE) {
+                event.getWhoClicked().getInventory().setHelmet(event.getCursor());
+                event.getWhoClicked().setItemOnCursor(new ItemStack(Material.AIR));
+                event.setCancelled(true);
+            }
+            // an item is there
+            if (event.getAction() == InventoryAction.NOTHING) {
+                ItemStack head = event.getCurrentItem();
+                Utilities.scheduleTask(()->{
+                    event.setCurrentItem(event.getCursor());
+                    event.getWhoClicked().setItemOnCursor(head);
+                }, 1);
+            }
+        }
+        // shift clicking UberItem in inventory with head slot open
+        else if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && Utilities.isUber(event.getCurrentItem())) {
+            if (Utilities.getIntFromItem(event.getCurrentItem(), "uberhelmet") == 0) return;
+
+            if (event.getWhoClicked().getInventory().getHelmet() == null || event.getWhoClicked().getInventory().getHelmet().getType() == Material.AIR) {
+                event.getWhoClicked().getInventory().setItem(39, event.getCurrentItem());
+                event.setCurrentItem(new ItemStack(Material.AIR));
+                event.setCancelled(true);
+            }
+        }
+
     }
 
 }

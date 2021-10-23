@@ -3,16 +3,19 @@ package thirtyvirus.uber;
 import com.google.common.io.ByteStreams;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import thirtyvirus.uber.commands.UberCommand;
-import thirtyvirus.uber.events.block.BlockPlace;
+import thirtyvirus.uber.events.MiscEvents;
+import thirtyvirus.uber.events.BlockEvents;
 import thirtyvirus.uber.events.chat.TabComplete;
 import thirtyvirus.uber.events.inventory.InventoryClick;
 import thirtyvirus.uber.events.inventory.InventoryClose;
@@ -28,7 +31,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+
+import static thirtyvirus.uber.helpers.RegisterItems.registerUberItems;
 
 public class UberItems extends JavaPlugin {
 
@@ -38,6 +44,7 @@ public class UberItems extends JavaPlugin {
     private static Map<String, UberMaterial> materials = new HashMap<>();
     private static Map<Integer, UberMaterial> materialIDs = new HashMap<>();
 
+    public enum ArmorType {LEATHER, CHAINMAIL, GOLD, IRON, DIAMOND}
     public static final List<String> default_items = Arrays.asList("lunch_box", "document_of_order", "cheat_code", "escape_rope",
             "fireball", "wrench", "malk_bucket", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel",
             "smart_pack", "boom_stick", "world_eater", "lightning_rod", "aspect_of_the_virus", "hackerman");
@@ -97,6 +104,7 @@ public class UberItems extends JavaPlugin {
         registerCommands();
         registerEvents();
         registerItemsAndMaterials();
+
 
         // schedule repeating task for processing UberItem active effects
         activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, UberItems::uberActiveEffects, activeEffectsDelay, activeEffectsDelay);
@@ -198,10 +206,11 @@ public class UberItems extends JavaPlugin {
     // register event handlers
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(new PlayerUseUberItem(), this);
+        getServer().getPluginManager().registerEvents(new MiscEvents(), this);
         getServer().getPluginManager().registerEvents(new InventoryClick(),this);
         getServer().getPluginManager().registerEvents(new InventoryClose(), this);
         getServer().getPluginManager().registerEvents(new RenameItem(), this);
-        getServer().getPluginManager().registerEvents(new BlockPlace(), this);
+        getServer().getPluginManager().registerEvents(new BlockEvents(), this);
         getServer().getPluginManager().registerEvents(new FoodLevelChange(), this);
         getServer().getPluginManager().registerEvents(new Bucket(), this);
     }
@@ -236,7 +245,7 @@ public class UberItems extends JavaPlugin {
         // register UberMaterials, UberItems. Then count the number of default items
         if (defaultUberMaterials) RegisterItems.registerUberMaterials();
         if (defaultUberItems) {
-            RegisterItems.registerUberItems();
+            registerUberItems();
             defaultItemCount = items.keySet().size();
         }
         haveCountedDefaultItems = true;
@@ -357,11 +366,84 @@ public class UberItems extends JavaPlugin {
         materialIDs.put(material.getUUID(), material);
     }
 
+    // put entire armor set into the UberItems HashMap
+    public static void putUberArmorSet(Class<? extends UberItem> uber, String name, UberRarity rarity, ArmorType type, Color dyeColor, List<UberAbility> abilities, ItemStack customHelmet, ItemStack customChestplate, ItemStack customLeggings, ItemStack customBoots, UberCraftingRecipe helmetRecipe, UberCraftingRecipe chestplateRecipe, UberCraftingRecipe leggingsRecipe, UberCraftingRecipe bootsRecipe) {
+
+        String helmet_name, helmet_code, chestplate_name, chestplate_code, leggings_name, leggings_code, boots_name, boots_code;
+        helmet_code = name.toLowerCase() + "_helmet"; helmet_name = name + " Helmet";
+        chestplate_code = name.toLowerCase() + "_chestplate"; chestplate_name = name + " Chestplate";
+        leggings_code = name.toLowerCase() + "_leggings"; leggings_name = name + " Leggings";
+        boots_code = name.toLowerCase() + "_boots"; boots_name = name + " Boots";
+
+        if (dyeColor == null) dyeColor = Color.GRAY;
+
+        // set the armor pieces to specific materials and dye colors if applicable
+        ItemStack helmet = new ItemStack(Material.LEATHER_HELMET); if (customHelmet != null) helmet = customHelmet;
+        ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE); if (customChestplate != null) chestplate = customChestplate;
+        ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS); if (customLeggings != null) leggings = customLeggings;
+        ItemStack boots = new ItemStack(Material.LEATHER_BOOTS); if (customBoots != null) boots = customBoots;
+        switch (type) {
+            case LEATHER:
+                if (customHelmet == null) { helmet = new ItemStack(Material.LEATHER_HELMET); Utilities.dyeArmor(helmet, dyeColor); }
+                if (customChestplate == null) { chestplate = new ItemStack(Material.LEATHER_CHESTPLATE); Utilities.dyeArmor(chestplate, dyeColor); }
+                if (customLeggings == null) { leggings = new ItemStack(Material.LEATHER_LEGGINGS); Utilities.dyeArmor(leggings, dyeColor); }
+                if (customBoots == null) { boots = new ItemStack(Material.LEATHER_BOOTS); Utilities.dyeArmor(boots, dyeColor); }
+                break;
+            case CHAINMAIL:
+                if (customHelmet == null) helmet = new ItemStack(Material.CHAINMAIL_HELMET);
+                if (customChestplate == null) chestplate = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+                if (customLeggings == null) leggings = new ItemStack(Material.CHAINMAIL_LEGGINGS);
+                boots = new ItemStack(Material.CHAINMAIL_BOOTS);
+                break;
+            case GOLD:
+                if (customHelmet == null) helmet = new ItemStack(Material.GOLDEN_HELMET);
+                if (customChestplate == null) chestplate = new ItemStack(Material.GOLDEN_CHESTPLATE);
+                if (customLeggings == null) leggings = new ItemStack(Material.GOLDEN_LEGGINGS);
+                boots = new ItemStack(Material.GOLDEN_BOOTS);
+                break;
+            case IRON:
+                if (customHelmet == null) helmet = new ItemStack(Material.IRON_HELMET);
+                if (customChestplate == null) chestplate = new ItemStack(Material.IRON_CHESTPLATE);
+                if (customLeggings == null) leggings = new ItemStack(Material.IRON_LEGGINGS);
+                boots = new ItemStack(Material.IRON_BOOTS);
+                break;
+            case DIAMOND:
+                if (customHelmet == null) helmet = new ItemStack(Material.DIAMOND_HELMET);
+                if (customChestplate == null) chestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
+                if (customLeggings == null) leggings = new ItemStack(Material.DIAMOND_LEGGINGS);
+                if (customBoots == null) boots = new ItemStack(Material.DIAMOND_BOOTS);
+                break;
+        }
+
+        // tag all armor pieces with full set bonus, helmet with helmet tag
+        for (UberAbility ability : abilities) {
+            if (ability.getType() == AbilityType.FULL_SET_BONUS) {
+                String fullSetBonusTag = ability.getName().toLowerCase().replace(" ", "");
+                Utilities.storeIntInItem(helmet, 1, fullSetBonusTag);
+                Utilities.storeIntInItem(chestplate, 1, fullSetBonusTag);
+                Utilities.storeIntInItem(leggings, 1, fullSetBonusTag);
+                Utilities.storeIntInItem(boots, 1, fullSetBonusTag);
+            }
+        }
+        Utilities.storeIntInItem(helmet, 1, "uberhelmet");
+
+        try {
+            UberItems.putItem(helmet_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(helmet, helmet_name, rarity, false, false, true, abilities, helmetRecipe));
+            UberItems.putItem(chestplate_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(chestplate, chestplate_name, rarity, false, false, false, abilities, chestplateRecipe));
+            UberItems.putItem(leggings_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(leggings, leggings_name, rarity, false, false, false, abilities, leggingsRecipe));
+            UberItems.putItem(boots_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(boots, boots_name, rarity, false, false, false, abilities, bootsRecipe));
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     // reload all plugin assets
     public static void reload() {
         getInstance().reloadConfig();
         getInstance().loadConfiguration();
         getInstance().loadLangFile();
+
 
         registerItemsAndMaterials();
 

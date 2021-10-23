@@ -24,11 +24,24 @@ public class UberAbility {
     public List<String> toLore() {
         List<String> lore = new ArrayList<>();
 
-        lore.add(ChatColor.GOLD + "Item Ability: " + name + " " + ChatColor.YELLOW + ChatColor.BOLD + type.getText());
-        lore.addAll(Utilities.stringToLore(description, 40, ChatColor.GRAY));
-        if (cooldown > 0) lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + cooldown + "s.");
+        if (type != AbilityType.FULL_SET_BONUS) {
+            lore.add(ChatColor.GOLD + "Item Ability: " + name + " " + ChatColor.YELLOW + ChatColor.BOLD + type.getText());
+            lore.addAll(Utilities.stringToLore(description, 40, ChatColor.GRAY));
+            if (cooldown > 0) lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + cooldown + "s.");
+        }
+        else {
+            lore.add(ChatColor.GOLD + "Full Set Bonus: " + name + " " + ChatColor.YELLOW);
+            lore.addAll(Utilities.stringToLore(description, 40, ChatColor.GRAY));
+            if (cooldown > 0) lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + cooldown + "s.");
+        }
 
         return lore;
+    }
+
+    public String getName() { return name; }
+    public String getDescription() { return description; }
+    public AbilityType getType() {
+        return type;
     }
 
 }

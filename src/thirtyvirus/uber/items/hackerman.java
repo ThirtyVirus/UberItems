@@ -74,14 +74,15 @@ public class hackerman extends UberItem {
         return false;
     }
     public boolean activeEffect(Player player, ItemStack item) {
-        if (Utilities.getIntFromItem(item, "status") == 1) {
-            Block b = player.getLocation().add(0,-1,0).getBlock();
-            if (b.getType() == Material.AIR || b.getType() == Material.WATER) {
-                Material old = b.getType();
-                if (Utilities.hasUpgrade(item, "Compacted") && Utilities.hasUpgrade(item, "Expensive")) b.setType(Material.GOLD_BLOCK);
-                else if (Utilities.hasUpgrade(item, "Compacted")) b.setType(Material.IRON_BLOCK);
-                else b.setType(Material.STONE);
-                Utilities.scheduleTask(() -> b.setType(old), 60);
+        if (Utilities.getIntFromItem(item, "status") == 1 && !player.isSneaking()) {
+
+            Block block = player.getLocation().add(0,-1,0).getBlock(); Material material = Material.STONE;
+            if (Utilities.hasUpgrade(item, "Compacted") && Utilities.hasUpgrade(item, "Expensive")) material = Material.GOLD_BLOCK;
+            else if (Utilities.hasUpgrade(item, "Compacted")) material = Material.IRON_BLOCK;
+
+            // maintain block under player until they move
+            if (!block.getType().isSolid()) {
+                Utilities.maintainBlockReplacement(player, block, block.getState(), material, 2, 1);
             }
             return true;
         }

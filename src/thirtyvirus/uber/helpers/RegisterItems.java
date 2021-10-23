@@ -1,12 +1,16 @@
 package thirtyvirus.uber.helpers;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
 import thirtyvirus.uber.items.*;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -15,6 +19,11 @@ public class RegisterItems {
     // register UberItems
     public static void registerUberItems() {
         // UberItems.putItem("NAME", new UberItemTemplate(0, UberRarity.UNFINISHED, "NAME", Material.STONE, false, false, false, Arrays.asList(new UberAbility("Ability name!", AbilityType.RIGHT_CLICK, "Ability description")), null));
+
+        //UberItems.putUberArmorSet(infinity_armor.class, "Infinity", UberRarity.SPECIAL, UberItems.ArmorType.LEATHER, Color.fromRGB(252, 186, 3),
+        //        Collections.singletonList(new UberAbility("Inevitable", AbilityType.FULL_SET_BONUS, "This does put a smile on my face")),
+        //        Utilities.getSkull("http://textures.minecraft.net/texture/eb9e6815d741fa1f87389027c357abaae9eeada173df89bbac96dfc8b9d6a3c9"),
+        //        null,null,null,null,null,null,null);
 
         UberItems.putItem("lunch_box", new lunch_box(Material.CONDUIT, "Lunch Box", UberRarity.RARE,
                   false, false, false,
