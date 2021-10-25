@@ -4,7 +4,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityResurrectEvent;
+import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.helpers.Utilities;
 
 public class MiscEvents implements Listener {
 
@@ -19,6 +21,13 @@ public class MiscEvents implements Listener {
             event.setCancelled(true);
         }
 
+    }
+
+    // prevent uberitems from being smelted
+    @EventHandler
+    private static void onUberSmelt(FurnaceSmeltEvent event) {
+        if (Utilities.isUber(event.getSource()) && Utilities.getIntFromItem(event.getSource(), "smeltable") == 0)
+            event.setCancelled(true);
     }
 
 }

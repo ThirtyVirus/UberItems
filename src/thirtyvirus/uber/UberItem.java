@@ -1,5 +1,6 @@
 package thirtyvirus.uber;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -19,7 +20,9 @@ import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class UberItem {
 
@@ -34,6 +37,7 @@ public abstract class UberItem {
     private List<UberAbility> abilities;
 
     private UberCraftingRecipe craftingRecipe;
+    private Map<String, Integer> startingProperties;
 
     /**
      * Define a new UberItem
@@ -50,6 +54,7 @@ public abstract class UberItem {
 
         this.craftingRecipe = craftingRecipe;
         UUID = Utilities.stringToSeed(material.name() + name + rarity.toString());
+        startingProperties = new HashMap<>();
     }
     public UberItem(ItemStack item, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
         this.item = item;
@@ -63,6 +68,7 @@ public abstract class UberItem {
 
         this.craftingRecipe = craftingRecipe;
         UUID = Utilities.stringToSeed(item.getType().name() + name + rarity.toString());
+        startingProperties = new HashMap<>();
     }
 
     /**
@@ -88,6 +94,9 @@ public abstract class UberItem {
 
         Utilities.nameItem(newItem, rarity.getColor() + name);
         Utilities.storeIntInItem(newItem, UUID, "UberUUID");
+        for (String key : startingProperties.keySet()) {
+            Utilities.storeIntInItem(newItem, startingProperties.get(key), key);
+        }
 
         onItemStackCreate(newItem);
         Utilities.loreItem(newItem, getLore(newItem));
@@ -200,6 +209,10 @@ public abstract class UberItem {
     public abstract boolean clickedInInventoryAction(Player player, InventoryClickEvent event, ItemStack item, ItemStack addition);
 
     public abstract boolean activeEffect(Player player, ItemStack item);
+
+    public void addStartingProperty(String key, Integer value) {
+        startingProperties.put(key.replaceAll("[^a-z0-9/._-]", ""), value);
+    }
 
     // getters
     public ItemStack getRawItem() { return item; }

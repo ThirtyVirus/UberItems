@@ -430,7 +430,8 @@ public final class Utilities {
     }
     public static void maintainBlockReplacement(Player player, Block block, BlockState oldState, Material material, int tickDelay, int widthX, int heightY, int lengthZ) {
         List<Block> blocks = getBlocksInCube(player.getLocation(), widthX, heightY, lengthZ);
-        if (blocks.contains(block)) {
+        if (block.getState() instanceof Container) return;
+        if (blocks.contains(block) && player.isOnline()) {
             block.setType(material);
             if (!temporaryBlocks.contains(block)) temporaryBlocks.add(block);
             Utilities.scheduleTask(()->maintainBlockReplacement(player, block, oldState, material, tickDelay, widthX, heightY, lengthZ), 5);

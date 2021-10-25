@@ -378,10 +378,10 @@ public class UberItems extends JavaPlugin {
         if (dyeColor == null) dyeColor = Color.GRAY;
 
         // set the armor pieces to specific materials and dye colors if applicable
-        ItemStack helmet = new ItemStack(Material.LEATHER_HELMET); if (customHelmet != null) helmet = customHelmet;
-        ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE); if (customChestplate != null) chestplate = customChestplate;
-        ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS); if (customLeggings != null) leggings = customLeggings;
-        ItemStack boots = new ItemStack(Material.LEATHER_BOOTS); if (customBoots != null) boots = customBoots;
+        ItemStack helmet = new ItemStack(Material.LEATHER_HELMET); if (customHelmet != null) helmet = customHelmet.clone();
+        ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE); if (customChestplate != null) chestplate = customChestplate.clone();
+        ItemStack leggings = new ItemStack(Material.LEATHER_LEGGINGS); if (customLeggings != null) leggings = customLeggings.clone();
+        ItemStack boots = new ItemStack(Material.LEATHER_BOOTS); if (customBoots != null) boots = customBoots.clone();
         switch (type) {
             case LEATHER:
                 if (customHelmet == null) { helmet = new ItemStack(Material.LEATHER_HELMET); Utilities.dyeArmor(helmet, dyeColor); }
@@ -415,26 +415,26 @@ public class UberItems extends JavaPlugin {
                 break;
         }
 
-        // tag all armor pieces with full set bonus, helmet with helmet tag
-        for (UberAbility ability : abilities) {
-            if (ability.getType() == AbilityType.FULL_SET_BONUS) {
-                String fullSetBonusTag = ability.getName().toLowerCase().replace(" ", "");
-                Utilities.storeIntInItem(helmet, 1, fullSetBonusTag);
-                Utilities.storeIntInItem(chestplate, 1, fullSetBonusTag);
-                Utilities.storeIntInItem(leggings, 1, fullSetBonusTag);
-                Utilities.storeIntInItem(boots, 1, fullSetBonusTag);
-            }
-        }
-        Utilities.storeIntInItem(helmet, 1, "uberhelmet");
-
         try {
-            UberItems.putItem(helmet_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(helmet, helmet_name, rarity, false, false, true, abilities, helmetRecipe));
-            UberItems.putItem(chestplate_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(chestplate, chestplate_name, rarity, false, false, false, abilities, chestplateRecipe));
-            UberItems.putItem(leggings_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(leggings, leggings_name, rarity, false, false, false, abilities, leggingsRecipe));
-            UberItems.putItem(boots_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(boots, boots_name, rarity, false, false, false, abilities, bootsRecipe));
+            putItem(helmet_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(helmet, helmet_name, rarity, false, false, true, abilities, helmetRecipe));
+            putItem(chestplate_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(chestplate, chestplate_name, rarity, false, false, false, abilities, chestplateRecipe));
+            putItem(leggings_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(leggings, leggings_name, rarity, false, false, false, abilities, leggingsRecipe));
+            putItem(boots_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(boots, boots_name, rarity, false, false, false, abilities, bootsRecipe));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
+
+        // tag all armor pieces with full set bonus, helmet with helmet tag
+        for (UberAbility ability : abilities) {
+            if (ability.getType() == AbilityType.FULL_SET_BONUS) {
+                String fullSetBonusTag = ability.getName().toLowerCase().replaceAll("[^a-z0-9/._-]", "");
+                getItem(helmet_code).addStartingProperty(fullSetBonusTag, 1);
+                getItem(chestplate_code).addStartingProperty(fullSetBonusTag, 1);
+                getItem(leggings_code).addStartingProperty(fullSetBonusTag, 1);
+                getItem(boots_code).addStartingProperty(fullSetBonusTag, 1);
+            }
+        }
+        getItem(helmet_code).addStartingProperty("uberhelmet", 1);
 
     }
 

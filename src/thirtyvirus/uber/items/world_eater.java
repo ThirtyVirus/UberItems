@@ -54,6 +54,8 @@ public class world_eater extends UberItem {
 
     public void doBlockEater(Player player, Block startingBlock, int amount) {
         if (startingBlock.getType() == Material.AIR) return;
+        if (Utilities.temporaryBlocks.contains(startingBlock)) return;
+
         Material targetMaterial = startingBlock.getType();
 
         ArrayList<Block> blocksToCheck = new ArrayList<>();
@@ -71,7 +73,7 @@ public class world_eater extends UberItem {
                     Block southBlock = block.getRelative(BlockFace.SOUTH);
                     Block westBlock = block.getRelative(BlockFace.WEST);
                     for (Block nearbyBlock : new ArrayList<Block>(Arrays.asList(upperBlock, lowerBlock, northBlock, eastBlock, southBlock, westBlock))) {
-                        if (nearbyBlock.getType() == targetMaterial) {
+                        if (nearbyBlock.getType() == targetMaterial && !Utilities.temporaryBlocks.contains(nearbyBlock)) {
                             nearbyBlock.setType(Material.AIR);
                             nearbyBlock.getWorld().playSound(nearbyBlock.getLocation(), Sound.BLOCK_GRASS_BREAK, 0.3F, 2F);
                             blocksToCheck.add(nearbyBlock);
