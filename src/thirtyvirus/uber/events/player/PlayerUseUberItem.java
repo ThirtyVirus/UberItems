@@ -105,7 +105,7 @@ public class PlayerUseUberItem implements Listener {
                 if (player.getGameMode() != GameMode.CREATIVE)
                     player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
                 event.setDropItems(false);
-                player.getInventory().addItem(UberItems.getItem("uber_workbench").makeItem(1));
+                Utilities.givePlayerItemSafely(player, UberItems.getItem("uber_workbench").makeItem(1));
                 Utilities.playSound(ActionSound.POP, player);
             }
         }

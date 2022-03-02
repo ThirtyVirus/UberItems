@@ -11,9 +11,6 @@ import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
 import thirtyvirus.uber.helpers.Utilities;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 public class UberCommand implements CommandExecutor{
 
     @Override
@@ -104,7 +101,7 @@ public class UberCommand implements CommandExecutor{
         if (uber == null || args[1].equals("null")) { Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem")); return; }
 
         // give the item to the player
-        player.getInventory().addItem(uber);
+        Utilities.givePlayerItemSafely(player, uber);
         player.sendMessage(UberItems.prefix + "Given " + uber.getItemMeta().getDisplayName());
     }
 
@@ -123,7 +120,7 @@ public class UberCommand implements CommandExecutor{
         ItemStack item = material.makeItem(stack);
 
         // give the item to the player
-        player.getInventory().addItem(item);
+        Utilities.givePlayerItemSafely(player, item);
         player.sendMessage(UberItems.prefix + "Given " + item.getItemMeta().getDisplayName());
     }
 

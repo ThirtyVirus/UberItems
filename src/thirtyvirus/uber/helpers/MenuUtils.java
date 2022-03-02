@@ -214,7 +214,7 @@ public class MenuUtils {
                 uber.getCraftingRecipe().consumeMaterials(items); stack += product.getAmount();
             } final int s = stack;
 
-            Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> { event.getWhoClicked().getInventory().addItem(uber.makeItem(s)); }, 1);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> { Utilities.givePlayerItemSafely((Player) event.getWhoClicked(), uber.makeItem(s)); }, 1);
             return;
         }
 
@@ -258,7 +258,7 @@ public class MenuUtils {
                 uber.getCraftingRecipe().consumeMaterials(items); stack += product.getAmount();
             } final int s = stack;
 
-            Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> { event.getWhoClicked().getInventory().addItem(uber.makeItem(s)); }, 1);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> { Utilities.givePlayerItemSafely((Player)event.getWhoClicked(), uber.makeItem(s)); }, 1);
             return;
         }
 

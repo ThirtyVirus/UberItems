@@ -6,7 +6,6 @@ import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.*;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.libs.org.apache.commons.codec.binary.Base64;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -679,7 +678,7 @@ public final class Utilities {
 
         ItemMeta headMeta = head.getItemMeta();
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-        byte[] encodedData = Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
+        byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
         profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
         Field profileField = null;
 
@@ -714,6 +713,14 @@ public final class Utilities {
         meta.setColor(color);
         item.setItemMeta(meta);
         return item;
+    }
+
+    public static void givePlayerItemSafely(Player player, ItemStack item) {
+        final Map<Integer, ItemStack> items = player.getInventory().addItem(item);
+        for (final ItemStack i : items.values()) {
+            Entity e = player.getWorld().dropItemNaturally(player.getLocation(), i);
+            e.setVelocity(player.getLocation().getDirection().multiply(0.1f));
+        }
     }
 
     // UBERITEM FUNCTIONS

@@ -125,7 +125,7 @@ public class InventoryClick implements Listener {
                 ItemStack i = event.getCurrentItem().clone(); i.setAmount(1);
                 if (!item.isStackable()) Utilities.storeStringInItem(i, java.util.UUID.randomUUID().toString(), "UUID");
                 else i.setAmount(event.getCurrentItem().getType().getMaxStackSize());
-                player.getInventory().addItem(i);
+                Utilities.givePlayerItemSafely(player, i);
                 return;
             }
 
@@ -142,7 +142,7 @@ public class InventoryClick implements Listener {
                 ItemStack i = event.getCurrentItem().clone(); i.setAmount(1);
                 if (!item.isStackable()) Utilities.storeStringInItem(i, java.util.UUID.randomUUID().toString(), "UUID");
                 else i.setAmount(event.getCurrentItem().getType().getMaxStackSize());
-                player.getInventory().addItem(i);
+                Utilities.givePlayerItemSafely(player, i);
                 return;
             }
 

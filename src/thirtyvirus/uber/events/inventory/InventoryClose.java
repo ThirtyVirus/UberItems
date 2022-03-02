@@ -16,7 +16,7 @@ import java.util.List;
 public class InventoryClose implements Listener {
 
     @EventHandler
-    private void onCloseInventory(InventoryCloseEvent event){
+    private void onCloseInventory(InventoryCloseEvent event) {
 
         // save ShootyBox inventory on close
         if (event.getView().getTitle().contains("Shooty Box")){
@@ -34,7 +34,7 @@ public class InventoryClose implements Listener {
                     i.getItem(10), i.getItem(11), i.getItem(12),
                     i.getItem(19), i.getItem(20), i.getItem(21),
                     i.getItem(28), i.getItem(29), i.getItem(30));
-            for (ItemStack it : items) if (it != null) event.getPlayer().getInventory().addItem(it);
+            for (ItemStack it : items) if (it != null) Utilities.givePlayerItemSafely((Player)event.getPlayer(), it);
 
         }
 
