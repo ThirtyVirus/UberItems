@@ -718,6 +718,7 @@ public final class Utilities {
     public static void givePlayerItemSafely(Player player, ItemStack item) {
         final Map<Integer, ItemStack> items = player.getInventory().addItem(item);
         for (final ItemStack i : items.values()) {
+            if (i == null || i.getType() == Material.AIR) continue;
             Entity e = player.getWorld().dropItemNaturally(player.getLocation(), i);
             e.setVelocity(player.getLocation().getDirection().multiply(0.1f));
         }
