@@ -214,7 +214,7 @@ public class RegisterItems {
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.BLAZE_ROD),
-                        new ItemStack(Material.AIR)), false, 1)));
+                        new ItemStack(Material.AIR)), false, 1), "PICKAXE"));
 
         UberItems.putItem("lightning_rod", new lightning_rod(Material.END_ROD, "Lightning Rod", UberRarity.EPIC,
                 false, false, false,
@@ -242,7 +242,7 @@ public class RegisterItems {
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.DIAMOND_SWORD),
-                        new ItemStack(Material.AIR)), false, 1)));
+                        new ItemStack(Material.AIR)), false, 1), "SWORD"));
 
         UberItems.putItem("hackerman", new hackerman(Material.TOTEM_OF_UNDYING, "Hackerman", UberRarity.RARE,
                 false, false, true,

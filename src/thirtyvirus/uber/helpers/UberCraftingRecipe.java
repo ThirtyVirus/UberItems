@@ -79,7 +79,7 @@ public class UberCraftingRecipe {
 
         // shapeless crafting recipe
         else {
-            ArrayList<ItemStack> mats = new ArrayList<ItemStack>(components);
+            ArrayList<ItemStack> mats = new ArrayList<>(components);
             mats.removeIf(mat -> mat.getType() == Material.AIR);
             for (ItemStack item : items) {
                 if (item.getType() == Material.AIR) continue;
@@ -140,23 +140,27 @@ public class UberCraftingRecipe {
 
     // check if two ItemStacks are "the same", i2 can have a higher quantity than i1
     // distinguish between normal item and uber material / uber item
-    // TODO make crafting check for certain metadata?
     private boolean isSame(ItemStack i1, ItemStack i2) {
 
-        // item 1 is an UberItem
-        if (Utilities.isUber(i1)) {
+        // item 1 and item 2 are UberItems
+        if (Utilities.isUber(i1) && Utilities.isUber(i2)) {
             int UUID = Utilities.getIntFromItem(i1, "UberUUID");
             return (UberItems.getItemFromID(UUID).compare(i2) && i1.getAmount() <= i2.getAmount());
         }
-        // item 1 is an UberMaterial
-        else if (Utilities.isUberMaterial(i1)) {
+        // item 1 and item 2 are UberMaterials
+        else if (Utilities.isUberMaterial(i1) && Utilities.isUberMaterial(i2)) {
             int UUID = Utilities.getIntFromItem(i1, "MaterialUUID");
             return (UberItems.getMaterialFromID(UUID).compare(i2) && i1.getAmount() <= i2.getAmount());
         }
-        // item 1 is air
+
+        // item 1 and 2 are mismatching status of being an UberItem / UberMaterial
+        else if (Utilities.isUber(i1) != Utilities.isUber(i2)) return false;
+        else if (Utilities.isUberMaterial(i1) != Utilities.isUberMaterial(i2)) return false;
+
+        // item 1 and item 2 are air
         else if (i1.getType() == Material.AIR && i2.getType() == Material.AIR) return true;
 
-        // item 1 is a non-plugin item
+        // non-plugin items TODO compare metadata?
         else return (i1.getType() == i2.getType() && i1.getAmount() <= i2.getAmount());
     }
 
