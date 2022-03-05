@@ -17,6 +17,7 @@ public class UberMaterial {
     private ItemStack item;
     private String name, description;
     private UberRarity rarity;
+    private String raritySuffix = "";
     private boolean stackable;
     private int UUID;
     private boolean enchantGlint;
@@ -40,6 +41,10 @@ public class UberMaterial {
         this.craftingRecipe = craftingRecipe;
         UUID = Utilities.stringToSeed(material.name() + name + rarity.toString());
     }
+    public UberMaterial(Material material, String name, UberRarity rarity, boolean enchantGlint, boolean stackable, boolean isVanillaCraftable, String description, UberCraftingRecipe craftingRecipe, String raritySuffix) {
+        this(material, name, rarity, enchantGlint, stackable, isVanillaCraftable, description, craftingRecipe);
+        this.raritySuffix = " " + raritySuffix;
+    }
     public UberMaterial(ItemStack item, String name, UberRarity rarity, boolean enchantGlint, boolean stackable, boolean isVanillaCraftable, String description, UberCraftingRecipe craftingRecipe) {
         this.item = item;
         this.name = name;
@@ -52,6 +57,10 @@ public class UberMaterial {
 
         this.craftingRecipe = craftingRecipe;
         UUID = Utilities.stringToSeed(item.getType().name() + name + rarity.toString());
+    }
+    public UberMaterial(ItemStack item, String name, UberRarity rarity, boolean enchantGlint, boolean stackable, boolean isVanillaCraftable, String description, UberCraftingRecipe craftingRecipe, String raritySuffix) {
+        this(item, name, rarity, enchantGlint, stackable, isVanillaCraftable, description, craftingRecipe);
+        this.raritySuffix = " " + raritySuffix;
     }
 
     /**
@@ -96,7 +105,7 @@ public class UberMaterial {
         }
 
         // show the rarity of the item
-        lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString() + " MATERIAL");
+        lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString() + raritySuffix.toUpperCase());
 
         return lore;
     }

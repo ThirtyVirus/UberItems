@@ -416,10 +416,10 @@ public class UberItems extends JavaPlugin {
         }
 
         try {
-            putItem(helmet_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(helmet, helmet_name, rarity, false, false, true, abilities, helmetRecipe));
-            putItem(chestplate_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(chestplate, chestplate_name, rarity, false, false, false, abilities, chestplateRecipe));
-            putItem(leggings_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(leggings, leggings_name, rarity, false, false, false, abilities, leggingsRecipe));
-            putItem(boots_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class).newInstance(boots, boots_name, rarity, false, false, false, abilities, bootsRecipe));
+            putItem(helmet_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class, String.class).newInstance(helmet, helmet_name, rarity, false, false, true, abilities, helmetRecipe, "HELMET"));
+            putItem(chestplate_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class, String.class).newInstance(chestplate, chestplate_name, rarity, false, false, false, abilities, chestplateRecipe, "CHESTPLATE"));
+            putItem(leggings_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class, String.class).newInstance(leggings, leggings_name, rarity, false, false, false, abilities, leggingsRecipe, "LEGGINGS"));
+            putItem(boots_code, uber.getConstructor(ItemStack.class, String.class, UberRarity.class, boolean.class, boolean.class, boolean.class, List.class, UberCraftingRecipe.class, String.class).newInstance(boots, boots_name, rarity, false, false, false, abilities, bootsRecipe, "BOOTS"));
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }

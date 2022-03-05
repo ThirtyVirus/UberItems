@@ -29,6 +29,7 @@ public abstract class UberItem {
     private ItemStack item;
     private String name;
     private UberRarity rarity;
+    private String raritySuffix = "";
     private boolean stackable;
     private int UUID;
 
@@ -56,6 +57,10 @@ public abstract class UberItem {
         UUID = Utilities.stringToSeed(material.name() + name + rarity.toString());
         startingProperties = new HashMap<>();
     }
+    public UberItem(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe, String raritySuffix) {
+        this(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+        this.raritySuffix = " " + raritySuffix;
+    }
     public UberItem(ItemStack item, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
         this.item = item;
         this.name = name;
@@ -69,6 +74,10 @@ public abstract class UberItem {
         this.craftingRecipe = craftingRecipe;
         UUID = Utilities.stringToSeed(item.getType().name() + name + rarity.toString());
         startingProperties = new HashMap<>();
+    }
+    public UberItem(ItemStack item, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe, String raritySuffix) {
+        this(item, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
+        this.raritySuffix = " " + raritySuffix;
     }
 
     /**
@@ -149,7 +158,7 @@ public abstract class UberItem {
         if (oneTimeUse) lore.add(ChatColor.DARK_GRAY + "(consumed on use)");
 
         // show the rarity of the item
-        lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString());
+        lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString() + raritySuffix.toUpperCase());
 
         return lore;
     }
