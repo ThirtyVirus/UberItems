@@ -1,6 +1,8 @@
 package thirtyvirus.uber;
 
 import com.google.common.io.ByteStreams;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -105,7 +107,6 @@ public class UberItems extends JavaPlugin {
         registerEvents();
         registerItemsAndMaterials();
 
-
         // schedule repeating task for processing UberItem active effects
         activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, UberItems::uberActiveEffects, activeEffectsDelay, activeEffectsDelay);
 
@@ -120,6 +121,38 @@ public class UberItems extends JavaPlugin {
                 }
             }
         }, 10, 10);
+
+        // manage player mana (regeneration and updating display)
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (Utilities.dontUpdateMana.containsKey(player)) continue;
+
+                // only show mana if holding item that uses it
+                boolean usesMana = false;
+                ItemStack item = player.getInventory().getItemInMainHand();
+                if (Utilities.isUber(item)) {
+                    UberItem uber = Utilities.getUber(item);
+                    for (UberAbility ability : uber.getAbilities()) {
+                        if (ability.getManaCost() > 0) {
+                            usesMana = true;
+                            break;
+                        }
+                    }
+                }
+                if (!usesMana) return;
+
+                // add new player to mana map
+                if (!Utilities.mana.containsKey(player) || !Utilities.maxMana.containsKey(player)) {
+                    Utilities.mana.put(player, Utilities.DEFAULT_MAX_MANA);
+                    Utilities.maxMana.put(player, Utilities.DEFAULT_MAX_MANA);
+                }
+                else {
+                    double newMana = Utilities.mana.get(player) + Utilities.maxMana.get(player) / 100;
+                    Utilities.mana.put(player, Math.min(newMana, Utilities.maxMana.get(player)));
+                }
+                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.AQUA + "" + Math.round(Utilities.mana.get(player)) + "/" + Math.round(Utilities.maxMana.get(player)) + "✎ Mana"));
+            }
+        }, 20, 20);
 
         // post confirmation in chat
         getLogger().info(getDescription().getName() + " V: " + getDescription().getVersion() + " has been enabled");

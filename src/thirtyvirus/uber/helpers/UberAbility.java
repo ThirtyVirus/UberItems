@@ -11,6 +11,7 @@ public class UberAbility {
     private String name, description;
     private AbilityType type;
     private int cooldown = 0;
+    private int manaCost = 0;
 
     public UberAbility(String name, AbilityType type, String description) {
         this.name = name; this.type = type; this.description = description;
@@ -20,6 +21,11 @@ public class UberAbility {
         this.name = name; this.type = type; this.description = description; this.cooldown = cooldown;
     }
 
+    public UberAbility(String name, AbilityType type, String description, int cooldown, int manaCost) {
+        this.name = name; this.type = type; this.description = description; this.cooldown = cooldown;
+        this.manaCost = manaCost;
+    }
+
     // convert the ability into Item Lore
     public List<String> toLore() {
         List<String> lore = new ArrayList<>();
@@ -27,6 +33,8 @@ public class UberAbility {
         if (type != AbilityType.FULL_SET_BONUS) {
             lore.add(ChatColor.GOLD + "Item Ability: " + name + " " + ChatColor.YELLOW + ChatColor.BOLD + type.getText());
             lore.addAll(Utilities.stringToLore(description, 40, ChatColor.GRAY));
+
+            if (manaCost > 0) lore.add(ChatColor.DARK_GRAY + "Mana Cost: " + ChatColor.AQUA + manaCost);
             if (cooldown > 0) lore.add(ChatColor.DARK_GRAY + "Cooldown: " + ChatColor.GREEN + cooldown + "s.");
         }
         else {
@@ -43,5 +51,7 @@ public class UberAbility {
     public AbilityType getType() {
         return type;
     }
+    public int getCooldown() { return cooldown; }
+    public int getManaCost() { return manaCost; }
 
 }

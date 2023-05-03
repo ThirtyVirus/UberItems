@@ -2,6 +2,8 @@ package thirtyvirus.uber.helpers;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.*;
@@ -39,6 +41,12 @@ public final class Utilities {
     private static Map<Player, Long> mostRecentSelect = new HashMap<>();
 
     public static List<Block> temporaryBlocks = new ArrayList<>();
+
+    public static Map<Player, Boolean> dontUpdateMana = new HashMap<>();
+
+    public static Map<Player, Double> mana = new HashMap<>();
+    public static Map<Player, Double> maxMana = new HashMap<>();
+    public static final Double DEFAULT_MAX_MANA = 100.0;
 
     // GENERAL PLUGIN FUNCTIONS
     // _____________________________________________________________________________ \\
@@ -586,7 +594,7 @@ public final class Utilities {
         ItemMeta itemMeta = host.getItemMeta();
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
 
-        if(container.has(k, new CompactInventory())) return container.get(k, new StoredString());
+        if(container.has(k, new StoredString())) return container.get(k, new StoredString());
 
         // if no entry, return null
         return null;
@@ -791,6 +799,22 @@ public final class Utilities {
         if (Utilities.getIntFromItem(player.getInventory().getBoots(), fullSetBonus) == 0) return false;
 
         return true;
+    }
+
+    // enforce a given mana cost, if available use the mana and return false
+    public static boolean enforceManaCost(Player player, double cost) {
+        if (!mana.containsKey(player)) mana.put(player, 0.0);
+        if (mana.get(player) >= cost) {
+            mana.put(player, mana.get(player) - cost);
+            return false;
+        }
+        else {
+            Utilities.playSound(ActionSound.ERROR, player);
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(String.valueOf(ChatColor.RED) + ChatColor.BOLD + "NOT ENOUGH MANA"));
+            dontUpdateMana.put(player, true);
+            Utilities.scheduleTask(()->dontUpdateMana.remove(player), 20);
+            return true;
+        }
     }
 
     /**

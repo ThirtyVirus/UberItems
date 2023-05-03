@@ -35,7 +35,7 @@ public abstract class UberItem {
 
     private boolean oneTimeUse;
     private boolean hasActive;
-    private List<UberAbility> abilities;
+    private List<UberAbility> abilities = new ArrayList<>();
 
     private UberCraftingRecipe craftingRecipe;
     private Map<String, Integer> startingProperties;
@@ -228,6 +228,7 @@ public abstract class UberItem {
     public Material getMaterial() { return item.getType(); }
     public String getName() { return name; }
     public UberRarity getRarity() { return rarity; }
+    public List<UberAbility> getAbilities() { return abilities; }
     public boolean isStackable() { return stackable; }
     public int getUUID() { return UUID; }
     public boolean hasActiveEffect() { return hasActive; }
