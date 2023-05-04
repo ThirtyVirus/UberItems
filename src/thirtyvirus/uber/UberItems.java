@@ -26,7 +26,6 @@ import thirtyvirus.uber.events.player.Bucket;
 import thirtyvirus.uber.events.player.FoodLevelChange;
 import thirtyvirus.uber.events.player.PlayerUseUberItem;
 import thirtyvirus.uber.helpers.*;
-import thirtyvirus.uber.items.UberItemTemplate;
 import thirtyvirus.uber.items.null_item;
 import thirtyvirus.uber.items.uber_workbench;
 
