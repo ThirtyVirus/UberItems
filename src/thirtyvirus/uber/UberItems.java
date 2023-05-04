@@ -27,6 +27,7 @@ import thirtyvirus.uber.events.player.FoodLevelChange;
 import thirtyvirus.uber.events.player.PlayerUseUberItem;
 import thirtyvirus.uber.helpers.*;
 import thirtyvirus.uber.items.UberItemTemplate;
+import thirtyvirus.uber.items.null_item;
 import thirtyvirus.uber.items.uber_workbench;
 
 import java.io.File;
@@ -35,8 +36,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-
-import static thirtyvirus.uber.helpers.RegisterItems.registerUberItems;
 
 public class UberItems extends JavaPlugin {
 
@@ -132,6 +131,7 @@ public class UberItems extends JavaPlugin {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 if (Utilities.isUber(item)) {
                     UberItem uber = Utilities.getUber(item);
+                    if (uber == null) continue;
                     for (UberAbility ability : uber.getAbilities()) {
                         if (ability.getManaCost() > 0) {
                             usesMana = true;
@@ -152,7 +152,7 @@ public class UberItems extends JavaPlugin {
                 }
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.AQUA + "" + Math.round(Utilities.mana.get(player)) + "/" + Math.round(Utilities.maxMana.get(player)) + "✎ Mana"));
             }
-        }, 20, 20);
+        }, 10, 10);
 
         // post confirmation in chat
         getLogger().info(getDescription().getName() + " V: " + getDescription().getVersion() + " has been enabled");
@@ -191,7 +191,10 @@ public class UberItems extends JavaPlugin {
         if (iwl != null) itemWhitelist.addAll(Arrays.asList(iwl.trim().split(",")));
 
         String mwl = config.getString("material-whitelist"); materialWhitelist.clear();
-        if (mwl != null) materialWhitelist.addAll(Arrays.asList(mwl.trim().split(",")));
+        if (mwl != null) {
+            materialWhitelist.addAll(Arrays.asList(mwl.trim().split(",")));
+            materialWhitelist.add("null");
+        }
 
         // sorting settings
         sortingMode = config.getInt("sorting-mode");
@@ -206,7 +209,7 @@ public class UberItems extends JavaPlugin {
         useBlackList = config.getBoolean("use-inventory-blacklist");
 
         String w = config.getString("inventory-whitelist"); whiteList.clear();
-        if (w !=null) whiteList.addAll(Arrays.asList(w.split(",")));
+        if (w != null) whiteList.addAll(Arrays.asList(w.split(",")));
 
         String b = config.getString("inventory-blacklist"); blackList.clear();
         if (b !=null) blackList.addAll(Arrays.asList(b.split(",")));
@@ -272,13 +275,13 @@ public class UberItems extends JavaPlugin {
                 Collections.singletonList(new UberAbility("A new chapter", AbilityType.RIGHT_CLICK, "Opens the UberItems Crafting Menu")), null));
 
         // register the error UberItem and UberMaterial separately from the rest of the items, it's essential
-        putItem("null", new UberItemTemplate(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, Collections.emptyList(), null));
+        putItem("null", new null_item(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, Collections.emptyList(), null));
         putMaterial("null", new UberMaterial(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, "ERROR: UberMaterial not found", null));
 
         // register UberMaterials, UberItems. Then count the number of default items
         if (defaultUberMaterials) RegisterItems.registerUberMaterials();
         if (defaultUberItems) {
-            registerUberItems();
+            RegisterItems.registerUberItems();
             defaultItemCount = items.keySet().size();
         }
         haveCountedDefaultItems = true;
@@ -382,6 +385,12 @@ public class UberItems extends JavaPlugin {
     // place UberItems and UberMaterials into the proper HashMaps
     public static void putItem(String name, UberItem item) {
 
+        if (name.equals("null") || name.equals("uber_workbench")) {
+            items.put(name, item);
+            itemIDs.put(item.getUUID(), item);
+            return;
+        }
+
         if (itemBlacklist.contains(name)) return;
         if (itemWhitelist.size() > 0 && !itemWhitelist.contains(name)) return;
 
@@ -392,8 +401,11 @@ public class UberItems extends JavaPlugin {
         else Bukkit.getLogger().severe("You're trying to load more than 5 custom items! Purchase UberItems Premium to load unlimited custom items: https://www.spigotmc.org/resources/83851/");
     }
     public static void putMaterial(String name, UberMaterial material) {
-        if (materialBlacklist.contains(name)) return;
-        if (materialWhitelist.size() > 0 && !materialWhitelist.contains(name)) return;
+
+        if (!name.equals("null")) {
+            if (materialBlacklist.contains(name)) return;
+            if (materialWhitelist.size() > 0 && !materialWhitelist.contains(name)) return;
+        }
 
         materials.put(name, material);
         materialIDs.put(material.getUUID(), material);

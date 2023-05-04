@@ -9,15 +9,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e89be58a-ef4f-430f-8537-cfe9ba3bde74" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/null_item.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Uber_Items.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Uber_Items.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/META-INF/Uber_Items.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/Utilities.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/Utilities.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems$ArmorType.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems$ArmorType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/UberItems.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/UberAbility.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/UberAbility.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/Utilities.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
