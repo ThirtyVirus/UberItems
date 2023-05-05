@@ -450,10 +450,10 @@ public final class Utilities {
      * @param amount the amount to heal the entity
      */
     public static void safeHeal(LivingEntity entity, int amount) {
-        double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+        double maxHealth = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
         if (entity.getHealth() + amount >= maxHealth) {
-            entity.setHealth(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+            entity.setHealth(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
         }
         else entity.setHealth(entity.getHealth() + amount);
     }

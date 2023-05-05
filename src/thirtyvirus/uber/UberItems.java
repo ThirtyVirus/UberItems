@@ -124,7 +124,6 @@ public class UberItems extends JavaPlugin {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (Utilities.dontUpdateMana.containsKey(player)) continue;
-
                 // only show mana if holding item that uses it
                 boolean usesMana = false;
                 ItemStack item = player.getInventory().getItemInMainHand();

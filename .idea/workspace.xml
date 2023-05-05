@@ -9,24 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e89be58a-ef4f-430f-8537-cfe9ba3bde74" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/atlas.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/big_backpack.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/calamari.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/crystal_ball.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/experience_bottle.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/homemade_portal_frame.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/kebab.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/livna.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/multi_bench.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/omlette.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/pillow.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/small_backpack.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/soul_anchor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/items/throwing_torch.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/Utilities.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Uber_Items/thirtyvirus/uber/helpers/Utilities.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/UberItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/events/MiscEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/events/MiscEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/RegisterItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/RegisterItems.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/thirtyvirus/uber/helpers/Utilities.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,12 +41,12 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/Thirt/OneDrive/Documents/Programming/Spigot/plugins/Survival_Utilities"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Thirt/IdeaProjects/Uber_Items&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Thirt\IdeaProjects\Uber_Items\src\thirtyvirus\" />
