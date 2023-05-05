@@ -124,31 +124,33 @@ public class UberItems extends JavaPlugin {
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (Utilities.dontUpdateMana.containsKey(player)) continue;
-                // only show mana if holding item that uses it
-                boolean usesMana = false;
-                ItemStack item = player.getInventory().getItemInMainHand();
-                if (Utilities.isUber(item)) {
-                    UberItem uber = Utilities.getUber(item);
-                    if (uber == null) continue;
-                    for (UberAbility ability : uber.getAbilities()) {
-                        if (ability.getManaCost() > 0) {
-                            usesMana = true;
-                            break;
-                        }
-                    }
-                }
-                if (!usesMana) return;
 
                 // add new player to mana map
                 if (!Utilities.mana.containsKey(player) || !Utilities.maxMana.containsKey(player)) {
                     Utilities.mana.put(player, Utilities.DEFAULT_MAX_MANA);
                     Utilities.maxMana.put(player, Utilities.DEFAULT_MAX_MANA);
                 }
+                // regenerate mana
                 else {
                     double newMana = Utilities.mana.get(player) + Utilities.maxMana.get(player) / 100;
                     Utilities.mana.put(player, Math.min(newMana, Utilities.maxMana.get(player)));
                 }
-                player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.AQUA + "" + Math.round(Utilities.mana.get(player)) + "/" + Math.round(Utilities.maxMana.get(player)) + "✎ Mana"));
+
+                // only show mana if holding item that uses it
+                boolean usesMana = false;
+                ItemStack item = player.getInventory().getItemInMainHand();
+                if (Utilities.isUber(item)) {
+                    UberItem uber = Utilities.getUber(item);
+                    if (uber != null) {
+                        for (UberAbility ability : uber.getAbilities()) {
+                            if (ability.getManaCost() > 0) {
+                                usesMana = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (usesMana) player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.AQUA + "" + Math.round(Utilities.mana.get(player)) + "/" + Math.round(Utilities.maxMana.get(player)) + "✎ Mana"));
             }
         }, 10, 10);
 
