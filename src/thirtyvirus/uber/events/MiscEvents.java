@@ -27,11 +27,10 @@ public class MiscEvents implements Listener {
     // 10% chance to drop 1-3 calamari from squid kills
     @EventHandler
     private void onKillSquid(EntityDeathEvent event) {
-        if (event.getEntity() instanceof Squid) {
+        if (event.getEntity() instanceof Squid && !UberItems.getItem("calamari").equals(UberItems.getItem("null"))) {
             int r = rand.nextInt(100) + 1;
             int d = rand.nextInt(3) + 1;
-            if (r < 20)
-                event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), UberItems.getItem("calamari").makeItem(d));
+            if (r < 20) event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), UberItems.getItem("calamari").makeItem(d));
         }
     }
 

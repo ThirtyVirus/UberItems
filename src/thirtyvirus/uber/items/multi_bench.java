@@ -36,6 +36,7 @@ public class multi_bench extends UberItem {
 
         String upgrade = "none";
         switch (item.getType()) {
+            case OBSIDIAN: upgrade = "Enchanting"; break;
             case CRAFTING_TABLE: upgrade = "Crafting"; break;
             case FURNACE: upgrade = "Smelting"; break;
             case BREWING_STAND: upgrade = "Brewing"; break;
