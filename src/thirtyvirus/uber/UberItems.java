@@ -144,7 +144,7 @@ public class UberItems extends JavaPlugin {
                     UberItem uber = Utilities.getUber(mainHand);
                     if (uber != null) { for (UberAbility ability : uber.getAbilities()) { if (ability.getManaCost() > 0) { usesMana = true; break; } } }
                 }
-                else if (Utilities.isUber(offHand)) {
+                if (Utilities.isUber(offHand)) {
                     UberItem uber = Utilities.getUber(offHand);
                     if (uber != null) { for (UberAbility ability : uber.getAbilities()) { if (ability.getManaCost() > 0) { usesMana = true; break; } } }
                 }
