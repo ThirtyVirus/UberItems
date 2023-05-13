@@ -138,17 +138,15 @@ public class UberItems extends JavaPlugin {
 
                 // only show mana if holding item that uses it
                 boolean usesMana = false;
-                ItemStack item = player.getInventory().getItemInMainHand();
-                if (Utilities.isUber(item)) {
-                    UberItem uber = Utilities.getUber(item);
-                    if (uber != null) {
-                        for (UberAbility ability : uber.getAbilities()) {
-                            if (ability.getManaCost() > 0) {
-                                usesMana = true;
-                                break;
-                            }
-                        }
-                    }
+                ItemStack mainHand = player.getInventory().getItemInMainHand();
+                ItemStack offHand = player.getInventory().getItemInOffHand();
+                if (Utilities.isUber(mainHand)) {
+                    UberItem uber = Utilities.getUber(mainHand);
+                    if (uber != null) { for (UberAbility ability : uber.getAbilities()) { if (ability.getManaCost() > 0) { usesMana = true; break; } } }
+                }
+                else if (Utilities.isUber(offHand)) {
+                    UberItem uber = Utilities.getUber(offHand);
+                    if (uber != null) { for (UberAbility ability : uber.getAbilities()) { if (ability.getManaCost() > 0) { usesMana = true; break; } } }
                 }
                 if (usesMana) player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.AQUA + "" + Math.round(Utilities.mana.get(player)) + "/" + Math.round(Utilities.maxMana.get(player)) + "✎ Mana"));
             }
@@ -287,7 +285,7 @@ public class UberItems extends JavaPlugin {
         haveCountedDefaultItems = true;
     }
 
-    // process active effets for uber items that are in use
+    // process active effects for uber items that are in use
     // TODO: Do active effects for uber items not in hand?
     private static void uberActiveEffects() {
         for (Player player : Bukkit.getOnlinePlayers()) {
