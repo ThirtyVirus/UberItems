@@ -1,5 +1,6 @@
 package thirtyvirus.uber.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -97,27 +98,49 @@ public class UberCommand implements CommandExecutor{
 
     // setMana command
     private void setMana(CommandSender sender, String[] args) {
-        // verify that the command is executed by a player
-        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
-        Player player = (Player) sender;
 
-        if (args.length > 1) {
-            double mana = Double.parseDouble(args[1]);
+        // modify a player's mana
+        if (args.length == 3) {
+            Player player = Bukkit.getPlayer(args[1]);
+            double mana = Double.parseDouble(args[2]);
             if (mana >= 0) Utilities.mana.put(player, Math.min(mana, Utilities.maxMana.get(player)));
         }
+        // modify your own mana (Player only)
+        else {
+            // verify that the command is executed by a player
+            if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
+            Player player = (Player) sender;
+
+            if (args.length == 2) {
+                double mana = Double.parseDouble(args[1]);
+                if (mana >= 0) Utilities.mana.put(player, Math.min(mana, Utilities.maxMana.get(player)));
+            }
+        }
+
     }
 
     // setMaxMana command
     private void setMaxMana(CommandSender sender, String[] args) {
-        // verify that the command is executed by a player
-        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
-        Player player = (Player) sender;
 
-        if (args.length > 1) {
-            double maxMana = Double.parseDouble(args[1]);
+        // modify a player's max mana
+        if (args.length == 3) {
+            Player player = Bukkit.getPlayer(args[1]);
+            double maxMana = Double.parseDouble(args[2]);
             if (maxMana >= 0) Utilities.maxMana.put(player, maxMana);
             if (Utilities.mana.get(player) > maxMana) Utilities.mana.put(player, maxMana);
         }
+        else {
+            // verify that the command is executed by a player
+            if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
+            Player player = (Player) sender;
+
+            if (args.length == 2) {
+                double maxMana = Double.parseDouble(args[1]);
+                if (maxMana >= 0) Utilities.maxMana.put(player, maxMana);
+                if (Utilities.mana.get(player) > maxMana) Utilities.mana.put(player, maxMana);
+            }
+        }
+
     }
 
     // give command
