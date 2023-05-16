@@ -184,11 +184,6 @@ public class RegisterItems {
                 Arrays.asList(new UberAbility("Transmutation", AbilityType.RIGHT_CLICK, "Use on a block to transmute it into a similar one"), new UberAbility("Machine Chisel", AbilityType.LEFT_CLICK, "Transmute many blocks at a time in your inventory")),
                 null));
 
-        UberItems.putItem("smart_pack", new smart_pack(Material.LIME_SHULKER_BOX, "Smart Pack", UberRarity.UNFINISHED,
-                false, false, true,
-                Arrays.asList(new UberAbility("Black Box", AbilityType.NONE, "Any items with special properties inside will retain their active effects"), new UberAbility("Automation", AbilityType.RIGHT_CLICK, "Activating the pack will activate items inside with a Right-Click ability")),
-                null));
-
         UberItems.putItem("boom_stick", new boom_stick(Material.STICK, "BOOM Stick", UberRarity.LEGENDARY,
                 false, false, false,
                 Arrays.asList(new UberAbility("BOOM", AbilityType.RIGHT_CLICK, "Blow up all nearby enemies", 5), new UberAbility("Banish", AbilityType.LEFT_CLICK, "Punch your enemies into the shadow realm")),

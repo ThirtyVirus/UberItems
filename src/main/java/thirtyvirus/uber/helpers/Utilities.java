@@ -105,7 +105,7 @@ public final class Utilities {
     public static boolean enforcePermissions(Player player, UberItem item) {
 
         // test for premium and over Rare rarity
-        if (!UberItems.premium && item.getRarity().isRarerThan(UberRarity.RARE)) {
+        if (!UberItems.premium && item.getRarity().isRarerThan(UberRarity.EPIC)) {
             warnPlayer(player, UberItems.getPhrase("not-premium-message"));
             return true;
         }

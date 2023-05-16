@@ -43,6 +43,7 @@ public class cheat_code extends UberItem {
         player.setSaturation(20);
         player.setFoodLevel(20);
         Utilities.safeHeal(player, 1000);
+        Utilities.mana.put(player, Utilities.maxMana.get(player));
         return true;
     }
     public boolean rightClickBlockAction(Player player, PlayerInteractEvent event, Block block, ItemStack item) { return rightClickAirAction(player, item); }

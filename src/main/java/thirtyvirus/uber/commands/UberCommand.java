@@ -54,6 +54,14 @@ public class UberCommand implements CommandExecutor{
                     if (sender.hasPermission("uber.admin")) updateLore(sender);
                     else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
                     break;
+                case "setmana":
+                    if (sender.hasPermission("uber.admin")) setMana(sender, args);
+                    else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
+                    break;
+                case "setmaxmana":
+                    if (sender.hasPermission("uber.admin")) setMaxMana(sender, args);
+                    else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
+                    break;
                 case "reload":
                     if (sender.hasPermission("uber.admin")) reload(sender);
                     else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
@@ -85,6 +93,31 @@ public class UberCommand implements CommandExecutor{
         // update the lore
         uber.updateLore(player.getInventory().getItemInMainHand());
         Utilities.informPlayer(player, UberItems.getPhrase("updated-lore-message"));
+    }
+
+    // setMana command
+    private void setMana(CommandSender sender, String[] args) {
+        // verify that the command is executed by a player
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
+        Player player = (Player) sender;
+
+        if (args.length > 1) {
+            double mana = Double.parseDouble(args[1]);
+            if (mana >= 0) Utilities.mana.put(player, Math.min(mana, Utilities.maxMana.get(player)));
+        }
+    }
+
+    // setMaxMana command
+    private void setMaxMana(CommandSender sender, String[] args) {
+        // verify that the command is executed by a player
+        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
+        Player player = (Player) sender;
+
+        if (args.length > 1) {
+            double maxMana = Double.parseDouble(args[1]);
+            if (maxMana >= 0) Utilities.maxMana.put(player, maxMana);
+            if (Utilities.mana.get(player) > maxMana) Utilities.mana.put(player, maxMana);
+        }
     }
 
     // give command

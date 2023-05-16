@@ -9,6 +9,7 @@ public enum UberRarity {
     EPIC(ChatColor.DARK_PURPLE),
     LEGENDARY(ChatColor.GOLD),
     MYTHIC(ChatColor.LIGHT_PURPLE),
+    DIVINE(ChatColor.AQUA),
     SPECIAL(ChatColor.RED),
     VERY_SPECIAL(ChatColor.RED),
     UNFINISHED(ChatColor.DARK_RED);

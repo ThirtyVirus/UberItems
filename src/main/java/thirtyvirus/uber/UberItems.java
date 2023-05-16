@@ -47,11 +47,13 @@ public class UberItems extends JavaPlugin {
     public enum ArmorType {LEATHER, CHAINMAIL, GOLD, IRON, DIAMOND}
     public static final List<String> default_items = Arrays.asList("lunch_box", "document_of_order", "cheat_code", "escape_rope",
             "fireball", "wrench", "malk_bucket", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel",
-            "smart_pack", "boom_stick", "world_eater", "lightning_rod", "aspect_of_the_virus", "hackerman");
+            "boom_stick", "world_eater", "lightning_rod", "aspect_of_the_virus", "hackerman", "pillow", "omlett", "experience_bottle",
+            "small_backpack", "big_backpack", "kebab", "calamari", "homemade_portal_frame", "crystal_ball", "soul_anchor", "multi_bench", "throwing_torch");
 
-    public static final List<String> default_materials = Arrays.asList("creative_core", "enchanted_cobblestone", "enchanted_diaond",
-            "enchanted_stone", "enchanted_ender_pearl", "enchanted_string", "spark_dust", "flammable_substance",
-            "paper_fletching", "fools_gold");
+    public static final List<String> default_materials = Arrays.asList("creative_core", "enchanted_cobblestone", "enchanted_diamond",
+            "enchanted_stone", "enchanted_ender_pearl", "enchanted_string", "spark_dust", "flammable_substance", "paper_fletching",
+            "fools_gold", "enchanted_crafting_table", "enchanted_furnace", "enchanted_brewing_stand", "enchanted_anvil",
+            "enchanted_enchanting_table", "enchanted_leather");
 
     // chat messages
     private static Map<String, String> phrases = new HashMap<>();

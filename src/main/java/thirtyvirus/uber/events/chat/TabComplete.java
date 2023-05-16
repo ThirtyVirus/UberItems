@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import thirtyvirus.uber.UberItems;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class TabComplete implements TabCompleter {
             // no arguments
             if (args.length == 1) {
                 if (player.hasPermission("uber.user")) { arguments.addAll(Arrays.asList("help", "info", "identify", "list")); }
-                if (player.hasPermission("uber.admin")) { arguments.addAll(Arrays.asList("give", "giveMaterial", "updateLore", "reload")); }
+                if (player.hasPermission("uber.admin")) { arguments.addAll(Arrays.asList("give", "giveMaterial", "setMana", "setMaxMana", "updateLore", "reload")); }
 
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[0].toLowerCase())) iter.remove(); }
             }
