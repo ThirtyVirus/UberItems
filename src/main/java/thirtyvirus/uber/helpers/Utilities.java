@@ -815,6 +815,19 @@ public final class Utilities {
         return null;
     }
 
+    public static void setCustomModelData(ItemStack item, int data) {
+        ItemMeta itemMeta = item.getItemMeta();
+        assert itemMeta != null;
+        itemMeta.setCustomModelData(data);
+        item.setItemMeta(itemMeta);
+    }
+
+    public static void sendActionBarMessage(Player player, String text) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(text));
+        Utilities.dontUpdateMana.put(player, true);
+        Utilities.scheduleTask(()->Utilities.dontUpdateMana.remove(player), 20);
+    }
+
     /**
      * @param player the player whose armor is to be checked
      * @param fullSetBonus the full set bonus to be checked for
@@ -846,9 +859,7 @@ public final class Utilities {
         }
         else {
             Utilities.playSound(ActionSound.ERROR, player);
-            player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(String.valueOf(ChatColor.RED) + ChatColor.BOLD + "NOT ENOUGH MANA"));
-            dontUpdateMana.put(player, true);
-            Utilities.scheduleTask(()->dontUpdateMana.remove(player), 20);
+            Utilities.sendActionBarMessage(player, String.valueOf(ChatColor.RED) + ChatColor.BOLD + "NOT ENOUGH MANA");
             return true;
         }
     }
