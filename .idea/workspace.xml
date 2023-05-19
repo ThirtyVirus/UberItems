@@ -10,7 +10,9 @@
   <component name="ChangeListManager">
     <list default="true" id="e89be58a-ef4f-430f-8537-cfe9ba3bde74" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/helpers/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/helpers/Utilities.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/language.yml" beforeDir="false" afterPath="$PROJECT_DIR$/language.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/MiscEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/MiscEvents.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/chat/TabComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/chat/TabComplete.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,8 +46,8 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Thirt/IdeaProjects/Uber_Items",
-    "project.structure.last.edited": "Problems",
+    "last_opened_file_path": "C:/Users/Thirt/OneDrive/Documents/Programming/Spigot/imports/spigot-suite/spigot-1.14.3.jar",
+    "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2"
   }
