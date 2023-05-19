@@ -72,6 +72,7 @@ public class MiscEvents implements Listener {
     public void onPlayerEat(PlayerItemConsumeEvent event) {
         ItemStack item = event.getItem();
         if (Utilities.isUber(item)) event.setCancelled(true);
+        if (Utilities.isUberMaterial(item)) event.setCancelled(true);
     }
 
     // prevent uberitems from being smelted
