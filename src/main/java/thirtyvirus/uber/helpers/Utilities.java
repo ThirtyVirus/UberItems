@@ -48,10 +48,21 @@ public final class Utilities {
     public static Map<Player, Double> maxMana = new HashMap<>();
     public static final Double DEFAULT_MAX_MANA = 100.0;
 
+    private static Random rand = new Random();
+
     public static final ItemStack emptySlot = Utilities.nameItem(Material.BLACK_STAINED_GLASS_PANE, " ");
 
     // GENERAL PLUGIN FUNCTIONS
     // _____________________________________________________________________________ \\
+
+    public static boolean percentChance(float percentage) {
+        if (percentage < 0 || percentage > 100) {
+            throw new IllegalArgumentException("Percentage must be between 0 and 100.");
+        }
+
+        float chance = percentage / 100;
+        return rand.nextFloat() < chance;
+    }
 
     /**
      * Warn a player or console with a list of messages, plays an error sound and uses red text
