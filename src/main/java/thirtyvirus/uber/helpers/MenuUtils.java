@@ -13,12 +13,12 @@ import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class MenuUtils {
+
+    public static Map<Player, List<UberMaterial>> checkedMaterials = new HashMap<>();
+    public static Map<Player, List<UberItem>> checkedItems = new HashMap<>();
 
     public static final ItemStack EMPTY_SLOT_ITEM = Utilities.nameItem(Material.BLACK_STAINED_GLASS_PANE, " ");
     public static final ItemStack EMPTY_ERROR_SLOT_ITEM = Utilities.nameItem(Material.RED_STAINED_GLASS_PANE, ChatColor.RED + "Item has no crafting recipe");
@@ -35,6 +35,7 @@ public class MenuUtils {
     public static final List<ItemStack> customItems = Arrays.asList(EMPTY_SLOT_ITEM, EMPTY_ERROR_SLOT_ITEM, CRAFTING_SLOT_ITEM, RECIPE_MENU_ITEM, PLUGIN_INFO, BACK_BUTTON, NEXT_BUTTON, PREVIOUS_BUTTON);
 
     public static final List<Integer> CUSTOM_CRAFTING_MENU_EXCEPTIONS = Arrays.asList(10,11,12,19,20,21,28,29,30,23);
+    public static final List<Integer> CUSTOM_GUIDE_MENU_EXCEPTIONS = Arrays.asList(11,12,13,20,21,22,29,30,31,24);
     public static final List<Integer> CRAFTING_GUIDE_MENU_EXCEPTIONS = Arrays.asList(0,1,2,3,4,5,6,7,8,9,17,18,26,27,35,36,44,45,46,47,51,52,53);
     public static final List<Integer> CRAFTING_GUIDE_ITEM_SLOTS = Arrays.asList(10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,37,38,39,40,41,42,43);
     public static final int ITEMS_PER_GUIDE_PAGE = 28;
@@ -53,6 +54,21 @@ public class MenuUtils {
         i.setItem(16, RECIPE_MENU_ITEM);
         i.setItem(25, PLUGIN_INFO);
         i.setItem(34, BACK_BUTTON);
+
+        return i;
+    }
+
+    public static Inventory createShowcaseMenu() {
+        Inventory i = Bukkit.createInventory(null, 54, "Used in - ???");
+
+        for (int counter = 0; counter < 54; counter++) {
+            if (!CUSTOM_GUIDE_MENU_EXCEPTIONS.contains(counter)) i.setItem(counter, EMPTY_SLOT_ITEM);
+        }
+        i.setItem(24, CRAFTING_SLOT_ITEM);
+
+        i.setItem(48, PREVIOUS_BUTTON);
+        i.setItem(49, BACK_BUTTON);
+        i.setItem(50, NEXT_BUTTON);
 
         return i;
     }
@@ -119,6 +135,26 @@ public class MenuUtils {
 
     }
 
+    // creates a specific UberItem / UberMaterial's Guide Menu, as a part of viewing the recipes with an Uber Material
+    public static Inventory createBoundCraftingTutorialMenu(ItemStack example, UberCraftingRecipe recipe) {
+        Inventory i1 = createShowcaseMenu();
+        Inventory i2 = Bukkit.createInventory(null, 54, "Used in - " + example.getItemMeta().getDisplayName());
+        i2.setContents(i1.getContents());
+
+        int amount = 1; if (recipe != null) amount = recipe.getCraftAmount();
+        ItemStack example2 = example.clone();
+        example2.setAmount(amount);
+        i2.setItem(24, example2);
+
+        // handle the specific crafting recipe
+        List<Integer> exceptions = Arrays.asList(11,12,13,20,21,22,29,30,31);
+
+        if (recipe == null) for (Integer exception : exceptions) i2.setItem(exception, EMPTY_ERROR_SLOT_ITEM);
+        else for (int counter = 0; counter < exceptions.size(); counter++) i2.setItem(exceptions.get(counter), recipe.get(counter));
+
+        return i2;
+    }
+
     // MENU UTILITY FUNCTIONS
 
     // make the craftable UberItem appear in the crafted slot if the appropriate materials are there
@@ -182,6 +218,78 @@ public class MenuUtils {
 
         // update inventory on a 1 tick delay as to prevent visual bugs clientside
         Bukkit.getScheduler().scheduleSyncDelayedTask(UberItems.getInstance(), () -> ((Player) event.getWhoClicked()).updateInventory(), 1);
+    }
+
+    public static int checkIndex(Player player, ItemStack checkedItem) {
+        int index = 0;
+
+        for (UberMaterial material : checkedMaterials.get(player)) {
+            if (material.compare(checkedItem)) return index;
+            else index++;
+        }
+        for (UberItem item : checkedItems.get(player)) {
+            if (item.compare(checkedItem)) return index;
+            else index++;
+        }
+
+        return 0;
+    }
+    public static void checkItem(Player player, int index) {
+        int counter = 0;
+
+        for (UberMaterial material : checkedMaterials.get(player)) {
+            if (counter == index) {
+                Inventory start = createBoundCraftingTutorialMenu(material.makeItem(material.getCraftingRecipe().getCraftAmount()), material.getCraftingRecipe());
+                player.openInventory(start);
+                Utilities.playSound(ActionSound.CLICK, player);
+                return;
+            }
+            counter++;
+        }
+        for (UberItem item : checkedItems.get(player)) {
+            if (counter == index) {
+                Inventory start = createBoundCraftingTutorialMenu(item.makeItem(item.getCraftingRecipe().getCraftAmount()), item.getCraftingRecipe());
+                player.openInventory(start);
+                Utilities.playSound(ActionSound.CLICK, player);
+                return;
+            }
+            counter++;
+        }
+    }
+    public static void checkMaterialRecipeUsage(Player player, UberMaterial tested) {
+        List<UberMaterial> materials = new ArrayList<>();
+        for (UberMaterial material : UberItems.getMaterials()) {
+            if (!material.hasCraftingRecipe()) continue;
+            for (ItemStack component : material.getCraftingRecipe().getComponents()) {
+                assert tested != null;
+                if (tested.compare(component)) {
+                    materials.add(material);
+                    break;
+                }
+            }
+        }
+        checkedMaterials.put(player, materials);
+
+        List<UberItem> items = new ArrayList<>();
+        for (UberItem item : UberItems.getItems()) {
+            if (!item.hasCraftingRecipe()) continue;
+            for (ItemStack component : item.getCraftingRecipe().getComponents()) {
+                assert tested != null;
+                if (tested.compare(component)) {
+                    items.add(item);
+                    break;
+                }
+            }
+        }
+        checkedItems.put(player, items);
+
+        if (items.size() == 0 && materials.size() == 0) return;
+
+        Inventory start;
+        if (materials.size() > 0) start = createBoundCraftingTutorialMenu(materials.get(0).makeItem(materials.get(0).getCraftingRecipe().getCraftAmount()), materials.get(0).getCraftingRecipe());
+        else start = createBoundCraftingTutorialMenu(items.get(0).makeItem(items.get(0).getCraftingRecipe().getCraftAmount()), items.get(0).getCraftingRecipe());
+        player.openInventory(start);
+        Utilities.playSound(ActionSound.CLICK, player);
     }
 
     private static void pullUberItem(InventoryClickEvent event, List<ItemStack> items, ItemStack product, ItemStack cursor) {

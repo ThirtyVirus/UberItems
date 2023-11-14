@@ -4,14 +4,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.UberMaterial;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class UberCraftingRecipe {
 
-    private List<ItemStack> recipe = new ArrayList<ItemStack>();
-    private List<ItemStack> components = new ArrayList<ItemStack>();
+    private List<ItemStack> recipe = new ArrayList<>();
+    private List<ItemStack> components = new ArrayList<>();
     private List<int[]> relativeCoords = new ArrayList<int[]>();
     private boolean shapeless;
     private int craftAmount;
@@ -166,9 +167,16 @@ public class UberCraftingRecipe {
 
     // getters
     public ItemStack get(int index) { return recipe.get(index); }
+    public List<ItemStack> getComponents() { return components; }
+    public boolean contains(UberMaterial material) {
+        for (ItemStack i : components) {
+            if (material.compare(i)) return true;
+        }
+        return false;
+    }
     public int getCraftAmount() { return craftAmount; }
 
-    // convert between a list index and a location in a 2 dimensional array
+    // convert between a list index and a location in a 2-dimensional array
     private int[] indexToCoord(int index, int craftingGridWidth) {
         int x = 0, y = 0;
         for (int counter = 0; counter < index; counter++) {

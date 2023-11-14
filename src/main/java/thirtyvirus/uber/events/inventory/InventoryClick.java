@@ -7,16 +7,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
+import thirtyvirus.uber.events.player.PlayerUseUberItem;
 import thirtyvirus.uber.helpers.ActionSound;
 import thirtyvirus.uber.helpers.MenuUtils;
 import thirtyvirus.uber.helpers.Utilities;
 
 import java.util.Objects;
+
+import static thirtyvirus.uber.helpers.MenuUtils.createBoundCraftingTutorialMenu;
 
 public class InventoryClick implements Listener {
 
@@ -134,22 +138,64 @@ public class InventoryClick implements Listener {
         }
         // clicking on an UberMaterial functionality
         else if (Utilities.isUberMaterial(event.getCurrentItem())) {
-            UberMaterial item = Utilities.getUberMaterial(event.getCurrentItem());
-            if (item == null) return;
-
-            // allow Creative Mode players to take UberMaterials from the menu directly
-            if (player.getGameMode() == GameMode.CREATIVE && event.getClick() == ClickType.SHIFT_LEFT) {
-                ItemStack i = event.getCurrentItem().clone(); i.setAmount(1);
-                if (!item.isStackable()) Utilities.storeStringInItem(i, java.util.UUID.randomUUID().toString(), "UUID");
-                else i.setAmount(event.getCurrentItem().getType().getMaxStackSize());
-                Utilities.givePlayerItemSafely(player, i);
-                return;
+            if (event.getClick() == ClickType.RIGHT) {
+                UberMaterial material = Utilities.getUberMaterial(event.getCurrentItem());
+                if (material == null || UberItems.getMaterial("null").compare(event.getCurrentItem())) return;
+                MenuUtils.checkMaterialRecipeUsage(player, material);
             }
+            else {
+                UberMaterial item = Utilities.getUberMaterial(event.getCurrentItem());
+                if (item == null) return;
 
-            player.openInventory(MenuUtils.createUnboundCraftingTutorialMenu(event.getCurrentItem(), item.getCraftingRecipe()));
-            Utilities.playSound(ActionSound.CLICK, player);
+                // allow Creative Mode players to take UberMaterials from the menu directly
+                if (player.getGameMode() == GameMode.CREATIVE && event.getClick() == ClickType.SHIFT_LEFT) {
+                    ItemStack i = event.getCurrentItem().clone(); i.setAmount(1);
+                    if (!item.isStackable()) Utilities.storeStringInItem(i, java.util.UUID.randomUUID().toString(), "UUID");
+                    else i.setAmount(event.getCurrentItem().getType().getMaxStackSize());
+                    Utilities.givePlayerItemSafely(player, i);
+                    return;
+                }
+
+                player.openInventory(MenuUtils.createUnboundCraftingTutorialMenu(event.getCurrentItem(), item.getCraftingRecipe()));
+                Utilities.playSound(ActionSound.CLICK, player);
+            }
         }
 
+    }
+
+    @EventHandler
+    private void interactInBoundGuideMenu(InventoryClickEvent event) {
+        // verify that the Player is in a UberItems crafting guide menu
+        if (!event.getView().getTitle().contains("Used in - ") || event.getView().getTopInventory().getLocation() != null) return;
+        Player player = (Player) event.getWhoClicked();
+
+        // cancel all clicks in this menu
+        event.setCancelled(true);
+
+        // prevent console errors
+        if (event.getCurrentItem() == null) return;
+
+        // close inventory button functionality
+        else if (event.getCurrentItem().equals(MenuUtils.BACK_BUTTON)) {
+            player.closeInventory();
+            Utilities.playSound(ActionSound.CLICK, player);
+        }
+        else if (event.getCurrentItem().equals(MenuUtils.PREVIOUS_BUTTON)) {
+            int index = MenuUtils.checkIndex(player, event.getInventory().getItem(24));
+            if (index < 0) return;
+            MenuUtils.checkItem(player, index - 1);
+        }
+        else if (event.getCurrentItem().equals(MenuUtils.NEXT_BUTTON)) {
+            int index = MenuUtils.checkIndex(player, event.getInventory().getItem(24));
+            if (index > MenuUtils.checkedItems.get(player).size() + MenuUtils.checkedMaterials.get(player).size() - 1) return;
+            MenuUtils.checkItem(player, index + 1);
+        }
+        else if (Utilities.isUberMaterial(event.getCurrentItem()) && event.getClick() == ClickType.RIGHT) {
+            UberMaterial material = Utilities.getUberMaterial(event.getCurrentItem());
+            if (material == null || UberItems.getMaterial("null").compare(event.getCurrentItem())) return;
+
+            MenuUtils.checkMaterialRecipeUsage(player, material);
+        }
     }
 
     // process click events in the UberItems Shooty Box Guide Menu

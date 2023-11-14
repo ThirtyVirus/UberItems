@@ -104,6 +104,29 @@ public class UberMaterial {
             lore.add("");
         }
 
+        // show the option to right-click the item to view recipes (only if it is used in any)
+        List<UberMaterial> materials = new ArrayList<>();
+        for (UberMaterial material : UberItems.getMaterials()) {
+            if (!material.hasCraftingRecipe()) continue;
+            for (ItemStack component : material.getCraftingRecipe().getComponents()) {
+                if (compare(component)) {
+                    materials.add(material);
+                    break;
+                }
+            }
+        }
+        List<UberItem> items = new ArrayList<>();
+        for (UberItem item : UberItems.getItems()) {
+            if (!item.hasCraftingRecipe()) continue;
+            for (ItemStack component : item.getCraftingRecipe().getComponents()) {
+                if (compare(component)) {
+                    items.add(item);
+                    break;
+                }
+            }
+        }
+        if (items.size() > 0 || materials.size() > 0) lore.add(ChatColor.YELLOW + "Right-click to view recipes!");
+
         // show the rarity of the item
         lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString() + raritySuffix.toUpperCase());
 

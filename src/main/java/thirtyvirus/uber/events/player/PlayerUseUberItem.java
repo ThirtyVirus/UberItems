@@ -14,13 +14,24 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import org.bukkit.inventory.MainHand;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.UberMaterial;
 import thirtyvirus.uber.helpers.ActionSound;
+import thirtyvirus.uber.helpers.MenuUtils;
+import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.Utilities;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static thirtyvirus.uber.helpers.MenuUtils.createBoundCraftingTutorialMenu;
 
 public class PlayerUseUberItem implements Listener {
 
@@ -138,6 +149,14 @@ public class PlayerUseUberItem implements Listener {
             if (!player.isSneaking()) { if (uber.rightClickBlockAction(player, event, event.getClickedBlock(), item)) uber.onItemUse(player, item); }
             else { if (uber.shiftRightClickBlockAction(player, event, event.getClickedBlock(), item)) uber.onItemUse(player, item); }
         }
+    }
+
+    @EventHandler
+    private void checkUberMaterialRecipes(PlayerInteractEvent event) {
+        if (!Utilities.isUberMaterial(event.getItem())) return;
+        UberMaterial tested = Utilities.getUberMaterial(event.getItem());
+
+        MenuUtils.checkMaterialRecipeUsage(event.getPlayer(), tested);
     }
 
 }
