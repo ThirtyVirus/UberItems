@@ -7,7 +7,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class UberDrop {
+public class UberDrop implements Comparable<UberDrop> {
 
     public ItemStack item;
     public float chance;
@@ -44,31 +44,55 @@ public class UberDrop {
     public void sendDropMessage(Player player) {
         String message;
 
+        float[] pitches = new float[] {0.3f, 0.6f, 0.9f, 1.2f };
+        int[] delays = {1, 5, 9, 13}; // Adjust delays as needed
+
         if (chance <= 0.001) {
-            message = ChatColor.AQUA + "RNGESUS INCARNATE! ";
+            pitches = new float[] {1.0f, 1.2f, 1.4f, 1.6f };
+            message = ChatColor.AQUA + String.valueOf(ChatColor.BOLD) + "RNGESUS INCARNATE! ";
         } else if (chance <= 0.01) {
-            message = ChatColor.LIGHT_PURPLE + "RNGESUS DROP! ";
+            pitches = new float[] {0.8f, 1.0f, 1.2f, 1.4f };
+            message = ChatColor.LIGHT_PURPLE + String.valueOf(ChatColor.BOLD) + "RNGESUS DROP! ";
         } else if (chance <= 0.1) {
-            message = ChatColor.GOLD + "EXCEPTIONALLY RARE DROP! ";
+            pitches = new float[] {0.5f, 0.7f, 0.9f, 1.1f };
+            message = ChatColor.GOLD + String.valueOf(ChatColor.BOLD) + "EXCEPTIONALLY RARE DROP! ";
         } else if (chance <= 1) {
-            message = ChatColor.DARK_PURPLE + "CRAZY RARE DROP! ";
+            pitches = new float[] {0.5f, 0.6f, 0.7f, 0.8f };
+            message = ChatColor.DARK_PURPLE + String.valueOf(ChatColor.BOLD) + "CRAZY RARE DROP! ";
         } else if (chance <= 2) {
-            message = ChatColor.BLUE + "VERY RARE DROP! ";
+            message = ChatColor.BLUE + String.valueOf(ChatColor.BOLD) + "VERY RARE DROP! ";
         } else if (chance <= 5) {
-            message = ChatColor.GREEN + "RARE DROP! ";
+            message = ChatColor.GREEN + String.valueOf(ChatColor.BOLD) + "RARE DROP! ";
         } else if (chance <= 20) {
-            message = ChatColor.WHITE + "DROP! ";
+            message = ChatColor.WHITE + String.valueOf(ChatColor.BOLD) + "DROP! ";
         } else {
-            message = ChatColor.WHITE + "DROP! ";
+            message = ChatColor.WHITE + String.valueOf(ChatColor.BOLD) + "DROP! ";
         }
 
         String displayName = item.getItemMeta().getDisplayName();
         if (displayName.equals("")) displayName = item.getType().name();
 
         player.sendMessage(message + ChatColor.GRAY + "(" + displayName + ChatColor.GRAY + ") " + ChatColor.AQUA + "(" + chance + "% Chance)");
-        Utilities.scheduleTask(()->player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 2f, 0.3f), 1);
-        Utilities.scheduleTask(()->player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 2f, 0.6f), 5);
-        Utilities.scheduleTask(()->player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 2f, 0.9f), 9);
-        Utilities.scheduleTask(()->player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_HARP, 2f, 1.2f), 13);
+
+        // Play the sound sequence
+        playSoundSequence(player, Sound.BLOCK_NOTE_BLOCK_HARP, 2, pitches, delays);
+    }
+
+    public void playSoundSequence(Player player, Sound sound, float volume, float[] pitches, int[] delays) {
+        if (pitches.length != delays.length) {
+            throw new IllegalArgumentException("The lengths of pitches and delays arrays must be the same.");
+        }
+
+        for (int i = 0; i < pitches.length; i++) {
+            int delay = delays[i];
+            float pitch = pitches[i];
+            Utilities.scheduleTask(() -> player.playSound(player.getLocation(), sound, volume, pitch), delay);
+        }
+    }
+
+    // override the compareTo method to compare UberDrop instances based on chance
+    @Override
+    public int compareTo(UberDrop other) {
+        return Float.compare(this.chance, other.chance);
     }
 }
