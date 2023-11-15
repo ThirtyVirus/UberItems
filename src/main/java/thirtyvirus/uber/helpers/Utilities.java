@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
@@ -171,6 +172,34 @@ public final class Utilities {
     }
     public static Block getBlockLookingAt(Player player, int range) {
         return player.getTargetBlock(TRANSPARENT, range);
+    }
+
+    /**
+     * Gets the entity that the player is looking at within a certain range
+     * @param player The player whose line of sight is being tested
+     * @return The entity the player is looking at, or null if no entity is found
+     */
+    public static Entity getEntityLookingAt(Player player) {
+        return getEntityLookingAt(player, 60);
+    }
+    public static Entity getEntityLookingAt(Player player, int range) {
+        // Get the player's eye location to start the ray trace
+        Location eye = player.getEyeLocation();
+        // Get the direction vector of where the player is looking
+        Vector direction = eye.getDirection();
+        // Get the world the player is in to perform the ray trace
+        World world = player.getWorld();
+
+        // Perform a ray trace to find the entity the player is looking at
+        RayTraceResult result = world.rayTraceEntities(eye, direction, range, 0.2, (entity) -> entity != player && entity != player.getVehicle());
+
+        // If a result is found and is an entity, return the hit entity
+        if (result != null && result.getHitEntity() != null) {
+            return result.getHitEntity();
+        }
+
+        // If no entity is found, return null
+        return null;
     }
 
     /**

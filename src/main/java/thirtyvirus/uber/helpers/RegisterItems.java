@@ -53,7 +53,7 @@ public class RegisterItems {
                         new ItemStack(Material.REDSTONE, 32),
                         new ItemStack(Material.COMPARATOR, 8)), false, 1)));
 
-        UberItems.putItem("cheat_code", new cheat_code(Material.STONE, "Cheat Code", UberRarity.EPIC,
+        UberItems.putItem("cheat_code", new cheat_code(Material.STONE, "Cheat Code", UberRarity.VERY_SPECIAL,
                  false, false, false,
                 Arrays.asList(new UberAbility("Konami Code", AbilityType.LEFT_CLICK, "Toggle creative mode"), new UberAbility("P2W", AbilityType.RIGHT_CLICK, "Heal and feed yourself instantly")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -66,6 +66,20 @@ public class RegisterItems {
                         new ItemStack(Material.DIAMOND_BLOCK, 64),
                         new ItemStack(Material.DIAMOND_BLOCK, 64),
                         new ItemStack(Material.DIAMOND_BLOCK, 64)), false, 1)));
+
+        UberItems.putItem("monster_eraser", new monster_eraser(Material.STICK, "Monster Eraser", UberRarity.VERY_SPECIAL,
+                false, false, false,
+                Arrays.asList(new UberAbility("Erase", AbilityType.RIGHT_CLICK, "Point at Monster, Right-Click, Erase from Existence")),
+                new UberCraftingRecipe(Arrays.asList(
+                        new ItemStack(Material.AIR),
+                        new ItemStack(Material.AIR),
+                        new ItemStack(Material.STICK, 1),
+                        new ItemStack(Material.AIR),
+                        UberItems.getMaterial("creative_core").makeItem(1),
+                        new ItemStack(Material.AIR),
+                        new ItemStack(Material.STICK),
+                        new ItemStack(Material.AIR),
+                        new ItemStack(Material.AIR)), false, 1)));
 
         UberItems.putItem("escape_rope", new escape_rope(Material.LEAD, "Escape Rope", UberRarity.UNCOMMON,
                 true, true, true,

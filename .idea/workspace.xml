@@ -9,8 +9,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e89be58a-ef4f-430f-8537-cfe9ba3bde74" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/monster_eraser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/helpers/UberDrop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/helpers/UberDrop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/helpers/RegisterItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/helpers/RegisterItems.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/helpers/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/helpers/Utilities.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
