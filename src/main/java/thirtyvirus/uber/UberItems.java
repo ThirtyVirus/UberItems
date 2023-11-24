@@ -38,6 +38,10 @@ import java.util.*;
 
 public class UberItems extends JavaPlugin {
 
+    // TODO
+    //  make UberItem class implement listener and move event handler methods into them
+    //  fix duplicate item / material entries being null with UberDrops
+
     // data for UberItems, UberMaterials
     private static Map<String, UberItem> items = new HashMap<>();
     private static Map<Integer, UberItem> itemIDs = new HashMap<>();
