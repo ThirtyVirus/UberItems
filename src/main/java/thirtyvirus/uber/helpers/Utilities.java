@@ -784,6 +784,34 @@ public final class Utilities {
         return head;
     }
 
+    public static void setSkull(ItemStack head, String url) {
+        if (url == null || url.isEmpty())
+            return;
+
+        ItemMeta headMeta = head.getItemMeta();
+        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
+        profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
+        Field profileField = null;
+
+        try {
+            profileField = headMeta.getClass().getDeclaredField("profile");
+        } catch (NoSuchFieldException | SecurityException e) {
+            e.printStackTrace();
+        }
+
+        profileField.setAccessible(true);
+
+        try {
+            profileField.set(headMeta, profile);
+        } catch (IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        head.setItemMeta(headMeta);
+        return;
+    }
+
     /**
      * Dye a leather armor piece
      *

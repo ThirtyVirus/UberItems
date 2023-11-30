@@ -72,7 +72,8 @@ public class UberDrop implements Comparable<UberDrop> {
         String displayName = item.getItemMeta().getDisplayName();
         if (displayName.equals("")) displayName = item.getType().name();
 
-        player.sendMessage(message + ChatColor.GRAY + "(" + displayName + ChatColor.GRAY + ") " + ChatColor.AQUA + "(" + chance + "% Chance)");
+        if (chance != 100) player.sendMessage(message + ChatColor.GRAY + "(" + displayName + ChatColor.GRAY + ") " + ChatColor.AQUA + "(" + chance + "% Chance)");
+        else player.sendMessage(message + ChatColor.GRAY + "(" + displayName + ChatColor.GRAY + ")");
 
         // Play the sound sequence
         playSoundSequence(player, Sound.BLOCK_NOTE_BLOCK_HARP, 2, pitches, delays);
