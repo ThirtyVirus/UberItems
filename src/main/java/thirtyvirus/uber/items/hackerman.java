@@ -8,8 +8,11 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +25,7 @@ import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
-public class hackerman extends UberItem {
+public class hackerman extends UberItem implements Listener {
 
     public hackerman(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
         super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
@@ -87,5 +90,18 @@ public class hackerman extends UberItem {
             return true;
         }
         return false;
+    }
+
+    // prevent hackerman from being used as a totem of undying
+    @EventHandler
+    private static void onTotemUse(EntityResurrectEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        Player player = (Player)event.getEntity();
+
+        if (UberItems.getItem("hackerman").compare(player.getInventory().getItemInMainHand()) ||
+                UberItems.getItem("hackerman").compare(player.getInventory().getItemInOffHand())) {
+            event.setCancelled(true);
+        }
+
     }
 }

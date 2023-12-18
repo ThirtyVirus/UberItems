@@ -1,4 +1,4 @@
-package thirtyvirus.uber.events.chat;
+package thirtyvirus.uber.events;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

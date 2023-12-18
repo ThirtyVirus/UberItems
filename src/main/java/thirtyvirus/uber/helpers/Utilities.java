@@ -122,13 +122,16 @@ public final class Utilities {
             return true;
         }
 
-        // test for player's item specific permissions
+        // give players access to items by default
+        if (player.hasPermission("uber.user")) return false;
+
+        // if not uber.user, test for player's item specific permissions
         if (!player.hasPermission("uber.item." + item.getName())) {
             warnPlayer(player, UberItems.getPhrase("no-permissions-message"));
             return true;
         }
 
-        // test for player's rarity permissions
+        // if not uber.user, test for player's rarity permissions
         switch (item.getRarity()) {
             case COMMON:
                 if (player.hasPermission("uber.rarity.common")) return false;

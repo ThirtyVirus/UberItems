@@ -11,20 +11,16 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import thirtyvirus.uber.commands.UberCommand;
 import thirtyvirus.uber.events.MiscEvents;
-import thirtyvirus.uber.events.BlockEvents;
-import thirtyvirus.uber.events.chat.TabComplete;
-import thirtyvirus.uber.events.inventory.InventoryClick;
-import thirtyvirus.uber.events.inventory.InventoryClose;
-import thirtyvirus.uber.events.inventory.RenameItem;
-import thirtyvirus.uber.events.player.Bucket;
-import thirtyvirus.uber.events.player.FoodLevelChange;
-import thirtyvirus.uber.events.player.PlayerUseUberItem;
+import thirtyvirus.uber.events.TabComplete;
+import thirtyvirus.uber.events.InventoryClick;
+import thirtyvirus.uber.events.PlayerUseUberItem;
 import thirtyvirus.uber.helpers.*;
 import thirtyvirus.uber.items.null_item;
 import thirtyvirus.uber.items.uber_workbench;
@@ -248,11 +244,6 @@ public class UberItems extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerUseUberItem(), this);
         getServer().getPluginManager().registerEvents(new MiscEvents(), this);
         getServer().getPluginManager().registerEvents(new InventoryClick(),this);
-        getServer().getPluginManager().registerEvents(new InventoryClose(), this);
-        getServer().getPluginManager().registerEvents(new RenameItem(), this);
-        getServer().getPluginManager().registerEvents(new BlockEvents(), this);
-        getServer().getPluginManager().registerEvents(new FoodLevelChange(), this);
-        getServer().getPluginManager().registerEvents(new Bucket(), this);
     }
 
     private static void registerItemsAndMaterials() {
@@ -397,6 +388,9 @@ public class UberItems extends JavaPlugin {
 
         if (itemBlacklist.contains(name)) return;
         if (itemWhitelist.size() > 0 && !itemWhitelist.contains(name)) return;
+
+        // if the event implements listener, register events
+        if (item instanceof Listener) instance.getServer().getPluginManager().registerEvents((Listener) item, instance);
 
         if (items.keySet().size() < defaultItemCount + 10 || !haveCountedDefaultItems || premium) {
             items.put(name, item);

@@ -1,4 +1,4 @@
-package thirtyvirus.uber.events.inventory;
+package thirtyvirus.uber.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -7,25 +7,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
-import thirtyvirus.uber.events.player.PlayerUseUberItem;
 import thirtyvirus.uber.helpers.ActionSound;
 import thirtyvirus.uber.helpers.MenuUtils;
 import thirtyvirus.uber.helpers.Utilities;
 
-import java.util.Objects;
-
-import static thirtyvirus.uber.helpers.MenuUtils.createBoundCraftingTutorialMenu;
-
 public class InventoryClick implements Listener {
 
     // process clicking an ItemStack ONTO an UberItem in the inventory
-    // TODO make work for creative mode
+    // TODO make work for creative mode?
     @EventHandler
     private void clickItemOntoUber(InventoryClickEvent event) {
         if (event.getAction() == InventoryAction.SWAP_WITH_CURSOR && Utilities.isUber(event.getCurrentItem())) {
@@ -196,20 +190,6 @@ public class InventoryClick implements Listener {
 
             MenuUtils.checkMaterialRecipeUsage(player, material);
         }
-    }
-
-    // process click events in the UberItems Shooty Box Guide Menu
-    @EventHandler
-    private void shootyBoxAmmoGuide(InventoryClickEvent event) {
-        // verify that the Player is in a UberItems crafting guide menu
-        if (!event.getView().getTitle().contains("Ammo Guide") || event.getView().getTopInventory().getLocation() != null) return;
-
-        // cancel all clicks in this menu
-        event.setCancelled(true);
-
-        // close inventory button functionality
-        if (Objects.equals(event.getCurrentItem(), MenuUtils.BACK_BUTTON))
-            event.getWhoClicked().closeInventory();
     }
 
     // allow UberItems that are helmets to be worn as such

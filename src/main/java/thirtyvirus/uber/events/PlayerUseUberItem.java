@@ -1,4 +1,4 @@
-package thirtyvirus.uber.events.player;
+package thirtyvirus.uber.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

@@ -7,70 +7,90 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Squid;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.FurnaceSmeltEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.UberItems;
+import thirtyvirus.uber.UberMaterial;
+import thirtyvirus.uber.helpers.ActionSound;
 import thirtyvirus.uber.helpers.Utilities;
 
 import java.util.Random;
 
 public class MiscEvents implements Listener {
 
-    private Random rand = new Random();
-
-    // 10% chance to drop 1-3 calamari from squid kills
+    // prevent accidentally placing UberItems as Vanilla Blocks
     @EventHandler
-    private void onKillSquid(EntityDeathEvent event) {
-        if (event.getEntity() instanceof Squid && !UberItems.getItem("calamari").equals(UberItems.getItem("null"))) {
-            int r = rand.nextInt(100) + 1;
-            int d = rand.nextInt(3) + 1;
-            if (r < 20) event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), UberItems.getItem("calamari").makeItem(d));
+    private void onBlockPlace (BlockPlaceEvent event) {
+        if (Utilities.isUber(event.getItemInHand())) event.setCancelled(true);
+        if (Utilities.isUberMaterial(event.getItemInHand())) event.setCancelled(true);
+    }
+
+    @EventHandler
+    private void onBlockBreak(BlockBreakEvent event) {
+        if (Utilities.temporaryBlocks.contains(event.getBlock())) event.setCancelled(true);
+    }
+
+    // prevent renaming UberItems or UberMaterials with an anvil
+    @EventHandler
+    private void playerRenameItem(InventoryClickEvent event){
+        Player player = (Player) event.getWhoClicked();
+        if (event.getView().getType() == InventoryType.ANVIL) {
+            if (event.getRawSlot() == 2) {
+                if (event.getView().getItem(0).getType() != Material.AIR && event.getView().getItem(2).getType() != Material.AIR) {
+                    if (Utilities.isUber(event.getView().getItem(0)) || Utilities.isUber(event.getView().getItem(1)) || Utilities.isUber(event.getView().getItem(2))) {
+                        event.setCancelled(true);
+                        Utilities.playSound(ActionSound.ERROR, player);
+                    }
+                    if (Utilities.isUberMaterial(event.getView().getItem(0)) || Utilities.isUberMaterial(event.getView().getItem(1)) || Utilities.isUberMaterial(event.getView().getItem(2))) {
+                        event.setCancelled(true);
+                        Utilities.playSound(ActionSound.ERROR, player);
+                    }
+                }
+            }
         }
     }
 
-    // handle soul anchor returning to the player once they die and respawn
+    // prevent crafting using UberItems or (unwanted) UberMaterials into vanilla recipes
     @EventHandler
-    private void onPlayerDeath(PlayerDeathEvent event) {
-        Player player = event.getEntity();
+    private void playerCraftEvent(CraftItemEvent event) {
+        Player player = (Player) event.getWhoClicked();
+        ItemStack[] item = event.getInventory().getMatrix();
 
-        ItemStack item = Utilities.searchFor(player.getInventory(), UberItems.getItem("soul_anchor"));
-        if (item != null) {
-            event.getDrops().remove(item);
-            Utilities.storeStringInItem(item, Utilities.toLocString(event.getEntity().getLocation()), "deathloc");
-            if (!event.getKeepInventory()) returnSoulAnchor(player, item);
+        for (int counter = 0; counter < 9; counter++) {
+
+            // prevent crash with the small manual grid
+            if (counter >= item.length) return;
+
+            if (Utilities.isUber(item[counter])) {
+                event.setCancelled(true);
+                Utilities.playSound(ActionSound.ERROR, player);
+                return;
+            }
+
+            if (Utilities.isUberMaterial(item[counter])) {
+                UberMaterial um = Utilities.getUberMaterial(item[counter]);
+                if (um == null || !um.isVanillaCraftable()) {
+                    event.setCancelled(true);
+                    Utilities.playSound(ActionSound.ERROR, player);
+                    return;
+                }
+            }
+
         }
-    }
-
-    // loop until the player respawns to return the death anchor
-    private void returnSoulAnchor(Player player, ItemStack item) {
-        if (player.isDead()) Utilities.scheduleTask(()->returnSoulAnchor(player, item), 10);
-        else player.getInventory().addItem(item);
-    }
-
-    // prevent hackerman from being used as a totem of undying
-    @EventHandler
-    private static void onTotemUse(EntityResurrectEvent event) {
-        if (!(event.getEntity() instanceof Player)) return;
-        Player player = (Player)event.getEntity();
-
-        if (UberItems.getItem("hackerman").compare(player.getInventory().getItemInMainHand()) ||
-                UberItems.getItem("hackerman").compare(player.getInventory().getItemInOffHand())) {
-            event.setCancelled(true);
-        }
-
     }
 
     // cancel players consuming UberItems that are food ItemStacks
     @EventHandler
     public void onPlayerEat(PlayerItemConsumeEvent event) {
         ItemStack item = event.getItem();
+        if (Utilities.isUber(item)) event.setCancelled(true);
         if (Utilities.isUber(item)) event.setCancelled(true);
         if (Utilities.isUberMaterial(item)) event.setCancelled(true);
     }

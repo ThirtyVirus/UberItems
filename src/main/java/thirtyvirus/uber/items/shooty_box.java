@@ -1,16 +1,16 @@
 package thirtyvirus.uber.items;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -21,7 +21,7 @@ import org.bukkit.util.Vector;
 import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.helpers.*;
 
-public class shooty_box extends UberItem {
+public class shooty_box extends UberItem implements Listener {
 
 	public shooty_box(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
 		super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
@@ -398,4 +398,41 @@ public class shooty_box extends UberItem {
 		return mob;
 	}
 
+	// process click events in the UberItems Shooty Box Guide Menu
+	@EventHandler
+	private void shootyBoxAmmoGuide(InventoryClickEvent event) {
+		// verify that the Player is in a UberItems crafting guide menu
+		if (!event.getView().getTitle().contains("Ammo Guide") || event.getView().getTopInventory().getLocation() != null) return;
+
+		// cancel all clicks in this menu
+		event.setCancelled(true);
+
+		// close inventory button functionality
+		if (Objects.equals(event.getCurrentItem(), MenuUtils.BACK_BUTTON))
+			event.getWhoClicked().closeInventory();
+	}
+	@EventHandler
+	private void onCloseInventory(InventoryCloseEvent event) {
+
+		// save ShootyBox inventory on close
+		if (event.getView().getTitle().contains("Shooty Box")){
+			Player player = (Player) event.getPlayer();
+			ItemStack shootyBox = player.getInventory().getItemInMainHand();
+
+			Utilities.saveCompactInventory(shootyBox, event.getInventory().getContents());
+			player.playSound(player.getLocation(), Sound.BLOCK_IRON_DOOR_CLOSE, 1, 1);
+		}
+
+		// add items back to a player's inventory if closing the UberItem crafting menu
+		if (event.getView().getTitle().contains("UberItems - Craft Item") && event.getView().getTopInventory().getLocation() == null) {
+			Inventory i = event.getInventory();
+			List<ItemStack> items = Arrays.asList(
+					i.getItem(10), i.getItem(11), i.getItem(12),
+					i.getItem(19), i.getItem(20), i.getItem(21),
+					i.getItem(28), i.getItem(29), i.getItem(30));
+			for (ItemStack it : items) if (it != null) Utilities.givePlayerItemSafely((Player)event.getPlayer(), it);
+
+		}
+
+	}
 }

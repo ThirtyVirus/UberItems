@@ -8,19 +8,23 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import thirtyvirus.uber.UberItem;
+import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.helpers.UberAbility;
 import thirtyvirus.uber.helpers.UberCraftingRecipe;
 import thirtyvirus.uber.helpers.UberRarity;
 import thirtyvirus.uber.helpers.Utilities;
 
-public class lunch_box extends UberItem {
+public class lunch_box extends UberItem implements Listener {
 
 	public lunch_box(Material material, String name, UberRarity rarity, boolean stackable, boolean oneTimeUse, boolean hasActiveEffect, List<UberAbility> abilities, UberCraftingRecipe craftingRecipe) {
 		super(material, name, rarity, stackable, oneTimeUse, hasActiveEffect, abilities, craftingRecipe);
@@ -118,4 +122,50 @@ public class lunch_box extends UberItem {
 	}
 
 	public boolean activeEffect(Player player, ItemStack item) { return false; }
+
+	// process lunch box ability
+	@EventHandler
+	private void onPlayerHungerChange(FoodLevelChangeEvent event) {
+		Player player = (Player) event.getEntity();
+
+		// check if the player has a lunch box
+		ItemStack lunchBox = Utilities.searchFor(player.getInventory(), UberItems.getItem("lunch_box"));
+		if (lunchBox == null) return;
+		UberItem uber = Utilities.getUber(lunchBox);
+		if (uber == null) return;
+
+		// enforce premium vs lite, item rarity perms, item specific perms
+		if (Utilities.enforcePermissions(player, uber)) return;
+
+		// get food and saturation levels
+		final int max = 20; // maximum food and saturation
+		int availableFood = Utilities.getIntFromItem(lunchBox, "food");
+		int availableSaturation = Utilities.getIntFromItem(lunchBox, "saturation");
+		int playerFood = player.getFoodLevel();
+		int playerSaturation = (int) player.getSaturation();
+
+		// verify that the amount is urgent
+		int foodNeeded = max - playerFood;
+		int saturationNeeded = max - playerSaturation;
+		if (foodNeeded < 5) return;
+
+		// limit the given food and saturation to the amount available
+		if (availableFood < foodNeeded) foodNeeded = availableFood;
+		if (availableSaturation < saturationNeeded) saturationNeeded = availableSaturation;
+
+		// subtract food and saturation from lunch box
+		availableFood -= foodNeeded;
+		availableSaturation -= saturationNeeded;
+
+		// feed player
+		player.setFoodLevel(playerFood + foodNeeded);
+		player.setSaturation(playerSaturation + saturationNeeded);
+		player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 1, 1);
+		event.setCancelled(true); // prevents the food and saturation levels from being reset by the event
+
+		// save the new saturation and food amounts in the item, update lore
+		Utilities.storeIntInItem(lunchBox, availableFood, "food");
+		Utilities.storeIntInItem(lunchBox, availableSaturation, "saturation");
+		uber.updateLore(lunchBox);
+	}
 }
