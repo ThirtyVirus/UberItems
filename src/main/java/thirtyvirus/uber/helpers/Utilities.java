@@ -116,54 +116,56 @@ public final class Utilities {
      */
     public static boolean enforcePermissions(Player player, UberItem item) {
 
-        // test for premium and over Rare rarity
+        // Deny access for non-premium users trying to access items above a certain rarity
         if (!UberItems.premium && item.getRarity().isRarerThan(UberRarity.EPIC)) {
             warnPlayer(player, UberItems.getPhrase("not-premium-message"));
-            return true;
+            return true; // Deny access
         }
 
-        // give players access to items by default
-        if (player.hasPermission("uber.user")) return false;
+        // Deny access if the player doesn't have the basic user permission
+        if (!player.hasPermission("uber.user")) {
+            warnPlayer(player, UberItems.getPhrase("no-permissions-message"));
+            return true; // Deny access
+        }
 
-        // if not uber.user, test for player's item specific permissions
+        // Deny access if the player doesn't have permission for this specific item
         if (!player.hasPermission("uber.item." + item.getName())) {
             warnPlayer(player, UberItems.getPhrase("no-permissions-message"));
-            return true;
+            return true; // Deny access
         }
 
-        // if not uber.user, test for player's rarity permissions
+        // Check for rarity-specific permissions
         switch (item.getRarity()) {
             case COMMON:
-                if (player.hasPermission("uber.rarity.common")) return false;
+                if (!player.hasPermission("uber.rarity.common")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
                 break;
             case UNCOMMON:
-                if (player.hasPermission("uber.rarity.uncommon")) return false;
+                if (!player.hasPermission("uber.rarity.uncommon")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
                 break;
             case RARE:
-                if (player.hasPermission("uber.rarity.rare")) return false;
+                if (!player.hasPermission("uber.rarity.rare")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
                 break;
             case EPIC:
-                if (player.hasPermission("uber.rarity.epic")) return false;
+                if (!player.hasPermission("uber.rarity.epic")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
                 break;
             case LEGENDARY:
-                if (player.hasPermission("uber.rarity.legendary")) return false;
+                if (!player.hasPermission("uber.rarity.legendary")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
                 break;
             case MYTHIC:
-                if (player.hasPermission("uber.rarity.mythic")) return false;
+                if (!player.hasPermission("uber.rarity.mythic")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
                 break;
             case SPECIAL:
-                if (player.hasPermission("uber.rarity.special")) return false;
+                if (!player.hasPermission("uber.rarity.special")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
                 break;
             case VERY_SPECIAL:
-                if (player.hasPermission("uber.rarity.very_special")) return false;
+                if (!player.hasPermission("uber.rarity.very_special")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
                 break;
             case UNFINISHED:
-                if (player.hasPermission("uber.rarity.unfinished")) return false;
+                if (!player.hasPermission("uber.rarity.unfinished")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
                 break;
         }
 
-        warnPlayer(player, UberItems.getPhrase("no-permissions-message"));
-        return true;
+        return false; // Grant access if none of the above conditions are met
     }
 
     /**
@@ -887,8 +889,23 @@ public final class Utilities {
     }
 
     public static void setCustomModelData(ItemStack item, int data) {
+        if (item == null) {
+            Bukkit.getLogger().warning("[UberItems] Cannot set Custom Model Data! ItemStack is null");
+            return;
+        }
+
+        if (item.getType() == Material.AIR) {
+            Bukkit.getLogger().warning("[UberItems] Cannot set Custom Model Data! ItemStack is of type AIR");
+            return;
+        }
+
         ItemMeta itemMeta = item.getItemMeta();
-        assert itemMeta != null;
+
+        if (itemMeta == null) {
+            Bukkit.getLogger().warning("[UberItems] Cannot set Custom Model Data! ItemMeta is null for item of type: " + item.getType());
+            return;
+        }
+
         itemMeta.setCustomModelData(data);
         item.setItemMeta(itemMeta);
     }

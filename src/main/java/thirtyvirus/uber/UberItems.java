@@ -389,7 +389,7 @@ public class UberItems extends JavaPlugin {
         if (itemBlacklist.contains(name)) return;
         if (itemWhitelist.size() > 0 && !itemWhitelist.contains(name)) return;
 
-        // if the event implements listener, register events
+        // if the event implements listener, register events (MAKE SURE NOT TO DO THIS IN ADDON PLUGINS)
         if (item instanceof Listener) instance.getServer().getPluginManager().registerEvents((Listener) item, instance);
 
         if (items.keySet().size() < defaultItemCount + 10 || !haveCountedDefaultItems || premium) {

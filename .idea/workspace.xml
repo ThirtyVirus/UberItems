@@ -10,32 +10,12 @@
   <component name="ChangeListManager">
     <list default="true" id="e89be58a-ef4f-430f-8537-cfe9ba3bde74" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/plugin.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/UberItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/UberItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/BlockEvents.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/MiscEvents.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/MiscEvents.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/chat/TabComplete.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/TabComplete.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/inventory/InventoryClick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/InventoryClick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/inventory/InventoryClose.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/inventory/RenameItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/player/Bucket.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/player/FoodLevelChange.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/player/PlayerUseUberItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/events/PlayerUseUberItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/helpers/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/helpers/Utilities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/calamari.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/calamari.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/hackerman.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/hackerman.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/lunch_box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/lunch_box.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/malk_bucket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/malk_bucket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/shooty_box.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/shooty_box.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/soul_anchor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/thirtyvirus/uber/items/soul_anchor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/UberItems$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/UberItems$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/UberItems$ArmorType.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/UberItems$ArmorType.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/UberItems.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/UberItems.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/events/MiscEvents.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/events/MiscEvents.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/events/inventory/InventoryClick.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/events/inventory/InventoryClick.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/helpers/Utilities$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/helpers/Utilities$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/helpers/Utilities.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/helpers/Utilities.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/items/shooty_box$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/items/shooty_box$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/items/shooty_box.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/thirtyvirus/uber/items/shooty_box.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,17 +44,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Thirt/OneDrive/Documents/Programming/Spigot/Test Server 2 (1.20.1)/plugins&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Thirt/OneDrive/Documents/Programming/Spigot/Test Server 2 (1.20.1)/plugins",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Thirt\IdeaProjects\Uber_Items\src\thirtyvirus\" />

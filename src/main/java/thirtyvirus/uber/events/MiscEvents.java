@@ -86,6 +86,14 @@ public class MiscEvents implements Listener {
         }
     }
 
+    // prevent players from using UberItems with grindstone
+    @EventHandler
+    private void onPlayerGrindstone(InventoryClickEvent event) {
+        if (event.getInventory().getType() != InventoryType.GRINDSTONE) return;
+        Utilities.warnPlayer(event.getWhoClicked(), "You can't put this into a grindstone!");
+        if (thirtyvirus.uber.helpers.Utilities.isUber(event.getCurrentItem())) event.setCancelled(true);
+    }
+
     // cancel players consuming UberItems that are food ItemStacks
     @EventHandler
     public void onPlayerEat(PlayerItemConsumeEvent event) {
