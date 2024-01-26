@@ -1,11 +1,13 @@
 package thirtyvirus.uber.helpers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import thirtyvirus.uber.UberItems;
 
 public class UberDrop implements Comparable<UberDrop> {
 
@@ -21,6 +23,10 @@ public class UberDrop implements Comparable<UberDrop> {
     }
 
     public boolean tryDrop(Location location, LivingEntity entity) {
+        if (Utilities.isNullUberItem(item) || Utilities.isNullUberMaterial(item)) {
+            Bukkit.getLogger().warning("UberDrop Cancelled because item is null!");
+            return false;
+        }
 
         if (Utilities.percentChance(chance)) {
             if (Utilities.isUber(item) && !Utilities.getUber(item).isStackable()) Utilities.storeStringInItem(item,  java.util.UUID.randomUUID().toString(), "UUID");
@@ -37,7 +43,12 @@ public class UberDrop implements Comparable<UberDrop> {
     }
 
     public void forceDrop(Location location, Player player) {
-        if (Utilities.isUber(item) && !Utilities.getUber(item).isStackable()) Utilities.storeStringInItem(item,  java.util.UUID.randomUUID().toString(), "UUID");
+        if (Utilities.isNullUberItem(item) || Utilities.isNullUberMaterial(item)) {
+            Bukkit.getLogger().warning("UberDrop Cancelled because item is null!");
+            return;
+        }
+
+        if (UberItems.getItem("null").compare(item)) { Bukkit.getLogger().warning("UberDrop Cancelled because item is null!"); return; }
         location.getWorld().dropItem(location, item);
         sendDropMessage(player);
     }

@@ -850,11 +850,35 @@ public final class Utilities {
      */
     public static boolean isUber(ItemStack item) { return getIntFromItem(item, "UberUUID") != 0; }
 
+    public static boolean isNullUberItem(ItemStack item) {
+
+        // has an UberItems UUID
+        int id = getIntFromItem(item, "UberUUID");
+        if (id != 0) {
+            UberItem result = UberItems.getItemFromID(id);
+            return UberItems.getItem("null").compare(result.makeItem(1));
+        }
+
+        return false;
+    }
+
     /**
      * @param item the ItemStack being tested
      * @return whether or not the item is an UberMaterial
      */
     public static boolean isUberMaterial(ItemStack item) { return getIntFromItem(item, "MaterialUUID") != 0; }
+
+    public static boolean isNullUberMaterial(ItemStack item) {
+
+        // has an UberMaterial UUID
+        int id = getIntFromItem(item, "MaterialUUID");
+        if (id != 0) {
+            UberMaterial result = UberItems.getMaterialFromID(id);
+            return UberItems.getMaterial("null").compare(result.makeItem(1));
+        }
+
+        return false;
+    }
 
     /**
      * @param item the ItemStack being tested
