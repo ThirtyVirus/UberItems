@@ -38,24 +38,25 @@ public class MiscEvents implements Listener {
     }
 
     // prevent renaming UberItems or UberMaterials with an anvil
-    @EventHandler
-    private void playerRenameItem(InventoryClickEvent event){
-        Player player = (Player) event.getWhoClicked();
-        if (event.getView().getType() == InventoryType.ANVIL) {
-            if (event.getRawSlot() == 2) {
-                if (event.getView().getItem(0).getType() != Material.AIR && event.getView().getItem(2).getType() != Material.AIR) {
-                    if (Utilities.isUber(event.getView().getItem(0)) || Utilities.isUber(event.getView().getItem(1)) || Utilities.isUber(event.getView().getItem(2))) {
-                        event.setCancelled(true);
-                        Utilities.playSound(ActionSound.ERROR, player);
-                    }
-                    if (Utilities.isUberMaterial(event.getView().getItem(0)) || Utilities.isUberMaterial(event.getView().getItem(1)) || Utilities.isUberMaterial(event.getView().getItem(2))) {
-                        event.setCancelled(true);
-                        Utilities.playSound(ActionSound.ERROR, player);
-                    }
-                }
-            }
-        }
-    }
+    // TODO fix this to not prevent anvil enchant combining? (do I need to prevent renaming?)
+//    @EventHandler
+//    private void playerRenameItem(InventoryClickEvent event){
+//        Player player = (Player) event.getWhoClicked();
+//        if (event.getView().getType() == InventoryType.ANVIL) {
+//            if (event.getRawSlot() == 2) {
+//                if (event.getView().getItem(0).getType() != Material.AIR && event.getView().getItem(2).getType() != Material.AIR) {
+//                    if (Utilities.isUber(event.getView().getItem(0)) || Utilities.isUber(event.getView().getItem(1)) || Utilities.isUber(event.getView().getItem(2))) {
+//                        event.setCancelled(true);
+//                        Utilities.playSound(ActionSound.ERROR, player);
+//                    }
+//                    if (Utilities.isUberMaterial(event.getView().getItem(0)) || Utilities.isUberMaterial(event.getView().getItem(1)) || Utilities.isUberMaterial(event.getView().getItem(2))) {
+//                        event.setCancelled(true);
+//                        Utilities.playSound(ActionSound.ERROR, player);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     // prevent crafting using UberItems or (unwanted) UberMaterials into vanilla recipes
     @EventHandler
