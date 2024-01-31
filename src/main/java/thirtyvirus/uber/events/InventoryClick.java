@@ -16,6 +16,9 @@ import thirtyvirus.uber.helpers.ActionSound;
 import thirtyvirus.uber.helpers.MenuUtils;
 import thirtyvirus.uber.helpers.Utilities;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class InventoryClick implements Listener {
 
     // process clicking an ItemStack ONTO an UberItem in the inventory
@@ -225,6 +228,21 @@ public class InventoryClick implements Listener {
                 event.setCurrentItem(new ItemStack(Material.AIR));
                 event.setCancelled(true);
             }
+        }
+
+    }
+
+    // give player back items inside UberItems crafting grid when the inventory is closed
+    @EventHandler
+    private void onCloseCraftingMenu(InventoryCloseEvent event) {
+        // verify that the closed inventory is the crafting menu
+        if (!event.getView().getTitle().equals("UberItems - Craft Item")) return;
+
+        List<Integer> crafting_slots = Arrays.asList(10,11,12,19,20,21,28,29,30);
+        for (int slot : crafting_slots) {
+            ItemStack item = event.getView().getTopInventory().getItem(slot);
+            if (item != null && item.getType() != Material.AIR)
+                Utilities.givePlayerItemSafely((Player)event.getPlayer(), item);
         }
 
     }
