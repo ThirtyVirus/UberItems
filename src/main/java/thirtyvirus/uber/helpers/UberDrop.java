@@ -83,8 +83,11 @@ public class UberDrop implements Comparable<UberDrop> {
         String displayName = item.getItemMeta().getDisplayName();
         if (displayName.equals("")) displayName = item.getType().name();
 
-        if (chance != 100) player.sendMessage(message + ChatColor.GRAY + "(" + displayName + ChatColor.GRAY + ") " + ChatColor.AQUA + "(" + chance + "% Chance)");
-        else player.sendMessage(message + ChatColor.GRAY + "(" + displayName + ChatColor.GRAY + ")");
+        String amountString = "";
+        if (item.getAmount() > 1) amountString = " x" + item.getAmount();
+
+        if (chance != 100) player.sendMessage(message + ChatColor.GRAY + "(" + displayName + amountString + ChatColor.GRAY + ") " + ChatColor.AQUA + "(" + chance + "% Chance)");
+        else player.sendMessage(message + ChatColor.GRAY + "(" + displayName + amountString + ChatColor.GRAY + ")");
 
         // Play the sound sequence
         playSoundSequence(player, Sound.BLOCK_NOTE_BLOCK_HARP, 2, pitches, delays);

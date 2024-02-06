@@ -1015,6 +1015,36 @@ public final class Utilities {
         }
     }
 
+    public static boolean enforceCooldownAndMana(Player player, String key, double seconds, double cost, ItemStack item, boolean throwError) {
+        if (!mana.containsKey(player)) mana.put(player, 0.0);
+        if (mana.get(player) < cost) {
+            Utilities.playSound(ActionSound.ERROR, player);
+            Utilities.sendActionBarMessage(player, String.valueOf(ChatColor.RED) + ChatColor.BOLD + "NOT ENOUGH MANA");
+            return true;
+        }
+
+        // get time, and time last used from item
+        double time = (double)System.currentTimeMillis() / 1000;
+        int lastTime = getIntFromItem(item, key);
+
+        // add "time last used" key if not already there
+        if (lastTime == 0) storeIntInItem(item, (int)time, key);
+        // was the item  last used longer than "seconds" seconds ago?
+        else {
+            if (time - seconds <= lastTime) {
+                int timeLeft = (int)time - lastTime;
+                timeLeft = (int)seconds - timeLeft;
+                if (throwError) warnPlayer(player, "This ability is on cooldown for " + timeLeft + "s.");
+                return true; // no, disallow the action
+            }
+        }
+
+        // allow the action, deduct mana and start cooldown
+        storeIntInItem(item, (int)time, key);
+        mana.put(player, mana.get(player) - cost);
+        return false;
+    }
+
     /**
      * Apply an upgrade to an UberItem, which is traditionally done through the clickedInInventoryAction method.
      * Checks if the requested upgrade is already on the item, if not adds it, cancels the event, and consumes the upgrade item.
