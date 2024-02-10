@@ -11,13 +11,15 @@
 # messages to better support their players.
 
 no-permissions-message: You do not have proper permissions!
+no-admin-permissions-message: Only players with admin privileges can do this!
 no-build-permissions-message: You do not have permissions to sort inventories here!
 not-container-block-message: This is not a container block!
 not-premium-message: That feature is reserved for UberItems Premium! Ask an administrator for an upgrade!
 
-updated-lore-message: UberItem lore updated!
 not-a-command-message: That is not a command!
 formatting-error-message: Formatting error, check your command syntax!
 no-console-message: You can only execute this command in-game!
+updated-lore-message: UberItem lore updated!
+reloaded-plugin-message: configuration, items, materials, and language settings reloaded
 
 not-uberitem: This is not an UberItem!

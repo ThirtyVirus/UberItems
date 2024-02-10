@@ -12,6 +12,7 @@ public enum UberRarity {
     DIVINE(ChatColor.AQUA),
     SPECIAL(ChatColor.RED),
     VERY_SPECIAL(ChatColor.RED),
+    ADMIN(ChatColor.DARK_RED),
     UNFINISHED(ChatColor.DARK_RED);
 
     private ChatColor color;

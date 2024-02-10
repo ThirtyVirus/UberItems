@@ -295,8 +295,8 @@ public class MenuUtils {
     private static void pullUberItem(InventoryClickEvent event, List<ItemStack> items, ItemStack product, ItemStack cursor) {
         UberItem uber = Utilities.getUber(product);
 
-        // enforce premium vs lite, item rarity perms, item specific perms
-        if (Utilities.enforcePermissions((Player)event.getWhoClicked(), Utilities.getUber(event.getCurrentItem()))) {
+        // enforce permissions
+        if (Utilities.enforcePermissions((Player)event.getWhoClicked(), Utilities.getUber(event.getCurrentItem()), true)) {
             event.setCancelled(true); return;
         }
 

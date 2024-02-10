@@ -17,22 +17,22 @@ public class UberCommand implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        // verify that the user has proper permissions
+        // Verify that the user has proper permissions
         if (!sender.hasPermission("uber.user")) {
             Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
             return true;
         }
 
-        // default to help command if no arguments are typed
+        // Default to help command if no arguments are typed
         if (args.length == 0) {
             help(sender);
             return true;
         }
 
-        //try {
+        try {
             switch (args[0].toLowerCase()) {
 
-                // standard plugin commands
+                // Standard plugin commands
                 case "help":
                     help(sender);
                     break;
@@ -40,7 +40,7 @@ public class UberCommand implements CommandExecutor{
                     info(sender);
                     break;
 
-                // plugin specific user commands
+                // Plugin specific user commands
                 case "identify":
                     identify(sender, args);
                     break;
@@ -48,7 +48,7 @@ public class UberCommand implements CommandExecutor{
                     list(sender);
                     break;
 
-                // staff commands
+                // Staff Commands
                 case "give":
                     if (sender.hasPermission("uber.admin")) give(sender, args);
                     else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
@@ -80,9 +80,9 @@ public class UberCommand implements CommandExecutor{
                     break;
             }
 
-        //} catch(Exception e) {
-        //    Utilities.warnPlayer(sender, UberItems.getPhrase("formatting-error-message"));
-        //}
+        } catch(Exception e) {
+            Utilities.warnPlayer(sender, UberItems.getPhrase("formatting-error-message"));
+        }
 
         return true;
     }
@@ -230,10 +230,12 @@ public class UberCommand implements CommandExecutor{
     }
 
     // list Command
-    private void list(CommandSender sender){
-        sender.sendMessage(UberItems.prefix + "Listing UberItems:");
+    private void list(CommandSender sender) {
+        sender.sendMessage(UberItems.prefix + ChatColor.GRAY + "Listing UberItems:");
+
         for (UberItem item : UberItems.getItems()) {
-            sender.sendMessage(ChatColor.GOLD + "" + item.getRarity().getColor() + item.getName());
+            if (!Utilities.enforcePermissions(sender, item, false))
+                sender.sendMessage(ChatColor.GOLD + "" + item.getRarity().getColor() + item.getName());
         }
     }
 
@@ -259,6 +261,10 @@ public class UberCommand implements CommandExecutor{
         sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber list");
         if (sender.hasPermission("uber.admin")) {
             sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber give");
+            sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber giveMaterial");
+            sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber updateLore");
+            sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber setMana");
+            sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber setMaxMana");
             sender.sendMessage(ChatColor.DARK_PURPLE + "- " + ChatColor.GRAY + "/uber reload");
         }
         sender.sendMessage(ChatColor.DARK_PURPLE + "------------------------------");
@@ -267,7 +273,7 @@ public class UberCommand implements CommandExecutor{
     // reload the config and language files in real time
     private void reload(CommandSender sender) {
         UberItems.reload();
-        Utilities.informPlayer(sender, "configuration, values, and language settings reloaded");
+        Utilities.informPlayer(sender, UberItems.getPhrase("reloaded-plugin-message"));
     }
 
 }

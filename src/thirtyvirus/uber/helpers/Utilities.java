@@ -136,57 +136,33 @@ public final class Utilities {
      * Can be used to restrict access to code depending on whether or the player has proper permissions
      * USAGE: if (enforcePermissions) return;
      *
-     * @param player the player being tested for permissions
+     * @param sender the command sender being tested for permissions
      * @param item the UberItem
      * @return whether or not to enforce permissions (true = restrict code, false = allow the code to run)
      */
-    public static boolean enforcePermissions(Player player, UberItem item) {
-
-        // Deny access if the player doesn't have the basic user permission
-        if (!player.hasPermission("uber.user")) {
-            warnPlayer(player, UberItems.getPhrase("no-permissions-message"));
+    public static boolean enforcePermissions(CommandSender sender, UberItem item, boolean giveWarning) {
+        // Specifically check for admin item permissions
+        if (!sender.hasPermission("uber.admin") && item.getRarity() == UberRarity.ADMIN) {
+            warnPlayer(sender, UberItems.getPhrase("no-admin-permissions-message"));
             return true; // Deny access
         }
 
-        // Deny access if the player doesn't have permission for this specific item
-        if (!player.hasPermission("uber.item." + item.getName())) {
-            warnPlayer(player, UberItems.getPhrase("no-permissions-message"));
+        // Check for basic user permission and specific item permission
+        if (!sender.hasPermission("uber.user") || !sender.hasPermission("uber.item." + item.getName())) {
+            warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
             return true; // Deny access
         }
 
-        // Check for rarity-specific permissions
-        switch (item.getRarity()) {
-            case COMMON:
-                if (!player.hasPermission("uber.rarity.common")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
-                break;
-            case UNCOMMON:
-                if (!player.hasPermission("uber.rarity.uncommon")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
-                break;
-            case RARE:
-                if (!player.hasPermission("uber.rarity.rare")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
-                break;
-            case EPIC:
-                if (!player.hasPermission("uber.rarity.epic")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
-                break;
-            case LEGENDARY:
-                if (!player.hasPermission("uber.rarity.legendary")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
-                break;
-            case MYTHIC:
-                if (!player.hasPermission("uber.rarity.mythic")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
-                break;
-            case SPECIAL:
-                if (!player.hasPermission("uber.rarity.special")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
-                break;
-            case VERY_SPECIAL:
-                if (!player.hasPermission("uber.rarity.very_special")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
-                break;
-            case UNFINISHED:
-                if (!player.hasPermission("uber.rarity.unfinished")) { warnPlayer(player, UberItems.getPhrase("no-permissions-message")); return true; }
-                break;
+        // Check for rarity-specific permission
+        String rarityPermission = "uber.rarity." + item.getRarity().toString().toLowerCase();
+        if (!sender.hasPermission(rarityPermission)) {
+            if (giveWarning) warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
+            return true; // Deny access
         }
 
         return false; // Grant access if none of the above conditions are met
     }
+
 
     /**
      * @param player the player whose line of sight is being tested

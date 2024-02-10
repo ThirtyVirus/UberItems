@@ -252,7 +252,7 @@ public class UberItems extends JavaPlugin {
         putItem("null", new null_item(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, Collections.emptyList(), null));
         putMaterial("null", new UberMaterial(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, "ERROR: UberMaterial not found", null));
 
-        // register default UberMaterials, then UberItems
+        // register default UberMaterials, then UberItems (in case item recipes need materials)
         if (defaultUberMaterials) RegisterItems.registerUberMaterials();
         if (defaultUberItems) RegisterItems.registerUberItems();
     }

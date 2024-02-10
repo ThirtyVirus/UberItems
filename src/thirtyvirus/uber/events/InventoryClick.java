@@ -120,8 +120,8 @@ public class InventoryClick implements Listener {
             // allow Creative Mode players to take UberItems from the menu directly
             if (player.getGameMode() == GameMode.CREATIVE && event.getClick() == ClickType.SHIFT_LEFT) {
 
-                // enforce premium vs lite, item rarity perms, item specific perms
-                if (Utilities.enforcePermissions(player, item)) return;
+                // enforce permissions
+                if (Utilities.enforcePermissions(player, item, true)) return;
 
                 ItemStack i = event.getCurrentItem().clone(); i.setAmount(1);
                 if (!item.isStackable()) Utilities.storeStringInItem(i, java.util.UUID.randomUUID().toString(), "UUID");

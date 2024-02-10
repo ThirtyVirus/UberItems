@@ -158,7 +158,7 @@ public abstract class UberItem {
         if (oneTimeUse) lore.add(ChatColor.DARK_GRAY + "(consumed on use)");
 
         // show the rarity of the item
-        lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString() + raritySuffix.toUpperCase());
+        lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString().replace('_', ' ') + raritySuffix.toUpperCase());
 
         return lore;
     }
