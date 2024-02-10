@@ -29,7 +29,7 @@ public class UberCommand implements CommandExecutor{
             return true;
         }
 
-        try {
+        //try {
             switch (args[0].toLowerCase()) {
 
                 // Standard plugin commands
@@ -80,9 +80,9 @@ public class UberCommand implements CommandExecutor{
                     break;
             }
 
-        } catch(Exception e) {
-            Utilities.warnPlayer(sender, UberItems.getPhrase("formatting-error-message"));
-        }
+        //} catch(Exception e) {
+       //     Utilities.warnPlayer(sender, UberItems.getPhrase("formatting-error-message"));
+        //}
 
         return true;
     }

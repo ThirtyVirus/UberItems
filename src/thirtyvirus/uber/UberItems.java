@@ -27,12 +27,14 @@ import thirtyvirus.uber.items.uber_workbench;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class UberItems extends JavaPlugin {
 
     // TODO
     //  fix duplicate item / material entries being null with UberDrops
     //  process active effects for uber items not in hand without big performance hit?
+    //  add proper tab-completion for "/uber give" and "/uber giveMaterial"
 
     // data for UberItems, UberMaterials
     private static final Map<String, UberItem> items = new HashMap<>();
@@ -163,7 +165,8 @@ public class UberItems extends JavaPlugin {
     private void loadConfiguration() {
         File configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()) Utilities.loadResource(this, "config.yml");
-        FileConfiguration config = this.getConfig();
+        this.reloadConfig();
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
         // general settings
         String p = config.getString("plugin-prefix");
@@ -240,11 +243,26 @@ public class UberItems extends JavaPlugin {
     }
 
     private static void registerItemsAndMaterials() {
-
         // unload old versions of default items and materials
-        for (UberItem item : getItems()) if (default_items.contains(item.getUUID())) { removeItem(item); break; }
-        for (UberMaterial material: getMaterials()) if (default_materials.contains(material.getUUID())) { removeMaterial(material); break; }
-        default_items.clear(); default_materials.clear();
+        for (int id : default_items) removeItem(UberItems.getItemFromID(id));
+        for (int id : default_materials) removeMaterial(UberItems.getMaterialFromID(id));
+        default_items.clear(); default_materials.clear(); // this will populate again after this method concludes
+
+        // remove addon items to accommodate changes in whitelist / blacklist
+        for (String name : itemBlacklist) removeItem(getItem(name));
+        if (itemWhitelist.size() > 0) {
+            List<UberItem> whitelistedItems = itemWhitelist.stream().map(UberItems::getItem).collect(Collectors.toList());
+            List<UberItem> itemsToRemove = items.values().stream().filter(uberItem -> !whitelistedItems.contains(uberItem)).collect(Collectors.toList());
+            itemsToRemove.forEach(UberItems::removeItem);
+        }
+
+        // remove addon materials to accommodate changes in whitelist / blacklist
+        for (String name : materialBlacklist) removeMaterial(getMaterial(name));
+        if (materialWhitelist.size() > 0) {
+            List<UberMaterial> whitelistedMaterials = materialWhitelist.stream().map(UberItems::getMaterial).collect(Collectors.toList());
+            List<UberMaterial> materialsToRemove = materials.values().stream().filter(uberMaterial -> !whitelistedMaterials.contains(uberMaterial)).collect(Collectors.toList());
+            materialsToRemove.forEach(UberItems::removeMaterial);
+        }
 
         // register (Uber Workbench, null Item, null Material) separately from the rest of the items, they are essential
         putItem("uber_workbench", new uber_workbench(Material.CRAFTING_TABLE, "Uber WorkBench", UberRarity.UNCOMMON, false, false, false,
@@ -310,6 +328,8 @@ public class UberItems extends JavaPlugin {
         materialIDs.put(material.getUUID(), material);
     }
     public static void removeItem(UberItem item) {
+        if (item == null) return;
+
         // unregister Listeners
         if (item instanceof Listener) {
             HandlerList.unregisterAll((Listener) item);
@@ -324,6 +344,8 @@ public class UberItems extends JavaPlugin {
 
     }
     public static void removeMaterial(UberMaterial material) {
+        if (material == null) return;
+
         materialIDs.remove(material.getUUID());
         for (String key : materials.keySet()) if (materials.get(key).getUUID() == material.getUUID()) {
             materials.remove(key);

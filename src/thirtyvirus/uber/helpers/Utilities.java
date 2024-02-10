@@ -1,12 +1,16 @@
 package thirtyvirus.uber.helpers;
 
 import com.google.common.io.ByteStreams;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -28,11 +32,10 @@ import thirtyvirus.uber.UberItem;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Field;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 public final class Utilities {
@@ -45,22 +48,42 @@ public final class Utilities {
             Material.RED_CARPET, Material.WHITE_CARPET, Material.YELLOW_CARPET);
 
     // store the most recent attempts at sorting by each player on the server
-    private static Map<Player, Long> mostRecentSelect = new HashMap<>();
+    private static final Map<Player, Long> mostRecentSelect = new HashMap<>();
 
     public static List<Block> temporaryBlocks = new ArrayList<>();
-
-    public static Map<Player, Boolean> dontUpdateMana = new HashMap<>();
 
     public static Map<Player, Double> mana = new HashMap<>();
     public static Map<Player, Double> maxMana = new HashMap<>();
     public static final Double DEFAULT_MAX_MANA = 100.0;
+    public static Map<Player, Boolean> dontUpdateMana = new HashMap<>();
 
-    private static Random rand = new Random();
+    private static final HashMap<UUID, Integer> bonusAttackSpeed = new HashMap<>();
+    private static final Random rand = new Random();
 
     public static final ItemStack emptySlot = Utilities.nameItem(Material.BLACK_STAINED_GLASS_PANE, " ");
 
     // GENERAL PLUGIN FUNCTIONS
     // _____________________________________________________________________________ \\
+
+    // apply the bonus attack speed to a player
+    public static void applyBonusAttackSpeed(Player player) {
+        AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
+        if (attribute != null) {
+            double bonus = 1 + getBonusAttackSpeed(player) / 100.0;
+            attribute.setBaseValue(4.0 * bonus);  // apply bonus to base attack speed
+        }
+    }
+
+    // get the bonus attack speed for a player
+    public static int getBonusAttackSpeed(Player player) {
+        return bonusAttackSpeed.getOrDefault(player.getUniqueId(), 0);
+    }
+
+    // set the bonus attack speed for a player
+    public static void setBonusAttackSpeed(Player player, int bonus) {
+        bonusAttackSpeed.put(player.getUniqueId(), bonus);
+        applyBonusAttackSpeed(player);
+    }
 
     public static boolean percentChance(float percentage) {
         if (percentage < 0 || percentage > 100) {
@@ -162,7 +185,6 @@ public final class Utilities {
 
         return false; // Grant access if none of the above conditions are met
     }
-
 
     /**
      * @param player the player whose line of sight is being tested
@@ -783,6 +805,34 @@ public final class Utilities {
 
         head.setItemMeta(headMeta);
         return head;
+    }
+
+    // get a player's skin texture by UUID
+    public static String getSkullFromUUID(UUID playerUUID) {
+        try {
+            URL url = new URL("https://sessionserver.mojang.com/session/minecraft/profile/" + playerUUID.toString().replace("-", "") + "?unsigned=false");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            StringBuilder jsonContent = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    jsonContent.append(line);
+                }
+            }
+
+            JsonParser parser = new JsonParser(); // Deprecated in newer versions but necessary for older Gson
+            JsonObject profileJson = parser.parse(jsonContent.toString()).getAsJsonObject();
+            JsonElement texturesElement = profileJson.get("properties").getAsJsonArray().get(0).getAsJsonObject().get("value");
+
+            String texturesJson = new String(Base64.getDecoder().decode(texturesElement.getAsString()));
+            JsonObject textures = parser.parse(texturesJson).getAsJsonObject();
+            return textures.getAsJsonObject("textures").getAsJsonObject("SKIN").get("url").getAsString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void setSkull(ItemStack head, String url) {

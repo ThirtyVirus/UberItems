@@ -22,7 +22,7 @@ public class RegisterItems {
         //        Utilities.getSkull("http://textures.minecraft.net/texture/eb9e6815d741fa1f87389027c357abaae9eeada173df89bbac96dfc8b9d6a3c9"),
         //        null,null,null,null,null,null,null);
 
-        putItem("cheat_code", new cheat_code(Material.STONE, "Cheat Code", UberRarity.ADMIN,
+        putDefaultItem("cheat_code", new cheat_code(Material.STONE, "Cheat Code", UberRarity.ADMIN,
                 false, false, false,
                 Arrays.asList(new UberAbility("Konami Code", AbilityType.LEFT_CLICK, "Toggle creative mode"), new UberAbility("P2W", AbilityType.RIGHT_CLICK, "Heal and feed yourself instantly")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -36,7 +36,7 @@ public class RegisterItems {
                         new ItemStack(Material.DIAMOND_BLOCK, 64),
                         new ItemStack(Material.DIAMOND_BLOCK, 64)), false, 1)));
 
-        putItem("monster_eraser", new monster_eraser(Material.STICK, "Monster Eraser", UberRarity.ADMIN,
+        putDefaultItem("monster_eraser", new monster_eraser(Material.STICK, "Monster Eraser", UberRarity.ADMIN,
                 false, false, false,
                 Collections.singletonList(new UberAbility("Erase", AbilityType.RIGHT_CLICK, "Point at Monster, Right-Click, Erase from Existence")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -50,7 +50,7 @@ public class RegisterItems {
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putItem("lunch_box", new lunch_box(Material.CONDUIT, "Lunch Box", UberRarity.RARE,
+        putDefaultItem("lunch_box", new lunch_box(Material.CONDUIT, "Lunch Box", UberRarity.RARE,
                   false, false, false,
                 Collections.singletonList(new UberAbility("Gluttony", AbilityType.NONE, "Automatically feeds you when hungry " + ChatColor.DARK_GRAY + "(drag & click food onto box to fill)")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -64,7 +64,7 @@ public class RegisterItems {
                         new ItemStack(Material.APPLE, 32),
                         UberItems.getMaterial("enchanted_ender_pearl").makeItem(1)), false, 1)));
 
-        putItem("document_of_order", new document_of_order(Material.PAPER, "Document of Order", UberRarity.EPIC,
+        putDefaultItem("document_of_order", new document_of_order(Material.PAPER, "Document of Order", UberRarity.EPIC,
                  false, false, false,
                 Arrays.asList(new UberAbility("Bureaucracy", AbilityType.RIGHT_CLICK, "Use on a container block while crouched to sort that container's contents. Crouch use on air to sort own inventory."), new UberAbility("Multisort", AbilityType.LEFT_CLICK, "Select many containers at once, then left click any non-container block to confirm, cr crouch left click any block to cancel. /newline "+ ChatColor.DARK_GRAY + "(sorts everything as if 1 large chest)")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -78,7 +78,7 @@ public class RegisterItems {
                         new ItemStack(Material.REDSTONE, 32),
                         new ItemStack(Material.COMPARATOR, 8)), false, 1)));
 
-        putItem("escape_rope", new escape_rope(Material.LEAD, "Escape Rope", UberRarity.UNCOMMON,
+        putDefaultItem("escape_rope", new escape_rope(Material.LEAD, "Escape Rope", UberRarity.UNCOMMON,
                 true, true, true,
                 Collections.singletonList(new UberAbility("Round Trip!", AbilityType.RIGHT_CLICK, "Instantly teleport back to the last location with the sky visible")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -92,7 +92,7 @@ public class RegisterItems {
                         new ItemStack(Material.SLIME_BALL),
                         new ItemStack(Material.STRING)), false, 1)));
 
-        putItem("fireball", new fireball(Material.FIRE_CHARGE, "FireBall", UberRarity.UNCOMMON,
+        putDefaultItem("fireball", new fireball(Material.FIRE_CHARGE, "FireBall", UberRarity.UNCOMMON,
                   true, true, false,
                 Collections.singletonList(new UberAbility("Throw em!", AbilityType.RIGHT_CLICK, "Throw a fireball which explodes on impact")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -106,7 +106,7 @@ public class RegisterItems {
                         UberItems.getMaterial("spark_dust").makeItem(1),
                         new ItemStack(Material.AIR)), false, 8)));
 
-        putItem("wrench", new wrench(Material.IRON_HOE, "Wrench", UberRarity.COMMON,
+        putDefaultItem("wrench", new wrench(Material.IRON_HOE, "Wrench", UberRarity.COMMON,
                   false, false, false,
                 Collections.singletonList(new UberAbility("Tinker", AbilityType.RIGHT_CLICK, "Change the direction of certain blocks")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -120,7 +120,7 @@ public class RegisterItems {
                         new ItemStack(Material.IRON_INGOT),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putItem("malk_bucket", new malk_bucket(Material.MILK_BUCKET, "Malk Bucket", UberRarity.RARE,
+        putDefaultItem("malk_bucket", new malk_bucket(Material.MILK_BUCKET, "Malk Bucket", UberRarity.RARE,
                   false, false, false,
                 Arrays.asList(new UberAbility("Void Udder", AbilityType.NONE, "It's an infinite milk bucket!"), new UberAbility("Spiked Milk", AbilityType.NONE, "Place a potion onto this item to spike the milk! Spiked milk is still infinite, and also gives the potion effect!")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -134,7 +134,7 @@ public class RegisterItems {
                         new ItemStack(Material.MILK_BUCKET),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putItem("uncle_sams_wrath", new uncle_sams_wrath(Material.FIREWORK_ROCKET, ChatColor.RED + "Uncle " + ChatColor.WHITE + "Sam's " + ChatColor.AQUA + "Wrath", UberRarity.RARE,
+        putDefaultItem("uncle_sams_wrath", new uncle_sams_wrath(Material.FIREWORK_ROCKET, ChatColor.RED + "Uncle " + ChatColor.WHITE + "Sam's " + ChatColor.AQUA + "Wrath", UberRarity.RARE,
                   false, false, false,
                 Collections.singletonList(new UberAbility("July 4th", AbilityType.RIGHT_CLICK, "Shoot lethal fireworks at your enemies. MURCA")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -148,7 +148,7 @@ public class RegisterItems {
                         new ItemStack(Material.PAPER),
                         UberItems.getMaterial("spark_dust").makeItem(1)), false, 1)));
 
-        putItem("electromagnet", new electromagnet(Material.IRON_INGOT, "ElectroMagnet", UberRarity.UNCOMMON,
+        putDefaultItem("electromagnet", new electromagnet(Material.IRON_INGOT, "ElectroMagnet", UberRarity.UNCOMMON,
                   false, false, true,
                 Arrays.asList(new UberAbility("Magnetic Pull", AbilityType.NONE, "Attract dropped items from a radius of " + ChatColor.GREEN + "32" + ChatColor.GRAY + " blocks away."), new UberAbility("Force Field", AbilityType.NONE, "When held in the hand, repel hostile mobs and projectiles /newline " + ChatColor.DARK_GRAY + "(toggle with crouch + right click)")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -162,7 +162,7 @@ public class RegisterItems {
                         new ItemStack(Material.REDSTONE, 64),
                         new ItemStack(Material.PHANTOM_MEMBRANE)), false, 1)));
 
-        putItem("pocket_portal", new pocket_portal(Material.COMPASS, "Pocket Portal", UberRarity.RARE,
+        putDefaultItem("pocket_portal", new pocket_portal(Material.COMPASS, "Pocket Portal", UberRarity.RARE,
                   false, false, false,
                 Collections.singletonList(new UberAbility("Beam me up Scotty!", AbilityType.RIGHT_CLICK, "Teleport to and from the nether", 120)),
                 new UberCraftingRecipe(Arrays.asList(
@@ -176,7 +176,7 @@ public class RegisterItems {
                         new ItemStack(Material.OBSIDIAN),
                         new ItemStack(Material.OBSIDIAN)), false, 1)));
 
-        putItem("shooty_box", new shooty_box(Material.DISPENSER, "Shooty Box", UberRarity.MYTHIC,
+        putDefaultItem("shooty_box", new shooty_box(Material.DISPENSER, "Shooty Box", UberRarity.MYTHIC,
                   false, false, false,
                 Collections.singletonList(new UberAbility("Blunderbuss!", AbilityType.RIGHT_CLICK, "Shoot the contents of the box at high speed, like a handheld dispenser " + ChatColor.DARK_GRAY + "(open with crouch + right click)")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -190,12 +190,12 @@ public class RegisterItems {
                         new ItemStack(Material.REDSTONE_BLOCK),
                         UberItems.getMaterial("enchanted_cobblestone").makeItem(32)), false, 1)));
 
-        putItem("chisel", new chisel(Material.SHEARS, "Chisel", UberRarity.UNFINISHED,
+        putDefaultItem("chisel", new chisel(Material.SHEARS, "Chisel", UberRarity.UNFINISHED,
                   false, false, false,
                 Arrays.asList(new UberAbility("Transmutation", AbilityType.RIGHT_CLICK, "Use on a block to transmute it into a similar one"), new UberAbility("Machine Chisel", AbilityType.LEFT_CLICK, "Transmute many blocks at a time in your inventory")),
                 null));
 
-        putItem("boom_stick", new boom_stick(Material.STICK, "BOOM Stick", UberRarity.LEGENDARY,
+        putDefaultItem("boom_stick", new boom_stick(Material.STICK, "BOOM Stick", UberRarity.LEGENDARY,
                 false, false, false,
                 Arrays.asList(new UberAbility("BOOM", AbilityType.RIGHT_CLICK, "Blow up all nearby enemies", 5), new UberAbility("Banish", AbilityType.LEFT_CLICK, "Punch your enemies into the shadow realm")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -209,7 +209,7 @@ public class RegisterItems {
                         new ItemStack(Material.PHANTOM_MEMBRANE),
                         new ItemStack(Material.PHANTOM_MEMBRANE)), false, 1)));
 
-        putItem("world_eater", new world_eater(Material.DIAMOND_PICKAXE, "World Eater", UberRarity.LEGENDARY,
+        putDefaultItem("world_eater", new world_eater(Material.DIAMOND_PICKAXE, "World Eater", UberRarity.LEGENDARY,
                 false, false, false, Collections.emptyList(),
                 new UberCraftingRecipe(Arrays.asList(
                         UberItems.getMaterial("enchanted_diamond").makeItem(1),
@@ -222,7 +222,7 @@ public class RegisterItems {
                         new ItemStack(Material.BLAZE_ROD),
                         new ItemStack(Material.AIR)), false, 1), "PICKAXE"));
 
-        putItem("lightning_rod", new lightning_rod(Material.END_ROD, "Lightning Rod", UberRarity.EPIC,
+        putDefaultItem("lightning_rod", new lightning_rod(Material.END_ROD, "Lightning Rod", UberRarity.EPIC,
                 false, false, false,
                 Collections.singletonList(new UberAbility("Smite", AbilityType.RIGHT_CLICK, "Strike lightning up to 150 blocks away")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -236,7 +236,7 @@ public class RegisterItems {
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putItem("aspect_of_the_virus", new aspect_of_the_virus(Material.DIAMOND_SWORD, "Aspect of the Virus", UberRarity.MYTHIC,
+        putDefaultItem("aspect_of_the_virus", new aspect_of_the_virus(Material.DIAMOND_SWORD, "Aspect of the Virus", UberRarity.MYTHIC,
                 false, false, false,
                 Collections.singletonList(new UberAbility("Shadow Death", AbilityType.RIGHT_CLICK, "While crouched, teleport behind the closest mob")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -250,7 +250,7 @@ public class RegisterItems {
                         new ItemStack(Material.DIAMOND_SWORD),
                         new ItemStack(Material.AIR)), false, 1), "SWORD"));
 
-        putItem("hackerman", new hackerman(Material.TOTEM_OF_UNDYING, "Hackerman", UberRarity.RARE,
+        putDefaultItem("hackerman", new hackerman(Material.TOTEM_OF_UNDYING, "Hackerman", UberRarity.RARE,
                 false, false, true,
                 Collections.singletonList(new UberAbility("Scaffold!", AbilityType.RIGHT_CLICK, "banned")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -266,7 +266,7 @@ public class RegisterItems {
 
         // TODO add Atlas
 
-        putItem("pillow", new pillow(Utilities.getSkull("http://textures.minecraft.net/texture/3088895e90ea5899499e32a3176ecdacd88656cba734d1345175fd11f2844893"), "Pillow",
+        putDefaultItem("pillow", new pillow(Utilities.getSkull("http://textures.minecraft.net/texture/3088895e90ea5899499e32a3176ecdacd88656cba734d1345175fd11f2844893"), "Pillow",
                 UberRarity.COMMON, false, false, true,
                 Collections.singletonList(new UberAbility("Well Rested", AbilityType.NONE, "When sleeping in a bed while holding this pillow, you regain health. Cure any active poison effects.", 300)),
                 new UberCraftingRecipe(Arrays.asList(
@@ -280,7 +280,7 @@ public class RegisterItems {
                         new ItemStack(Material.FEATHER, 16),
                         new ItemStack(Material.STRING, 8)), false, 1)));
 
-        putItem("omlette", new omlette(Utilities.getSkull("http://textures.minecraft.net/texture/4e947fe09ebb7e7b3769bb8a5da5cb734646b2c7973ab6a35b6627a7dc1245d1"), "Omlette",
+        putDefaultItem("omlette", new omlette(Utilities.getSkull("http://textures.minecraft.net/texture/4e947fe09ebb7e7b3769bb8a5da5cb734646b2c7973ab6a35b6627a7dc1245d1"), "Omlette",
                 UberRarity.UNCOMMON, true, true, false, Collections.emptyList(),
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
@@ -293,7 +293,7 @@ public class RegisterItems {
                         new ItemStack(Material.EGG, 4),
                         new ItemStack(Material.AIR)), false, 4)));
 
-        putItem("experience_bottle", new experience_bottle(Material.EXPERIENCE_BOTTLE, "Experience Bottle", UberRarity.COMMON,
+        putDefaultItem("experience_bottle", new experience_bottle(Material.EXPERIENCE_BOTTLE, "Experience Bottle", UberRarity.COMMON,
                 true, true, false, Collections.emptyList(),
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
@@ -310,7 +310,7 @@ public class RegisterItems {
 
         // TODO add livna (reverse anvil)
 
-        putItem("small_backpack", new small_backpack(Utilities.getSkull("http://textures.minecraft.net/texture/2308bf5cc3e9decaf0770c3fdad1e042121cf39cc2505bbb866e18c6d23ccd0c"), "Small Backpack",
+        putDefaultItem("small_backpack", new small_backpack(Utilities.getSkull("http://textures.minecraft.net/texture/2308bf5cc3e9decaf0770c3fdad1e042121cf39cc2505bbb866e18c6d23ccd0c"), "Small Backpack",
                 UberRarity.RARE, false, false, false,
                 Collections.emptyList(),
                 new UberCraftingRecipe(Arrays.asList(
@@ -324,7 +324,7 @@ public class RegisterItems {
                         new ItemStack(Material.WHITE_WOOL, 8),
                         new ItemStack(Material.WHITE_WOOL, 8)), false, 1)));
 
-        putItem("big_backpack", new big_backpack(Utilities.getSkull("http://textures.minecraft.net/texture/a2bb38516b29504186e11559cd5250ae218db4ddd27ae438726c847ce6b3c98"), "Big Backpack",
+        putDefaultItem("big_backpack", new big_backpack(Utilities.getSkull("http://textures.minecraft.net/texture/a2bb38516b29504186e11559cd5250ae218db4ddd27ae438726c847ce6b3c98"), "Big Backpack",
                 UberRarity.EPIC, false, false, false,
                 Collections.emptyList(),
                 new UberCraftingRecipe(Arrays.asList(
@@ -338,7 +338,7 @@ public class RegisterItems {
                         UberItems.getMaterial("enchanted_leather").makeItem(1),
                         new ItemStack(Material.WHITE_WOOL, 64)), false, 1)));
 
-        putItem("kebab", new kebab(Utilities.getSkull("https://textures.minecraft.net/texture/31e9359292be8de0e6467bba69260c4c7a8c1bfc08ae09bae78b6fcd612b7ca3"), "Kebab",
+        putDefaultItem("kebab", new kebab(Utilities.getSkull("https://textures.minecraft.net/texture/31e9359292be8de0e6467bba69260c4c7a8c1bfc08ae09bae78b6fcd612b7ca3"), "Kebab",
                 UberRarity.RARE, true, true, false,
                 Collections.emptyList(),
                 new UberCraftingRecipe(Arrays.asList(
@@ -352,10 +352,10 @@ public class RegisterItems {
                         new ItemStack(Material.STICK),
                         new ItemStack(Material.COOKED_CHICKEN)), false, 3)));
 
-        putItem("calamari", new calamari(Material.COOKED_COD, "Calamari",
+        putDefaultItem("calamari", new calamari(Material.COOKED_COD, "Calamari",
                 UberRarity.UNCOMMON, true, true, false, Collections.emptyList(), null));
 
-        putItem("homemade_portal_frame", new homemade_portal_frame(Material.END_PORTAL_FRAME, "Homemade Portal Frame",
+        putDefaultItem("homemade_portal_frame", new homemade_portal_frame(Material.END_PORTAL_FRAME, "Homemade Portal Frame",
                 UberRarity.EPIC, true, true, false,
                 Collections.emptyList(),
                 new UberCraftingRecipe(Arrays.asList(
@@ -369,7 +369,7 @@ public class RegisterItems {
                         new ItemStack(Material.END_STONE, 12),
                         new ItemStack(Material.END_STONE, 12)), false, 12)));
 
-        putItem("crystal_ball", new crystal_ball(Utilities.getSkull("http://textures.minecraft.net/texture/5a5f29a76d1f91c165f63baac048670e7b1d37ce785a4d9c21d8c3a177b5"), "Crystal Ball",
+        putDefaultItem("crystal_ball", new crystal_ball(Utilities.getSkull("http://textures.minecraft.net/texture/5a5f29a76d1f91c165f63baac048670e7b1d37ce785a4d9c21d8c3a177b5"), "Crystal Ball",
                 UberRarity.EPIC, false, false, false,
                 Arrays.asList(new UberAbility("Mana Battery", AbilityType.LEFT_CLICK, "Deposit an experience level into the crystal ball, crouch to deposit all."),
                         new UberAbility("Mana Discharge", AbilityType.RIGHT_CLICK, "Withdraw an experience level from the crystal ball, crouch to withdraw all.")),
@@ -384,7 +384,7 @@ public class RegisterItems {
                         new ItemStack(Material.SEA_LANTERN),
                         new ItemStack(Material.GLASS)), false, 1)));
 
-        putItem("soul_anchor", new soul_anchor(Utilities.getSkull("https://textures.minecraft.net/texture/38be8abd66d09a58ce12d377544d726d25cad7e979e8c2481866be94d3b32f"), "Soul Anchor",
+        putDefaultItem("soul_anchor", new soul_anchor(Utilities.getSkull("https://textures.minecraft.net/texture/38be8abd66d09a58ce12d377544d726d25cad7e979e8c2481866be94d3b32f"), "Soul Anchor",
                 UberRarity.LEGENDARY, false, true, false,
                 Arrays.asList(new UberAbility("Soulbound", AbilityType.NONE, "Stores location on death, returns to the player inventory after respawn"),
                         new UberAbility("Do-Over", AbilityType.RIGHT_CLICK, "Return to your previous death point")),
@@ -399,7 +399,7 @@ public class RegisterItems {
                         new ItemStack(Material.ENDER_PEARL, 16),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putItem("multi_bench", new multi_bench(Material.OBSIDIAN, "Multi-Bench",
+        putDefaultItem("multi_bench", new multi_bench(Material.OBSIDIAN, "Multi-Bench",
                 UberRarity.UNFINISHED, false, false, false,
                 Collections.singletonList(new UberAbility("Ultimate Multitool", AbilityType.LEFT_CLICK, "Swap between various utility blocks")),
                 new UberCraftingRecipe(Arrays.asList(
@@ -413,7 +413,7 @@ public class RegisterItems {
                         new ItemStack(Material.OBSIDIAN, 16),
                         new ItemStack(Material.STICK)), false, 1)));
 
-        putItem("throwing_torch", new throwing_torch(Material.TORCH, "Throwing Torch", UberRarity.COMMON,
+        putDefaultItem("throwing_torch", new throwing_torch(Material.TORCH, "Throwing Torch", UberRarity.COMMON,
                 true, true, false, Collections.emptyList(),
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
@@ -438,10 +438,13 @@ public class RegisterItems {
 
     // register UberMaterials
     public static void registerUberMaterials() {
-        putMaterial("creative_core", new UberMaterial(Utilities.getSkull("http://textures.minecraft.net/texture/faff2eb498e5c6a04484f0c9f785b448479ab213df95ec91176a308a12add70"),
+        putDefaultMaterial("creative_core", new UberMaterial(Utilities.getSkull("http://textures.minecraft.net/texture/faff2eb498e5c6a04484f0c9f785b448479ab213df95ec91176a308a12add70"),
                 "Creative Core", UberRarity.VERY_SPECIAL, false, false, false, "", null));
 
-        putMaterial("enchanted_cobblestone", new UberMaterial(Material.COBBLESTONE,
+        putDefaultMaterial("defeated_player_head", new UberMaterial(Utilities.getSkull("http://textures.minecraft.net/texture/44eaa0ddf7603ec5581af5023c3f0057d933863d7c5a3abc8975d7b50d7bae6e"),
+                "Player Head", UberRarity.LEGENDARY, false, false, false, "", null));
+
+        putDefaultMaterial("enchanted_cobblestone", new UberMaterial(Material.COBBLESTONE,
                 "Enchanted Cobblestone", UberRarity.UNCOMMON, true, true, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                     new ItemStack(Material.AIR),
@@ -454,7 +457,7 @@ public class RegisterItems {
                     new ItemStack(Material.COBBLESTONE, 32),
                     new ItemStack(Material.AIR)), true, 1)));
 
-        putMaterial("enchanted_diamond", new UberMaterial(Material.DIAMOND,
+        putDefaultMaterial("enchanted_diamond", new UberMaterial(Material.DIAMOND,
                 "Enchanted Diamond", UberRarity.UNCOMMON, true, true, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
@@ -467,7 +470,7 @@ public class RegisterItems {
                         new ItemStack(Material.DIAMOND, 32),
                         new ItemStack(Material.AIR)), true, 1)));
 
-        putMaterial("enchanted_stone", new UberMaterial(Material.STONE,
+        putDefaultMaterial("enchanted_stone", new UberMaterial(Material.STONE,
                 "Enchanted Stone", UberRarity.RARE, true, true, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
@@ -480,7 +483,7 @@ public class RegisterItems {
                         UberItems.getMaterial("enchanted_cobblestone").makeItem(32),
                         new ItemStack(Material.AIR)), true, 1)));
 
-        putMaterial("enchanted_ender_pearl", new UberMaterial(Material.ENDER_PEARL,
+        putDefaultMaterial("enchanted_ender_pearl", new UberMaterial(Material.ENDER_PEARL,
                 "Enchanted Ender Pearl", UberRarity.UNCOMMON, true, true, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
@@ -493,7 +496,7 @@ public class RegisterItems {
                         new ItemStack(Material.ENDER_PEARL, 16),
                         new ItemStack(Material.AIR)), true, 1)));
 
-        putMaterial("enchanted_string", new UberMaterial(Material.STRING,
+        putDefaultMaterial("enchanted_string", new UberMaterial(Material.STRING,
                 "Enchanted String", UberRarity.UNCOMMON, true, true, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.STRING, 16),
@@ -506,7 +509,7 @@ public class RegisterItems {
                         new ItemStack(Material.STRING, 16),
                         new ItemStack(Material.STRING, 16)), true, 1)));
 
-        putMaterial("spark_dust", new UberMaterial(Material.GUNPOWDER,
+        putDefaultMaterial("spark_dust", new UberMaterial(Material.GUNPOWDER,
                 "Spark Dust", UberRarity.COMMON, false, true, true,
                 "This dangerous pile of explosives can be used in place of gunpowder when crafting",
                 new UberCraftingRecipe(Arrays.asList(
@@ -520,7 +523,7 @@ public class RegisterItems {
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR)), true, 10)));
 
-        putMaterial("flammable_substance", new UberMaterial(Material.FIRE_CHARGE,
+        putDefaultMaterial("flammable_substance", new UberMaterial(Material.FIRE_CHARGE,
                 "Flammable Substance", UberRarity.UNCOMMON, false, true, true,
                 "This cocktail can light ablaze at any moment",
                 new UberCraftingRecipe(Arrays.asList(
@@ -534,7 +537,7 @@ public class RegisterItems {
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR)), true, 1)));
 
-        putMaterial("paper_fletching", new UberMaterial(Material.FEATHER,
+        putDefaultMaterial("paper_fletching", new UberMaterial(Material.FEATHER,
         "Paper Fletching", UberRarity.COMMON, false, true, true,
                 "Feathers are so 2010",
                 new UberCraftingRecipe(Arrays.asList(
@@ -548,7 +551,7 @@ public class RegisterItems {
                         new ItemStack(Material.PAPER),
                         new ItemStack(Material.AIR)), false, 8)));
 
-        putMaterial("fools_gold", new UberMaterial(Material.GOLD_INGOT,
+        putDefaultMaterial("fools_gold", new UberMaterial(Material.GOLD_INGOT,
                 "Fools Gold", UberRarity.RARE, false, true, true,
                 "A speedrunner's best friend",
                 new UberCraftingRecipe(Arrays.asList(
@@ -562,7 +565,7 @@ public class RegisterItems {
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putMaterial("enchanted_crafting_table", new UberMaterial(Material.CRAFTING_TABLE, "Enchanted Crafting Table", UberRarity.UNCOMMON, true, false, false, "",
+        putDefaultMaterial("enchanted_crafting_table", new UberMaterial(Material.CRAFTING_TABLE, "Enchanted Crafting Table", UberRarity.UNCOMMON, true, false, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.CRAFTING_TABLE, 32),
@@ -574,7 +577,7 @@ public class RegisterItems {
                         new ItemStack(Material.CRAFTING_TABLE, 32),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putMaterial("enchanted_furnace", new UberMaterial(Material.FURNACE, "Enchanted Furnace", UberRarity.UNCOMMON, true, false, false, "",
+        putDefaultMaterial("enchanted_furnace", new UberMaterial(Material.FURNACE, "Enchanted Furnace", UberRarity.UNCOMMON, true, false, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.FURNACE, 32),
@@ -586,7 +589,7 @@ public class RegisterItems {
                         new ItemStack(Material.FURNACE, 32),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putMaterial("enchanted_brewing_stand", new UberMaterial(Material.BREWING_STAND, "Enchanted Brewing Stand", UberRarity.UNCOMMON, true, false, false, "",
+        putDefaultMaterial("enchanted_brewing_stand", new UberMaterial(Material.BREWING_STAND, "Enchanted Brewing Stand", UberRarity.UNCOMMON, true, false, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.BREWING_STAND, 32),
@@ -598,7 +601,7 @@ public class RegisterItems {
                         new ItemStack(Material.BREWING_STAND, 32),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putMaterial("enchanted_anvil", new UberMaterial(Material.ANVIL, "Enchanted Anvil", UberRarity.UNCOMMON, true, false, false, "",
+        putDefaultMaterial("enchanted_anvil", new UberMaterial(Material.ANVIL, "Enchanted Anvil", UberRarity.UNCOMMON, true, false, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.ANVIL, 4),
@@ -610,7 +613,7 @@ public class RegisterItems {
                         new ItemStack(Material.ANVIL, 4),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putMaterial("enchanted_enchanting_table", new UberMaterial(Material.ENCHANTING_TABLE, "Enchanted Enchanting Table", UberRarity.UNCOMMON, true, false, false, "",
+        putDefaultMaterial("enchanted_enchanting_table", new UberMaterial(Material.ENCHANTING_TABLE, "Enchanted Enchanting Table", UberRarity.UNCOMMON, true, false, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.AIR),
                         new ItemStack(Material.ENCHANTING_TABLE, 4),
@@ -622,7 +625,7 @@ public class RegisterItems {
                         new ItemStack(Material.ENCHANTING_TABLE, 4),
                         new ItemStack(Material.AIR)), false, 1)));
 
-        putMaterial("enchanted_leather", new UberMaterial(Material.LEATHER, "Enchanted Leather", UberRarity.UNCOMMON, true, true, false, "",
+        putDefaultMaterial("enchanted_leather", new UberMaterial(Material.LEATHER, "Enchanted Leather", UberRarity.UNCOMMON, true, true, false, "",
                 new UberCraftingRecipe(Arrays.asList(
                         new ItemStack(Material.LEATHER, 64),
                         new ItemStack(Material.LEATHER, 64),
@@ -636,11 +639,11 @@ public class RegisterItems {
     }
 
     // put UberItem or UberMaterial, but also add to default_items / default_materials
-    private static void putItem(String name, UberItem item) {
+    private static void putDefaultItem(String name, UberItem item) {
         UberItems.putItem(name, item);
         UberItems.default_items.add(item.getUUID());
     }
-    private static void putMaterial(String name, UberMaterial material) {
+    private static void putDefaultMaterial(String name, UberMaterial material) {
         UberItems.putMaterial(name, material);
         UberItems.default_materials.add(material.getUUID());
     }

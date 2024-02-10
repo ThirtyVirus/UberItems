@@ -128,7 +128,7 @@ public class UberMaterial {
         if (items.size() > 0 || materials.size() > 0) lore.add(ChatColor.YELLOW + "Right-click to view recipes!");
 
         // show the rarity of the item
-        lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString() + raritySuffix.toUpperCase());
+        lore.add("" + rarity.getColor() + ChatColor.BOLD + rarity.toString().replace('_', ' ') + raritySuffix.toUpperCase());
 
         return lore;
     }

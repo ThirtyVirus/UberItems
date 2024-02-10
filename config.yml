@@ -21,7 +21,7 @@ default-uber-materials: true
 item-blacklist:
 # do not load these materials from the main plugin and addons (comma separated, case sensitive)
 # NOTE: also uses the technical name for the material, using underscores
-material-blacklist:
+material-blacklist: defeated_player_head
 
 # only load these items from the main plugin and addons (comma separated, case sensitive)
 # NOTE: use the technical name with underscores (found with tab completion with '/uber give' command)

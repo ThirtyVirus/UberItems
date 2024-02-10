@@ -1,6 +1,7 @@
 package thirtyvirus.uber.events;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -14,12 +15,16 @@ import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import thirtyvirus.uber.UberItems;
 import thirtyvirus.uber.UberMaterial;
 import thirtyvirus.uber.helpers.ActionSound;
+import thirtyvirus.uber.helpers.UberDrop;
 import thirtyvirus.uber.helpers.Utilities;
+
+import java.util.UUID;
 
 public class MiscEvents implements Listener {
 
@@ -33,6 +38,43 @@ public class MiscEvents implements Listener {
     @EventHandler
     private void onBlockBreak(BlockBreakEvent event) {
         if (Utilities.temporaryBlocks.contains(event.getBlock())) event.setCancelled(true);
+    }
+
+    // ensure that players have the proper bonus attack speed when they log in
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        Utilities.applyBonusAttackSpeed(player);
+    }
+
+    // drop heads on player death
+    @EventHandler
+    private void playerDeath(PlayerDeathEvent event) {
+
+        // only drop player heads if "defeated players heads" are a valid UberMaterial
+        if (UberItems.getMaterial("null").compare(UberItems.getMaterial("defeated_player_head").makeItem(1))) return;
+
+        Player killer = event.getEntity().getKiller();
+        Player killedPlayer = event.getEntity();
+        if (killer != null) {
+
+            // Asynchronously fetch the skin texture and apply it to the head
+            Bukkit.getScheduler().runTaskAsynchronously(UberItems.getInstance(), () -> {
+                UUID killedPlayerUUID = killedPlayer.getUniqueId();
+                String textureUrl = Utilities.getSkullFromUUID(killedPlayerUUID);
+
+                // Ensure you run the following part on the main thread
+                Bukkit.getScheduler().runTask(UberItems.getInstance(), () -> {
+
+                    ItemStack head = UberItems.getMaterial("defeated_player_head").makeItem(1);
+                    Utilities.setSkull(head, textureUrl);
+                    Utilities.nameItem(head, ChatColor.GOLD + killedPlayer.getName() + "'s Head");
+
+                    UberDrop drop = new UberDrop(head, 100, true);
+                    drop.tryDrop(killedPlayer.getLocation(), killer);
+                });
+            });
+        }
     }
 
     // prevent renaming UberItems or UberMaterials with an anvil
@@ -89,7 +131,6 @@ public class MiscEvents implements Listener {
     @EventHandler
     public void onPlayerEat(PlayerItemConsumeEvent event) {
         ItemStack item = event.getItem();
-        if (Utilities.isUber(item)) event.setCancelled(true);
         if (Utilities.isUber(item)) event.setCancelled(true);
         if (Utilities.isUberMaterial(item)) event.setCancelled(true);
     }

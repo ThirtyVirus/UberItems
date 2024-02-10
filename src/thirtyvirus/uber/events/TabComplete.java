@@ -32,19 +32,19 @@ public class TabComplete implements TabCompleter {
             }
 
             // give command
-            else if (args.length == 2 && args[0].toLowerCase().equals("give") && player.hasPermission("uber.admin")) {
+            else if (args.length == 2 && args[0].equalsIgnoreCase("give") && player.hasPermission("uber.admin")) {
                 arguments.addAll(UberItems.getItemNames()); arguments.remove("null");
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }
 
             // give material command
-            else if (args.length == 2 && args[0].toLowerCase().equals("givematerial") && player.hasPermission("uber.admin")) {
+            else if (args.length == 2 && args[0].equalsIgnoreCase("givematerial") && player.hasPermission("uber.admin")) {
                 arguments.addAll(UberItems.getMaterialNames()); arguments.remove("null");
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }
 
             // identify command
-            else if (args.length == 2 && args[0].toLowerCase().equals("identify") && player.hasPermission("uber.admin")) {
+            else if (args.length == 2 && args[0].equalsIgnoreCase("identify") && player.hasPermission("uber.admin")) {
                 arguments.addAll(UberItems.getItemNames());
                 Iterator<String> iter = arguments.iterator(); while (iter.hasNext()) { String str = iter.next().toLowerCase(); if (!str.contains(args[1].toLowerCase())) iter.remove(); }
             }

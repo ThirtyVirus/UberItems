@@ -27,7 +27,7 @@ import thirtyvirus.uber.helpers.Utilities;
 
 public class PlayerUseUberItem implements Listener {
 
-    // handle equipping an UberItem helmet
+    // handle equipping an UberItem helmet by right-clicking on it from outside the inventory
     @EventHandler
     private void onRightClickHelmet(PlayerInteractEvent event) {
         if (event.getHand() != EquipmentSlot.HAND || (event.getAction() != Action.RIGHT_CLICK_AIR ) && event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
