@@ -1092,6 +1092,102 @@ public final class Utilities {
         return false;
     }
 
+    // enforces an ability cooldown, but with multiple charges
+    public static boolean enforceCharges(Player player, String key, int charges, double seconds, ItemStack item, boolean throwError) {
+        double time = (double) System.currentTimeMillis() / 1000;
+
+        // get times each previous charge was used
+        int shortestWait = (int)seconds;
+        for (int counter = 0; counter < charges; counter++) {
+            int lastTime = getIntFromItem(item, key + counter);
+
+            // add "time last used" key if not already there, automatically assume charge can be used
+            if (lastTime == 0) {
+                storeIntInItem(item, (int) time, key + counter);
+                return false;
+            }
+            // was at least one charge last used longer than "seconds" seconds ago?
+            else {
+                if (time - seconds > lastTime) { // yes, allow the action (plus update the last time used)
+                    storeIntInItem(item, (int) time, key + counter);
+                    return false;
+                } else { // no, check for another charge
+                    int timeLeft = (int) time - lastTime;
+                    timeLeft = (int) seconds - timeLeft;
+                    if (shortestWait > timeLeft) shortestWait = timeLeft;
+                }
+            }
+        }
+
+        // no charges were available within the last 'seconds' seconds, enforce cooldown
+        if (throwError) warnPlayer(player, "This ability is on cooldown for " + shortestWait + "s.");
+        return true;
+    }
+
+    // enforces an ability cooldown, but with multiple charges and mana cost
+    public static boolean enforceChargesWithMana(Player player, String key, int charges, double seconds, double cost, ItemStack item, boolean throwError) {
+        if (!mana.containsKey(player)) mana.put(player, 0.0);
+        if (mana.get(player) < cost) {
+            Utilities.playSound(ActionSound.ERROR, player);
+            Utilities.sendActionBarMessage(player, String.valueOf(ChatColor.RED) + ChatColor.BOLD + "NOT ENOUGH MANA");
+            return true;
+        }
+
+        double time = (double) System.currentTimeMillis() / 1000;
+
+        // get times each previous charge was used
+        int shortestWait = (int)seconds;
+        for (int counter = 0; counter < charges; counter++) {
+            int lastTime = getIntFromItem(item, key + counter);
+
+            // add "time last used" key if not already there, automatically assume charge can be used
+            if (lastTime == 0) {
+                storeIntInItem(item, (int) time, key + counter);
+                return false;
+            }
+            // was at least one charge last used longer than "seconds" seconds ago?
+            else {
+                if (time - seconds > lastTime) { // yes, allow the action (plus update the last time used)
+                    storeIntInItem(item, (int) time, key + counter);
+                    return false;
+                } else { // no, check for another charge
+                    int timeLeft = (int) time - lastTime;
+                    timeLeft = (int) seconds - timeLeft;
+                    if (shortestWait > timeLeft) shortestWait = timeLeft;
+                }
+            }
+        }
+
+        // no charges were available within the last 'seconds' seconds, enforce cooldown
+        if (throwError) warnPlayer(player, "This ability is on cooldown for " + shortestWait + "s.");
+        return true;
+    }
+
+    public static boolean enforceCombatTag(Player player, int seconds, boolean throwError) {
+        // Use long for time
+        long time = System.currentTimeMillis() / 1000;
+
+        // get time last attacked by a player
+        String lastTimeString = getEntityTag(player, "attackedbyplayer");
+
+        // add "attackedbyplayer" key if not already there
+        if (lastTimeString.equals("")) {
+            return false;
+        }
+        // was the entity attacked more than "seconds" seconds ago?
+        else {
+            long lastTime = Long.parseLong(lastTimeString);
+
+            if (time - seconds > lastTime) {
+                return false; // yes, allow the action
+            } else {
+                long timeLeft = seconds - (time - lastTime);
+                if (throwError) warnPlayer(player, "You can't do that while in combat! Please wait " + timeLeft + "s.");
+                return true; // no, disallow the action
+            }
+        }
+    }
+
     /**
      * Apply an upgrade to an UberItem, which is traditionally done through the clickedInInventoryAction method.
      * Checks if the requested upgrade is already on the item, if not adds it, cancels the event, and consumes the upgrade item.
