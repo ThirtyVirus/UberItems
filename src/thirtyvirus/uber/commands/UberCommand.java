@@ -23,7 +23,13 @@ public class UberCommand implements CommandExecutor{
             return true;
         }
 
-        try {
+        // default to help command if no arguments are typed
+        if (args.length == 0) {
+            help(sender);
+            return true;
+        }
+
+        //try {
             switch (args[0].toLowerCase()) {
 
                 // standard plugin commands
@@ -74,9 +80,9 @@ public class UberCommand implements CommandExecutor{
                     break;
             }
 
-        } catch(Exception e) {
-            Utilities.warnPlayer(sender, UberItems.getPhrase("formatting-error-message"));
-        }
+        //} catch(Exception e) {
+        //    Utilities.warnPlayer(sender, UberItems.getPhrase("formatting-error-message"));
+        //}
 
         return true;
     }

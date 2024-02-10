@@ -142,12 +142,6 @@ public final class Utilities {
      */
     public static boolean enforcePermissions(Player player, UberItem item) {
 
-        // Deny access for non-premium users trying to access items above a certain rarity
-        if (!UberItems.premium && item.getRarity().isRarerThan(UberRarity.EPIC)) {
-            warnPlayer(player, UberItems.getPhrase("not-premium-message"));
-            return true; // Deny access
-        }
-
         // Deny access if the player doesn't have the basic user permission
         if (!player.hasPermission("uber.user")) {
             warnPlayer(player, UberItems.getPhrase("no-permissions-message"));

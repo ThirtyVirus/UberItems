@@ -26,19 +26,19 @@ import java.util.Map;
 
 public abstract class UberItem {
 
-    private ItemStack item;
-    private String name;
-    private UberRarity rarity;
+    private final ItemStack item;
+    private final String name;
+    private final UberRarity rarity;
     private String raritySuffix = "";
-    private boolean stackable;
-    private int UUID;
+    private final boolean stackable;
+    private final int UUID;
 
-    private boolean oneTimeUse;
-    private boolean hasActive;
+    private final boolean oneTimeUse;
+    private final boolean hasActive;
     private List<UberAbility> abilities = new ArrayList<>();
 
     private UberCraftingRecipe craftingRecipe;
-    private Map<String, Integer> startingProperties;
+    private final Map<String, Integer> startingProperties;
 
     /**
      * Define a new UberItem

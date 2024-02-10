@@ -12,14 +12,14 @@ import java.util.List;
 public class UberCraftingRecipe {
 
     private List<ItemStack> recipe = new ArrayList<>();
-    private List<ItemStack> components = new ArrayList<>();
-    private List<int[]> relativeCoords = new ArrayList<int[]>();
+    private final List<ItemStack> components = new ArrayList<>();
+    private final List<int[]> relativeCoords = new ArrayList<int[]>();
     private boolean shapeless;
     private int craftAmount;
 
     // make an UberCraftingRecipe from a list of strings, assumes 9 items
     public UberCraftingRecipe(List<ItemStack> recipe, boolean shapeless, int craftAmount) {
-        if (recipe.size() != 9) return;
+        if (recipe.size() != 9) return; // TODO find out why this works?
 
         this.recipe = recipe;
         this.shapeless = shapeless;
@@ -47,6 +47,7 @@ public class UberCraftingRecipe {
 
     // compare a list of ItemStacks to this recipe, assumes 9 items
     public boolean isEqual(List<ItemStack> items) {
+
         // verify that the list was no null entries
         for (int counter = 0; counter < items.size(); counter++) {
             if (items.get(counter) == null) items.set(counter, new ItemStack(Material.AIR));
@@ -73,6 +74,7 @@ public class UberCraftingRecipe {
                 int y = previousCoord[1] + relativeCoords.get(counter)[1];
                 int newSpot = coordToIndex(new int[] {x,y}, 3);
 
+                if (newSpot >= items.size()) return false; // prevent checking for slots that are out-of-bounds
                 if (!isSame(components.get(counter), items.get(newSpot))) return false;
                 previousCoord = new int[]{x,y};
             }

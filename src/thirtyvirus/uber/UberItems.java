@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,6 +32,7 @@ public class UberItems extends JavaPlugin {
 
     // TODO
     //  fix duplicate item / material entries being null with UberDrops
+    //  process active effects for uber items not in hand without big performance hit?
 
     // data for UberItems, UberMaterials
     private static final Map<String, UberItem> items = new HashMap<>();
@@ -39,15 +41,8 @@ public class UberItems extends JavaPlugin {
     private static final Map<Integer, UberMaterial> materialIDs = new HashMap<>();
 
     public enum ArmorType {LEATHER, CHAINMAIL, GOLD, IRON, DIAMOND}
-    public static final List<String> default_items = Arrays.asList("lunch_box", "document_of_order", "cheat_code", "escape_rope",
-            "fireball", "wrench", "malk_bucket", "uncle_sams_wrath", "electromagnet", "pocket_portal", "shooty_box", "chisel",
-            "boom_stick", "world_eater", "lightning_rod", "aspect_of_the_virus", "hackerman", "pillow", "omlett", "experience_bottle",
-            "small_backpack", "big_backpack", "kebab", "calamari", "homemade_portal_frame", "crystal_ball", "soul_anchor", "multi_bench", "throwing_torch");
-
-    public static final List<String> default_materials = Arrays.asList("creative_core", "enchanted_cobblestone", "enchanted_diamond",
-            "enchanted_stone", "enchanted_ender_pearl", "enchanted_string", "spark_dust", "flammable_substance", "paper_fletching",
-            "fools_gold", "enchanted_crafting_table", "enchanted_furnace", "enchanted_brewing_stand", "enchanted_anvil",
-            "enchanted_enchanting_table", "enchanted_leather");
+    public static final List<Integer> default_items = new ArrayList<>();
+    public static final List<Integer> default_materials = new ArrayList<>();
 
     // chat messages
     private static final Map<String, String> phrases = new HashMap<>();
@@ -57,7 +52,7 @@ public class UberItems extends JavaPlugin {
     public static String consolePrefix = "[UberItems] ";
     public static boolean defaultUberItems = true;
     public static boolean defaultUberMaterials = true;
-    public static int activeEffectsCheckID = 0;
+    public static List<Integer> scheduledTasks = new ArrayList<>();
     public static int activeEffectsDelay = 2; // in ticks
 
     public static List<String> itemBlacklist = new ArrayList<>();
@@ -82,9 +77,7 @@ public class UberItems extends JavaPlugin {
     public static Map<Player, List<Block>> multisorts = new HashMap<>();
 
     // other variables
-    public static final boolean premium = true;
-    private static boolean haveCountedDefaultItems = false;
-    private static int defaultItemCount = 0;
+    private static final Set<Listener> registeredListeners = new HashSet<>();
     private static UberItems instance;
 
     // actions to be taken on plugin enable
@@ -96,28 +89,28 @@ public class UberItems extends JavaPlugin {
         loadConfiguration();
         loadLangFile();
 
-        // register commands, events
+        // register commands, events, items and materials
         registerCommands();
         registerEvents();
         registerItemsAndMaterials();
 
         // schedule repeating task for processing UberItem active effects
-        activeEffectsCheckID = Bukkit.getScheduler().scheduleSyncRepeatingTask(this, UberItems::uberActiveEffects, activeEffectsDelay, activeEffectsDelay);
+        scheduledTasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(this, UberItems::uberActiveEffects, activeEffectsDelay, activeEffectsDelay));
 
         // schedule checking of recent added containers (Document of Order)
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> SortingUtilities.checkCancelMultisort(multisorts, multiSortTimeout), 20 * multiSortTimeout, 20 * multiSortTimeout);
+        scheduledTasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> SortingUtilities.checkCancelMultisort(multisorts, multiSortTimeout), 20 * multiSortTimeout, 20 * multiSortTimeout));
 
         // schedule checking if a player is in the crafting menu (to update the recipe)
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+        scheduledTasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (player.getOpenInventory().getTitle().contains("UberItems - Craft Item")) {
                     MenuUtils.checkCraft(player.getOpenInventory().getTopInventory());
                 }
             }
-        }, 10, 10);
+        }, 10, 10));
 
         // manage player mana (regeneration and updating display)
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+        scheduledTasks.add(Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (Utilities.dontUpdateMana.containsKey(player)) continue;
 
@@ -146,7 +139,7 @@ public class UberItems extends JavaPlugin {
                 }
                 if (usesMana) player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.AQUA + String.valueOf(Math.round(Utilities.mana.get(player))) + "/" + Math.round(Utilities.maxMana.get(player)) + "✎ Mana"));
             }
-        }, 10, 10);
+        }, 10, 10));
 
         // post confirmation in chat
         getLogger().info(getDescription().getName() + " V: " + getDescription().getVersion() + " has been enabled");
@@ -154,8 +147,13 @@ public class UberItems extends JavaPlugin {
 
     // actions to be taken on plugin disable
     public void onDisable() {
+        // un-register Listeners
+        for (Listener listener : registeredListeners) HandlerList.unregisterAll(listener);
+        registeredListeners.clear();
+
         // cancel scheduled tasks
-        Bukkit.getScheduler().cancelTask(activeEffectsCheckID);
+        for (int id : scheduledTasks) Bukkit.getScheduler().cancelTask(id);
+        scheduledTasks.clear();
 
         // posts exit message in chat
         getLogger().info(getDescription().getName() + " V: " + getDescription().getVersion() + " has been disabled");
@@ -164,9 +162,7 @@ public class UberItems extends JavaPlugin {
     // load config.yml (generate one if not there)
     private void loadConfiguration() {
         File configFile = new File(getDataFolder(), "config.yml");
-        if (!configFile.exists()){
-            Utilities.loadResource(this, "config.yml");
-        }
+        if (!configFile.exists()) Utilities.loadResource(this, "config.yml");
         FileConfiguration config = this.getConfig();
 
         // general settings
@@ -200,11 +196,10 @@ public class UberItems extends JavaPlugin {
         ignoreBuildPerms = config.getBoolean("ignore-area-build-permissions");
 
         useWhiteList = config.getBoolean("use-inventory-whitelist");
-        useBlackList = config.getBoolean("use-inventory-blacklist");
-
         String w = config.getString("inventory-whitelist"); whiteList.clear();
         if (w != null) whiteList.addAll(Arrays.asList(w.split(",")));
 
+        useBlackList = config.getBoolean("use-inventory-blacklist");
         String b = config.getString("inventory-blacklist"); blackList.clear();
         if (b !=null) blackList.addAll(Arrays.asList(b.split(",")));
 
@@ -235,117 +230,51 @@ public class UberItems extends JavaPlugin {
 
     // register event handlers
     private void registerEvents() {
-        getServer().getPluginManager().registerEvents(new PlayerUseUberItem(), this);
-        getServer().getPluginManager().registerEvents(new MiscEvents(), this);
-        getServer().getPluginManager().registerEvents(new InventoryClick(),this);
+        registerListener(new PlayerUseUberItem());
+        registerListener(new MiscEvents());
+        registerListener(new InventoryClick());
+    }
+    private static void registerListener(Listener listener) {
+        instance.getServer().getPluginManager().registerEvents(listener, instance);
+        registeredListeners.add(listener);
     }
 
     private static void registerItemsAndMaterials() {
-        haveCountedDefaultItems = false;
 
-        // make sure that items and materials are updated ONLY for the base plugin
-        List<String> str = new ArrayList<>(items.keySet());
-        for (String item : str) {
-            if (default_items.contains(item)) {
-                itemIDs.remove(items.get(item).getUUID());
-                items.remove(item);
-            }
-        }
-        str = new ArrayList<>(materials.keySet());
-        for (String material : str) {
-            if (default_materials.contains(material)) {
-                materialIDs.remove(materials.get(material).getUUID());
-                materials.remove(material);
-            }
-        }
+        // unload old versions of default items and materials
+        for (UberItem item : getItems()) if (default_items.contains(item.getUUID())) { removeItem(item); break; }
+        for (UberMaterial material: getMaterials()) if (default_materials.contains(material.getUUID())) { removeMaterial(material); break; }
+        default_items.clear(); default_materials.clear();
 
-        // register the Uber Workbench separately from the rest of the items, it's essential
+        // register (Uber Workbench, null Item, null Material) separately from the rest of the items, they are essential
         putItem("uber_workbench", new uber_workbench(Material.CRAFTING_TABLE, "Uber WorkBench", UberRarity.UNCOMMON, false, false, false,
                 Collections.singletonList(new UberAbility("A new chapter", AbilityType.RIGHT_CLICK, "Opens the UberItems Crafting Menu")), null));
-
-        // register the error UberItem and UberMaterial separately from the rest of the items, it's essential
         putItem("null", new null_item(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, Collections.emptyList(), null));
         putMaterial("null", new UberMaterial(Material.BARRIER, "null", UberRarity.UNFINISHED, false, false, false, "ERROR: UberMaterial not found", null));
 
-        // register UberMaterials, UberItems. Then count the number of default items
+        // register default UberMaterials, then UberItems
         if (defaultUberMaterials) RegisterItems.registerUberMaterials();
-        if (defaultUberItems) {
-            RegisterItems.registerUberItems();
-            defaultItemCount = items.keySet().size();
-        }
-        haveCountedDefaultItems = true;
+        if (defaultUberItems) RegisterItems.registerUberItems();
     }
 
     // process active effects for uber items that are in use
-    // TODO: Do active effects for uber items not in hand?
     private static void uberActiveEffects() {
+
+        // loop through all online players to check for UberItems with active effects
         for (Player player : Bukkit.getOnlinePlayers()) {
 
-            // main hand
-            if (Utilities.isUber(player.getInventory().getItemInMainHand())) {
-                UberItem uber = Utilities.getUber(player.getInventory().getItemInMainHand());
-                if (uber == null) continue;
+            // process active effects for UberItems in main and off hands, armor slots
+            List<ItemStack> items = Arrays.asList(
+                    player.getInventory().getItemInMainHand(),
+                    player.getInventory().getItemInOffHand(),
+                    player.getInventory().getHelmet(),
+                    player.getInventory().getChestplate(),
+                    player.getInventory().getLeggings(),
+                    player.getInventory().getBoots());
 
-                // enforce premium vs lite
-                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
-
-                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInMainHand());
-            }
-
-            // off hand
-            if (Utilities.isUber(player.getInventory().getItemInOffHand())) {
-                UberItem uber = Utilities.getUber(player.getInventory().getItemInOffHand());
-                if (uber == null) continue;
-
-                // enforce premium vs lite
-                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
-
-                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
-
-            }
-
-            // helmet slot
-            if (Utilities.isUber(player.getInventory().getHelmet())) {
-                UberItem uber = Utilities.getUber(player.getInventory().getHelmet());
-                if (uber == null) continue;
-
-                // enforce premium vs lite
-                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
-
-                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
-            }
-
-            // chestplate slot
-            if (Utilities.isUber(player.getInventory().getChestplate())) {
-                UberItem uber = Utilities.getUber(player.getInventory().getChestplate());
-                if (uber == null) continue;
-
-                // enforce premium vs lite
-                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
-
-                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
-            }
-
-            // leggings slot
-            if (Utilities.isUber(player.getInventory().getLeggings())) {
-                UberItem uber = Utilities.getUber(player.getInventory().getLeggings());
-                if (uber == null) continue;
-
-                // enforce premium vs lite
-                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
-
-                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
-            }
-
-            // boots slot
-            if (Utilities.isUber(player.getInventory().getBoots())) {
-                UberItem uber = Utilities.getUber(player.getInventory().getBoots());
-                if (uber == null) continue;
-
-                // enforce premium vs lite
-                if (!UberItems.premium && uber.getRarity().isRarerThan(UberRarity.RARE)) return;
-
-                if (uber.hasActiveEffect()) uber.activeEffect(player, player.getInventory().getItemInOffHand());
+            for (ItemStack item : items) {
+                UberItem uber = Utilities.getUber(item);
+                if (uber != null && uber.hasActiveEffect()) uber.activeEffect(player, item);
             }
 
         }
@@ -354,33 +283,52 @@ public class UberItems extends JavaPlugin {
     // place UberItems and UberMaterials into the proper HashMaps
     public static void putItem(String name, UberItem item) {
 
-        if (name.equals("null") || name.equals("uber_workbench")) {
-            items.put(name, item);
-            itemIDs.put(item.getUUID(), item);
-            return;
+        // skip blacklist / whitelist for essential items
+        if (!name.equals("null") && !name.equals("uber_workbench")) {
+            // don't add item if in blacklist, or not included in whitelist
+            if (itemBlacklist.contains(name)) return;
+            if (itemWhitelist.size() > 0 && !itemWhitelist.contains(name)) return;
         }
-
-        if (itemBlacklist.contains(name)) return;
-        if (itemWhitelist.size() > 0 && !itemWhitelist.contains(name)) return;
 
         // if the event implements listener, register events (MAKE SURE NOT TO DO THIS IN ADDON PLUGINS)
-        if (item instanceof Listener) instance.getServer().getPluginManager().registerEvents((Listener) item, instance);
+        if (item instanceof Listener && !registeredListeners.contains(item)) registerListener((Listener) item);
 
-        if (items.keySet().size() < defaultItemCount + 10 || !haveCountedDefaultItems || premium) {
-            items.put(name, item);
-            itemIDs.put(item.getUUID(), item);
-        }
-        else Bukkit.getLogger().severe("You're trying to load more than 5 custom items! Purchase UberItems Premium to load unlimited custom items: https://www.spigotmc.org/resources/83851/");
+        // add the item
+        items.put(name, item);
+        itemIDs.put(item.getUUID(), item);
     }
     public static void putMaterial(String name, UberMaterial material) {
 
+        // skip blacklist / whitelist for essential material
         if (!name.equals("null")) {
             if (materialBlacklist.contains(name)) return;
             if (materialWhitelist.size() > 0 && !materialWhitelist.contains(name)) return;
         }
 
+        // add the material
         materials.put(name, material);
         materialIDs.put(material.getUUID(), material);
+    }
+    public static void removeItem(UberItem item) {
+        // unregister Listeners
+        if (item instanceof Listener) {
+            HandlerList.unregisterAll((Listener) item);
+            registeredListeners.remove(item);
+        }
+
+        itemIDs.remove(item.getUUID());
+        for (String key : items.keySet()) if (items.get(key).getUUID() == item.getUUID()) {
+            items.remove(key);
+            return;
+        }
+
+    }
+    public static void removeMaterial(UberMaterial material) {
+        materialIDs.remove(material.getUUID());
+        for (String key : materials.keySet()) if (materials.get(key).getUUID() == material.getUUID()) {
+            materials.remove(key);
+            return;
+        }
     }
 
     // put entire armor set into the UberItems HashMap
@@ -457,9 +405,9 @@ public class UberItems extends JavaPlugin {
 
     // reload all plugin assets
     public static void reload() {
-        getInstance().reloadConfig();
-        getInstance().loadConfiguration();
-        getInstance().loadLangFile();
+        instance.reloadConfig();
+        instance.loadConfiguration();
+        instance.loadLangFile();
 
         registerItemsAndMaterials();
 
