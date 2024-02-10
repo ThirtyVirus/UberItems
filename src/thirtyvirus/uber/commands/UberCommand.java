@@ -50,11 +50,11 @@ public class UberCommand implements CommandExecutor{
 
                 // Staff Commands
                 case "give":
-                    if (sender.hasPermission("uber.admin")) give(sender, args);
+                    if (sender.hasPermission("uber.admin")) give(sender, args, false);
                     else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
                     break;
                 case "givematerial":
-                    if (sender.hasPermission("uber.admin")) giveMaterial(sender, args);
+                    if (sender.hasPermission("uber.admin")) give(sender, args, true);
                     else Utilities.warnPlayer(sender, UberItems.getPhrase("no-permissions-message"));
                     break;
                 case "updatelore":
@@ -149,41 +149,87 @@ public class UberCommand implements CommandExecutor{
 
     }
 
-    // give command
-    private void give(CommandSender sender, String[] args) {
-        // verify that the command is executed by a player
-        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
-        Player player = (Player) sender;
+    // give command (also works for "/giveMaterial"). Variations:
+    // "/uber give itemname"
+    // "/uber give itemname amount"
+    // "/uber give playername itemname"
+    // "/uber give playername itemname amount"
+    private void give(CommandSender sender, String[] args, boolean material) {
+        // Determine the action based on argument length and content
+        Player targetPlayer = null;
+        String itemName;
+        int amount = 1; // Default amount
 
-        // create the item from name
-        int stack = 1; if (args.length > 2) stack = Integer.parseInt(args[2]);
-        ItemStack uber = UberItems.getItem(args[1]).makeItem(stack);
+        // Checking the number of arguments to handle different cases
+        switch (args.length) {
+            case 2:
+                // Could be either "/uber give itemname" or "/uber give playername itemname" (implied)
 
-        // verify that the item is in fact an UberItem
-        if (uber == null || args[1].equals("null")) { Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem")); return; }
+                // Attempt to parse as item name directly for the sender
+                itemName = args[1];
+                targetPlayer = sender instanceof Player ? (Player) sender : null;
+                if (targetPlayer == null) {
+                    Utilities.warnPlayer(sender, "You cannot give UberItems to the console! Specify a player name to give the item to");
+                    return;
+                }
+                break;
+            case 3:
+                // Could be "/uber give itemname amount" or "/uber give playername itemname"
+                try {
+                    // Attempt to determine if third argument is a number (amount)
+                    amount = Integer.parseInt(args[2]);
+                    itemName = args[1];
+                    targetPlayer = sender instanceof Player ? (Player) sender : null;
+                } catch (NumberFormatException e) {
+                    // Third argument is not a number, treat as playername itemname
+                    targetPlayer = Bukkit.getPlayer(args[1]);
+                    itemName = args[2];
+                    if (targetPlayer == null) {
+                        Utilities.warnPlayer(sender, "Player not found.");
+                        return;
+                    }
+                }
+                break;
+            case 4:
+                // Can only be "/uber give playername itemname amount"
+                targetPlayer = Bukkit.getPlayer(args[1]);
+                if (targetPlayer == null) {
+                    Utilities.warnPlayer(sender, "Player not found.");
+                    return;
+                }
+                itemName = args[2];
+                try {
+                    amount = Integer.parseInt(args[3]);
+                } catch (NumberFormatException e) {
+                    Utilities.warnPlayer(sender, "Invalid amount. Please specify a valid number.");
+                    return;
+                }
+                break;
+            default:
+                Utilities.warnPlayer(sender, "Incorrect command usage.");
+                return;
+        }
 
-        // give the item to the player
-        Utilities.givePlayerItemSafely(player, uber);
-        player.sendMessage(UberItems.prefix + "Given " + uber.getItemMeta().getDisplayName());
-    }
+        // Create the ItemStack from name (either an UberItem or UberMaterial)
+        ItemStack uber;
+        if (!material) uber = UberItems.getItem(itemName).makeItem(amount);
+        else uber = UberItems.getMaterial(itemName).makeItem(amount);
 
-    // givematerial command
-    private void giveMaterial(CommandSender sender, String[] args) {
-        // verify that the command is executed by a player
-        if (!(sender instanceof Player)) { Utilities.warnPlayer(sender, UberItems.getPhrase("no-console-message")); return; }
-        Player player = (Player) sender;
+        // Verify that the item is an UberItem
+        if (uber == null || itemName.equals("null") || UberItems.getItem("null").compare(uber) || UberItems.getMaterial("null").compare(uber)) {
+            Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem"));
+            return;
+        }
 
-        // create the material from either ID or name
-        int stack = 1; if (args.length > 2) stack = Integer.parseInt(args[2]);
-        UberMaterial material = UberItems.getMaterial(args[1]);
+        // Give the item to the target player
+        Utilities.givePlayerItemSafely(targetPlayer, uber);
 
-        // verify that the item is in fact an UberMaterial
-        if (material == null || args[1].equals("null")) { Utilities.warnPlayer(sender, UberItems.getPhrase("not-uberitem")); return; }
-        ItemStack item = material.makeItem(stack);
-
-        // give the item to the player
-        Utilities.givePlayerItemSafely(player, item);
-        player.sendMessage(UberItems.prefix + "Given " + item.getItemMeta().getDisplayName());
+        String message = UberItems.prefix + ChatColor.GRAY + "Given " + uber.getItemMeta().getDisplayName() + ChatColor.GRAY + " x" + amount;
+        if (sender.equals(targetPlayer)) Utilities.informPlayer(sender, message);
+        else {
+            Utilities.informPlayer(sender, message + " to player " + targetPlayer.getName());
+            Utilities.informPlayer(targetPlayer, message);
+        }
     }
 
     // identify Command

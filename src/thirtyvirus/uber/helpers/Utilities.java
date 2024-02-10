@@ -828,6 +828,7 @@ public final class Utilities {
         return item;
     }
 
+    // adds item to the player's inventory. Drops the item on the ground if inventory is full
     public static void givePlayerItemSafely(Player player, ItemStack item) {
         final Map<Integer, ItemStack> items = player.getInventory().addItem(item);
         for (final ItemStack i : items.values()) {
