@@ -35,6 +35,10 @@ public class UberItems extends JavaPlugin {
     //  fix duplicate item / material entries being null with UberDrops
     //  process active effects for uber items not in hand without big performance hit?
     //  add proper tab-completion for "/uber give" and "/uber giveMaterial"
+    //  Investigate addon items & materials not reloading at the same time as the main plugin (need to somehow tell addons to reload too?)
+    //  Add easy system for “persistent buffs"? Buffs that are active when an item is active? (ex: perm strength 1 when holding item)
+    //  Add multi-page menus as helper method?
+    //  Generalize:, event items (inherit Mythic item rules), makeUnbreakable. Update javadocs and spigot page.
 
     // data for UberItems, UberMaterials
     private static final Map<String, UberItem> items = new HashMap<>();
