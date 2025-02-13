@@ -428,6 +428,9 @@ public final class Utilities {
      * @return the wrapped text, in multiple lines
      */
     public static List<String> stringToLore(String string, int characterLimit, ChatColor prefixColor) {
+        return stringToLore(string, characterLimit, "" + prefixColor);
+    }
+    public static List<String> stringToLore(String string, int characterLimit, String prefixString) {
         String[] words = string.split(" ");
         List<String> lines = new ArrayList<>();
 
@@ -443,11 +446,11 @@ public final class Utilities {
             // test if adding the word would make the line too long, start new line if so
             if (word.equals("/newline") || currentLine.length() + word.length() >= characterLimit) {
                 String newLine = currentLine.toString();
-                lines.add("" + prefixColor + newLine);
+                lines.add("" + prefixString + newLine);
                 currentLine = new StringBuilder();
             }
         }
-        if (currentLine.length() > 0) lines.add("" + prefixColor + currentLine);
+        if (currentLine.length() > 0) lines.add("" + prefixString + currentLine);
 
         return lines;
     }
